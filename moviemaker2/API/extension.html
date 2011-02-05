@@ -1,0 +1,140 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>moviemaker2.extension &mdash; Moviemaker v0.1.0b documentation</title>
+    <link rel="stylesheet" href="../_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.1.0b',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="Moviemaker v0.1.0b documentation" href="../index.html" />
+    <link rel="up" title="API" href="../API.html" />
+    <link rel="next" title="moviemaker2.branch" href="branch.html" />
+    <link rel="prev" title="moviemaker2.parameter" href="parameter.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="branch.html" title="moviemaker2.branch"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="parameter.html" title="moviemaker2.parameter"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">Moviemaker v0.1.0b documentation</a> &raquo;</li>
+          <li><a href="../API.html" accesskey="U">API</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="module-moviemaker2.extension">
+<span id="moviemaker2-extension"></span><h1>moviemaker2.extension<a class="headerlink" href="#module-moviemaker2.extension" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="moviemaker2.extension.Extension">
+<em class="property">class </em><tt class="descclassname">moviemaker2.extension.</tt><tt class="descname">Extension</tt><big>(</big><em>value</em>, <em>p</em><big>)</big><a class="reference internal" href="../_modules/moviemaker2/extension.html#Extension"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#moviemaker2.extension.Extension" title="Permalink to this definition">¶</a></dt>
+<dd><p>Extends paramter objects by evaluating some Function with the parameter
+object as argument, and stores it using another <tt class="docutils literal"><span class="pre">p</span></tt> object.  Use like
+this:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">extended</span> <span class="o">=</span> <span class="n">target</span> <span class="o">|</span> <span class="n">extension</span>
+</pre></div>
+</div>
+<dl class="method">
+<dt id="moviemaker2.extension.Extension.__init__">
+<tt class="descname">__init__</tt><big>(</big><em>value</em>, <em>p</em><big>)</big><a class="reference internal" href="../_modules/moviemaker2/extension.html#Extension.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#moviemaker2.extension.Extension.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>value</em> is called and stored in the parameter object via <em>p</em>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="moviemaker2.extension.Extension.__call__">
+<tt class="descname">__call__</tt><big>(</big><em>ps</em><big>)</big><a class="reference internal" href="../_modules/moviemaker2/extension.html#Extension.__call__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#moviemaker2.extension.Extension.__call__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Extends <em>ps</em>, and calls <em>target</em> with the extended Ps.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="parameter.html"
+                        title="previous chapter">moviemaker2.parameter</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="branch.html"
+                        title="next chapter">moviemaker2.branch</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/API/extension.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="branch.html" title="moviemaker2.branch"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="parameter.html" title="moviemaker2.parameter"
+             >previous</a> |</li>
+        <li><a href="../index.html">Moviemaker v0.1.0b documentation</a> &raquo;</li>
+          <li><a href="../API.html" >API</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2010--2011, Friedrich Romstedt.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.1.
+    </div>
+  </body>
+</html>

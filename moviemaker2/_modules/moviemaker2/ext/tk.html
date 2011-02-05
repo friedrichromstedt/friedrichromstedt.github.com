@@ -1,0 +1,289 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>moviemaker2.ext.tk &mdash; Moviemaker v0.1.0b documentation</title>
+    <link rel="stylesheet" href="../../../_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '0.1.0b',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <link rel="top" title="Moviemaker v0.1.0b documentation" href="../../../index.html" />
+    <link rel="up" title="Module code" href="../../index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../../index.html">Moviemaker v0.1.0b documentation</a> &raquo;</li>
+          <li><a href="../../index.html" accesskey="U">Module code</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <h1>Source code for moviemaker2.ext.tk</h1><div class="highlight"><pre>
+<span class="kn">import</span> <span class="nn">Tkinter</span>
+<span class="kn">import</span> <span class="nn">PIL.ImageTk</span>
+<span class="kn">import</span> <span class="nn">threading</span>
+<span class="kn">import</span> <span class="nn">Queue</span>
+<span class="kn">import</span> <span class="nn">traceback</span>
+<span class="kn">import</span> <span class="nn">numpy</span>
+<span class="kn">import</span> <span class="nn">moviemaker2.ext.render_capsules</span>
+
+<span class="sd">&quot;&quot;&quot;Provides a Tkinter.Frame descendant capable of rendering with</span>
+<span class="sd">graphical feedback.&quot;&quot;&quot;</span>
+
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;RenderFrame&#39;</span><span class="p">]</span>
+
+<div class="viewcode-block" id="StatusBar"><a class="viewcode-back" href="../../../API/ext.html#moviemaker2.ext.tk.StatusBar">[docs]</a><span class="k">class</span> <span class="nc">StatusBar</span><span class="p">(</span><span class="n">Tkinter</span><span class="o">.</span><span class="n">Frame</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Creates a widget with lots of Labels to display progress in a </span>
+<span class="sd">    multithreaded rendering program.&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="StatusBar.__init__"><a class="viewcode-back" href="../../../API/ext.html#moviemaker2.ext.tk.StatusBar.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">master</span><span class="p">,</span> <span class="n">nbins</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> 
+            <span class="o">*</span><span class="n">frame_args</span><span class="p">,</span> <span class="o">**</span><span class="n">frame_kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;*nbins* is the number of bins to use.  For each bin, a Label will </span>
+<span class="sd">        be created (at least 1px wide).  All other args and kwargs go to </span>
+<span class="sd">        Frame.&quot;&quot;&quot;</span>
+        
+        <span class="k">if</span> <span class="n">nbins</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="n">nbins</span> <span class="o">=</span> <span class="mi">1</span>
+    
+        <span class="n">Tkinter</span><span class="o">.</span><span class="n">Frame</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">master</span><span class="p">,</span> <span class="o">*</span><span class="n">frame_args</span><span class="p">,</span> <span class="o">**</span><span class="n">frame_kwargs</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">labels</span> <span class="o">=</span> <span class="p">[]</span>  <span class="c"># .setup() needs .labels initialised.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">nbins</span> <span class="o">=</span> <span class="n">nbins</span>
+</div>
+<div class="viewcode-block" id="StatusBar.setup"><a class="viewcode-back" href="../../../API/ext.html#moviemaker2.ext.tk.StatusBar.setup">[docs]</a>    <span class="k">def</span> <span class="nf">setup</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nslots</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Setup the StatusBar.  If *nbins* &gt; *nslots*, *nbins* is set to </span>
+<span class="sd">        *nslots*.&quot;&quot;&quot;</span>
+        
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">nbins</span> <span class="o">&gt;</span> <span class="n">nslots</span><span class="p">:</span>
+            <span class="c"># This were not useful, because some labels never get set.</span>
+            <span class="n">nbins</span> <span class="o">=</span> <span class="n">nslots</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">nbins</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">nbins</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">nslots</span> <span class="o">=</span> <span class="n">nslots</span>
+
+        <span class="c"># Clear.</span>
+        <span class="k">for</span> <span class="n">label</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">labels</span><span class="p">:</span>
+            <span class="n">label</span><span class="o">.</span><span class="n">destroy</span><span class="p">()</span>
+
+        <span class="c"># Create.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">labels</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">states_bins</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">nbins</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">states_slots</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nslots</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">state_unset</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">state_ok</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">state_error</span> <span class="o">=</span> <span class="mi">2</span>
+        <span class="k">for</span> <span class="n">index</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">nbins</span><span class="p">):</span>
+            <span class="n">label</span> <span class="o">=</span> <span class="n">Tkinter</span><span class="o">.</span><span class="n">Label</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">background</span><span class="o">=</span><span class="s">&#39;lightgray&#39;</span><span class="p">,</span>
+                <span class="n">borderwidth</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+            <span class="n">label</span><span class="o">.</span><span class="n">pack</span><span class="p">(</span><span class="n">side</span><span class="o">=</span><span class="n">Tkinter</span><span class="o">.</span><span class="n">LEFT</span><span class="p">,</span> <span class="n">fill</span><span class="o">=</span><span class="n">Tkinter</span><span class="o">.</span><span class="n">X</span><span class="p">,</span> <span class="n">expand</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">labels</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">label</span><span class="p">)</span>
+
+        <span class="c"># To calculate the bin, use SLOT * .SLOPE</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">slope</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">nbins</span><span class="p">)</span> <span class="o">/</span> <span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nslots</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="StatusBar.enable"><a class="viewcode-back" href="../../../API/ext.html#moviemaker2.ext.tk.StatusBar.enable">[docs]</a>    <span class="k">def</span> <span class="nf">enable</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">slot</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Turns on the label with index *slot*.&quot;&quot;&quot;</span>
+
+        <span class="nb">bin</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">slot</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">slope</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">states_bins</span><span class="p">[</span><span class="nb">bin</span><span class="p">]</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">state_error</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">labels</span><span class="p">[</span><span class="nb">bin</span><span class="p">]</span><span class="o">.</span><span class="n">configure</span><span class="p">(</span><span class="n">background</span><span class="o">=</span><span class="s">&#39;gray&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">states_bins</span><span class="p">[</span><span class="nb">bin</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">state_ok</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">states_slots</span><span class="p">[</span><span class="n">slot</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">state_ok</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">check_set_green</span><span class="p">()</span>
+</div>
+<div class="viewcode-block" id="StatusBar.check_set_green"><a class="viewcode-back" href="../../../API/ext.html#moviemaker2.ext.tk.StatusBar.check_set_green">[docs]</a>    <span class="k">def</span> <span class="nf">check_set_green</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Checks if the process is finished.&quot;&quot;&quot;</span>
+
+        <span class="c"># If all done, set to all-green except those with errors.</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">state_unset</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">states_slots</span><span class="p">:</span>
+            <span class="k">for</span> <span class="p">(</span><span class="n">state</span><span class="p">,</span> <span class="n">label</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">states_slots</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">labels</span><span class="p">):</span>
+                <span class="k">if</span> <span class="n">state</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">state_ok</span><span class="p">:</span>
+                    <span class="n">label</span><span class="o">.</span><span class="n">configure</span><span class="p">(</span><span class="n">background</span> <span class="o">=</span> <span class="s">&#39;green&#39;</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="StatusBar.error"><a class="viewcode-back" href="../../../API/ext.html#moviemaker2.ext.tk.StatusBar.error">[docs]</a>    <span class="k">def</span> <span class="nf">error</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">slot</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Signals an error in slot SLOT.&quot;&quot;&quot;</span>
+
+        <span class="nb">bin</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">slot</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">slope</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">labels</span><span class="p">[</span><span class="nb">bin</span><span class="p">]</span><span class="o">.</span><span class="n">configure</span><span class="p">(</span><span class="n">background</span><span class="o">=</span><span class="s">&#39;red&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">states_bins</span><span class="p">[</span><span class="nb">bin</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">state_error</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">states_slots</span><span class="p">[</span><span class="n">slot</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">state_error</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">check_set_green</span><span class="p">()</span>
+</div></div>
+<div class="viewcode-block" id="RenderFrame"><a class="viewcode-back" href="../../../API/ext.html#moviemaker2.ext.tk.RenderFrame">[docs]</a><span class="k">class</span> <span class="nc">RenderFrame</span><span class="p">(</span><span class="n">Tkinter</span><span class="o">.</span><span class="n">Frame</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;A Tkinter.Frame which can render events with graphical feedback.  The</span>
+<span class="sd">    .start() method must be called once to start the polling mechanism. </span>
+<span class="sd">    </span>
+<span class="sd">    Use the .render_queue as argument to a Renderer&#39;s .render() method.&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="RenderFrame.__init__"><a class="viewcode-back" href="../../../API/ext.html#moviemaker2.ext.tk.RenderFrame.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">master</span><span class="p">,</span> <span class="n">nbins</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
+            <span class="o">*</span><span class="n">frame_args</span><span class="p">,</span> <span class="o">**</span><span class="n">frame_kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;*nbins* is the number of sections used for the status bar.</span>
+<span class="sd">        *frame_args* and *frame_kwargs* go to the ``Frame`` class.&quot;&quot;&quot;</span>
+
+        <span class="n">Tkinter</span><span class="o">.</span><span class="n">Frame</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">frame_args</span><span class="p">,</span> <span class="o">**</span><span class="n">frame_kwargs</span><span class="p">)</span>
+
+        <span class="c"># Initialise attributes ...</span>
+
+        <span class="c"># The message queue for ImageCapsules:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">render_queue</span> <span class="o">=</span> <span class="n">Queue</span><span class="o">.</span><span class="n">Queue</span><span class="p">()</span>
+
+        <span class="c"># Initialise status bar ...</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">status_bar</span> <span class="o">=</span> <span class="n">StatusBar</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nbins</span><span class="o">=</span><span class="n">nbins</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">status_bar</span><span class="o">.</span><span class="n">pack</span><span class="p">(</span><span class="n">side</span><span class="o">=</span><span class="n">Tkinter</span><span class="o">.</span><span class="n">TOP</span><span class="p">,</span> <span class="n">fill</span><span class="o">=</span><span class="n">Tkinter</span><span class="o">.</span><span class="n">X</span><span class="p">)</span>
+
+        <span class="c"># Initialise display ...</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">canvas</span> <span class="o">=</span> <span class="n">Tkinter</span><span class="o">.</span><span class="n">Canvas</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">highlightthickness</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">canvas</span><span class="o">.</span><span class="n">pack</span><span class="p">(</span><span class="n">side</span><span class="o">=</span><span class="n">Tkinter</span><span class="o">.</span><span class="n">TOP</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">photo_id</span> <span class="o">=</span> <span class="bp">None</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">spacer</span> <span class="o">=</span> <span class="n">Tkinter</span><span class="o">.</span><span class="n">Label</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">text</span><span class="o">=</span><span class="s">&#39;Moviemaker2 Output&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">spacer</span><span class="o">.</span><span class="n">pack</span><span class="p">(</span><span class="n">side</span><span class="o">=</span><span class="n">Tkinter</span><span class="o">.</span><span class="n">TOP</span><span class="p">)</span>
+    
+        <span class="bp">self</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+</div>
+<div class="viewcode-block" id="RenderFrame.setup"><a class="viewcode-back" href="../../../API/ext.html#moviemaker2.ext.tk.RenderFrame.setup">[docs]</a>    <span class="k">def</span> <span class="nf">setup</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nslots</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Sets the slots and bin number.  *nslots* is the number of frames</span>
+<span class="sd">        to be rendered.  *nbins* should be some reasonably smaller number.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">status_bar</span><span class="o">.</span><span class="n">setup</span><span class="p">(</span><span class="n">nslots</span><span class="o">=</span><span class="n">nslots</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="RenderFrame.start"><a class="viewcode-back" href="../../../API/ext.html#moviemaker2.ext.tk.RenderFrame.start">[docs]</a>    <span class="k">def</span> <span class="nf">start</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Starts the polling mechanism essential for visual feedback.&quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">after</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">poll</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="RenderFrame.poll"><a class="viewcode-back" href="../../../API/ext.html#moviemaker2.ext.tk.RenderFrame.poll">[docs]</a>    <span class="k">def</span> <span class="nf">poll</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Grabs all items from the .render_queue, displays the latest</span>
+<span class="sd">        frame, and enables all frames&#39; status slot.</span>
+<span class="sd">        </span>
+<span class="sd">        Will poll again after 100 ms.&quot;&quot;&quot;</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="c"># Poll all capsules ...</span>
+
+            <span class="n">capsules</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="k">while</span> <span class="bp">True</span><span class="p">:</span>
+                    <span class="n">capsules</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">render_queue</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">block</span><span class="o">=</span><span class="bp">False</span><span class="p">))</span>
+            <span class="k">except</span> <span class="n">Queue</span><span class="o">.</span><span class="n">Empty</span><span class="p">:</span>
+                <span class="k">pass</span>
+
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">capsules</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">after</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">poll</span><span class="p">)</span>
+                <span class="k">return</span>
+
+            <span class="c"># Find the latest capsule ...</span>
+
+            <span class="c"># Set all slots involved ...</span>
+
+            <span class="n">image_capsules</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">for</span> <span class="n">capsule</span> <span class="ow">in</span> <span class="n">capsules</span><span class="p">:</span>
+                <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">capsule</span><span class="p">,</span>
+                        <span class="n">moviemaker2</span><span class="o">.</span><span class="n">ext</span><span class="o">.</span><span class="n">render_capsules</span><span class="o">.</span><span class="n">AnnounceCapsule</span><span class="p">):</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">status_bar</span><span class="o">.</span><span class="n">setup</span><span class="p">(</span><span class="n">nslots</span><span class="o">=</span><span class="n">capsule</span><span class="o">.</span><span class="n">nframes</span><span class="p">)</span>
+                <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">capsule</span><span class="p">,</span> 
+                        <span class="n">moviemaker2</span><span class="o">.</span><span class="n">ext</span><span class="o">.</span><span class="n">render_capsules</span><span class="o">.</span><span class="n">ResultCapsule</span><span class="p">):</span>
+                    <span class="k">if</span> <span class="ow">not</span> <span class="n">capsule</span><span class="o">.</span><span class="n">error</span><span class="p">:</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">status_bar</span><span class="o">.</span><span class="n">enable</span><span class="p">(</span><span class="n">capsule</span><span class="o">.</span><span class="n">frameindex</span><span class="p">)</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">status_bar</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="n">capsule</span><span class="o">.</span><span class="n">frameindex</span><span class="p">)</span>
+                    <span class="n">image_capsules</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">capsule</span><span class="p">)</span>
+
+            <span class="c"># Display the latest frame without errors ...</span>
+
+            <span class="n">image_capsules</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">c</span><span class="p">:</span> <span class="n">c</span><span class="o">.</span><span class="n">frameindex</span><span class="p">)</span>
+
+            <span class="k">for</span> <span class="n">index</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="nb">len</span><span class="p">(</span><span class="n">image_capsules</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">):</span>
+                <span class="n">capsule</span> <span class="o">=</span> <span class="n">image_capsules</span><span class="p">[</span><span class="n">index</span><span class="p">]</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">capsule</span><span class="o">.</span><span class="n">error</span><span class="p">:</span>
+                    <span class="n">photo_image</span> <span class="o">=</span> <span class="n">PIL</span><span class="o">.</span><span class="n">ImageTk</span><span class="o">.</span><span class="n">PhotoImage</span><span class="p">(</span><span class="n">capsule</span><span class="o">.</span><span class="n">image</span><span class="p">)</span>
+                    <span class="n">old_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">photo_id</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">canvas</span><span class="o">.</span><span class="n">configure</span><span class="p">(</span><span class="n">width</span><span class="o">=</span><span class="n">capsule</span><span class="o">.</span><span class="n">image</span><span class="o">.</span><span class="n">size</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+                        <span class="n">height</span><span class="o">=</span><span class="n">capsule</span><span class="o">.</span><span class="n">image</span><span class="o">.</span><span class="n">size</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">photo_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">canvas</span><span class="o">.</span><span class="n">create_image</span><span class="p">((</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>
+                        <span class="n">image</span><span class="o">=</span><span class="n">photo_image</span><span class="p">,</span> <span class="n">anchor</span><span class="o">=</span><span class="n">Tkinter</span><span class="o">.</span><span class="n">NW</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="n">old_id</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">canvas</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="n">old_id</span><span class="p">)</span>
+                    <span class="c"># need to store a ref to the image, else it gets</span>
+                    <span class="c"># deleted, as well as its display on the canvas.</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">photo_image</span> <span class="o">=</span> <span class="n">photo_image</span>
+                    <span class="k">break</span>
+
+        <span class="k">except</span> <span class="ne">Exception</span><span class="p">,</span> <span class="n">exc</span><span class="p">:</span>
+            <span class="k">print</span> <span class="s">&quot;(RenderFrame) Exception while polling:&quot;</span>
+            <span class="n">traceback</span><span class="o">.</span><span class="n">print_exc</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">after</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">poll</span><span class="p">)</span>
+</pre></div></div></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../../index.html">Moviemaker v0.1.0b documentation</a> &raquo;</li>
+          <li><a href="../../index.html" >Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2010--2011, Friedrich Romstedt.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.1.
+    </div>
+  </body>
+</html>

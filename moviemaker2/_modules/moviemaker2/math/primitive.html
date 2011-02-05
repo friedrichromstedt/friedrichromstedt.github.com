@@ -1,0 +1,628 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>moviemaker2.math.primitive &mdash; Moviemaker v0.1.0b documentation</title>
+    <link rel="stylesheet" href="../../../_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '0.1.0b',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <link rel="top" title="Moviemaker v0.1.0b documentation" href="../../../index.html" />
+    <link rel="up" title="Module code" href="../../index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../../index.html">Moviemaker v0.1.0b documentation</a> &raquo;</li>
+          <li><a href="../../index.html" accesskey="U">Module code</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <h1>Source code for moviemaker2.math.primitive</h1><div class="highlight"><pre>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">The primitive arithmetic operations must be overloaded in the class definition</span>
+<span class="sd">directly, and therefore the returned Functions are defined in this module too,</span>
+<span class="sd">and not in :mod:`moviemaker.math` where they belong to.  Nevertheless they </span>
+<span class="sd">will be available through the :mod:`moviemaker.math` module, too.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span>
+<span class="kn">from</span> <span class="nn">moviemaker2.function</span> <span class="kn">import</span> <span class="n">Function</span><span class="p">,</span> <span class="n">Constant</span><span class="p">,</span> <span class="n">Identity</span><span class="p">,</span> <span class="n">asfunction</span>
+
+<span class="c"># All other Function can be accessed more clearly by ordinary means or by</span>
+<span class="c"># using numpy functions (numpy.sin, numpy.cos):</span>
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;MathFunction&#39;</span><span class="p">,</span> <span class="s">&#39;asmathfunction&#39;</span><span class="p">,</span> <span class="s">&#39;asmathfunctionv&#39;</span><span class="p">,</span> <span class="s">&#39;asarray&#39;</span><span class="p">,</span>
+    <span class="s">&#39;Less&#39;</span><span class="p">,</span> <span class="s">&#39;Greater&#39;</span><span class="p">,</span> <span class="s">&#39;LessEqual&#39;</span><span class="p">,</span> <span class="s">&#39;GreaterEqual&#39;</span><span class="p">,</span> <span class="s">&#39;Equal&#39;</span><span class="p">,</span> <span class="s">&#39;Not&#39;</span><span class="p">]</span>
+
+<div class="viewcode-block" id="MathFunction"><a class="viewcode-back" href="../../../API/math.html#moviemaker2.math.primitive.MathFunction">[docs]</a><span class="k">class</span> <span class="nc">MathFunction</span><span class="p">(</span><span class="n">Function</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Supports overloaded primitve arithmetics.  Can wrap an ordinary </span>
+<span class="sd">    Function, to extend it by math overloads.</span>
+
+<span class="sd">    Examples:  (fXXX is a function for something &quot;XXX&quot;)</span>
+
+<span class="sd">    1)  ``fa + fb``, etc.</span>
+<span class="sd">    2)  ``numpy.cos(fangle)``.  This works through the :meth:`cos` method.</span>
+<span class="sd">        Same for ``numpy.sin(fangle)``.</span>
+<span class="sd">    3)  ``numpy.sum(farray, axis=1)``.  This works through the :meth:`sum`</span>
+<span class="sd">        method.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+<div class="viewcode-block" id="MathFunction.__init__"><a class="viewcode-back" href="../../../API/math.html#moviemaker2.math.primitive.MathFunction.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">wrap</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;*wrap* is an ordinary Function, being used during __call__.&quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">wrap</span> <span class="o">=</span> <span class="n">wrap</span>
+</div>
+<div class="viewcode-block" id="MathFunction.__call__"><a class="viewcode-back" href="../../../API/math.html#moviemaker2.math.primitive.MathFunction.__call__">[docs]</a>    <span class="k">def</span> <span class="nf">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Calls just ``.wrap``.&quot;&quot;&quot;</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">wrap</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="MathFunction.__add__"><a class="viewcode-back" href="../../../API/math.html#moviemaker2.math.primitive.MathFunction.__add__">[docs]</a>    <span class="k">def</span> <span class="nf">__add__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Returns the :class:`Sum` with another Function.&quot;&quot;&quot;</span>
+
+        <span class="n">other</span> <span class="o">=</span> <span class="n">asfunction</span><span class="p">(</span><span class="n">other</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">Sum</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="MathFunction.__radd__"><a class="viewcode-back" href="../../../API/math.html#moviemaker2.math.primitive.MathFunction.__radd__">[docs]</a>    <span class="k">def</span> <span class="nf">__radd__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Returns the :class:`Sum` with another Function.&quot;&quot;&quot;</span>
+
+        <span class="n">other</span> <span class="o">=</span> <span class="n">asfunction</span><span class="p">(</span><span class="n">other</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">Sum</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="MathFunction.__sub__"><a class="viewcode-back" href="../../../API/math.html#moviemaker2.math.primitive.MathFunction.__sub__">[docs]</a>    <span class="k">def</span> <span class="nf">__sub__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Returns the :class:`Sum` with the negative of the other </span>
+<span class="sd">        Function.&quot;&quot;&quot;</span>
+
+        <span class="n">other</span> <span class="o">=</span> <span class="n">asfunction</span><span class="p">(</span><span class="n">other</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">Sum</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">-</span><span class="n">other</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="MathFunction.__rsub__"><a class="viewcode-back" href="../../../API/math.html#moviemaker2.math.primitive.MathFunction.__rsub__">[docs]</a>    <span class="k">def</span> <span class="nf">__rsub__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Returns the :class:`Sum` of the other Function with the negative of</span>
+<span class="sd">        ``self``.&quot;&quot;&quot;</span>
+
+        <span class="n">other</span> <span class="o">=</span> <span class="n">asfunction</span><span class="p">(</span><span class="n">other</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">Sum</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="o">-</span><span class="bp">self</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="MathFunction.__mul__"><a class="viewcode-back" href="../../../API/math.html#moviemaker2.math.primitive.MathFunction.__mul__">[docs]</a>    <span class="k">def</span> <span class="nf">__mul__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Returns the :class:`Product` with the other Function.&quot;&quot;&quot;</span>
+
+        <span class="n">other</span> <span class="o">=</span> <span class="n">asfunction</span><span class="p">(</span><span class="n">other</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">Product</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="MathFunction.__rmul__"><a class="viewcode-back" href="../../../API/math.html#moviemaker2.math.primitive.MathFunction.__rmul__">[docs]</a>    <span class="k">def</span> <span class="nf">__rmul__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Returns the :class:`Product` of the other Function with </span>
+<span class="sd">        ``self``.&quot;&quot;&quot;</span>
+
+        <span class="n">other</span> <span class="o">=</span> <span class="n">asfunction</span><span class="p">(</span><span class="n">other</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">Product</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="MathFunction.__div__"><a class="viewcode-back" href="../../../API/math.html#moviemaker2.math.primitive.MathFunction.__div__">[docs]</a>    <span class="k">def</span> <span class="nf">__div__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Returns the :class:`Quotient` with the other Function.&quot;&quot;&quot;</span>
+
+        <span class="n">other</span> <span class="o">=</span> <span class="n">asfunction</span><span class="p">(</span><span class="n">other</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">Quotient</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="MathFunction.__rdiv__"><a class="viewcode-back" href="../../../API/math.html#moviemaker2.math.primitive.MathFunction.__rdiv__">[docs]</a>    <span class="k">def</span> <span class="nf">__rdiv__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Returns the :class:`Quotient` of the other Function with </span>
+<span class="sd">        ``self``.&quot;&quot;&quot;</span>
+
+        <span class="n">other</span> <span class="o">=</span> <span class="n">asfunction</span><span class="p">(</span><span class="n">other</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">Quotient</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="MathFunction.__pow__"><a class="viewcode-back" href="../../../API/math.html#moviemaker2.math.primitive.MathFunction.__pow__">[docs]</a>    <span class="k">def</span> <span class="nf">__pow__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">exponent</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Raises ``self`` to the power of the other Function.&quot;&quot;&quot;</span>
+
+        <span class="n">exponent</span> <span class="o">=</span> <span class="n">asfunction</span><span class="p">(</span><span class="n">exponent</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">Power</span><span class="p">(</span><span class="n">base</span><span class="o">=</span><span class="bp">self</span><span class="p">,</span> <span class="n">exponent</span><span class="o">=</span><span class="n">exponent</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="MathFunction.__rpow__"><a class="viewcode-back" href="../../../API/math.html#moviemaker2.math.primitive.MathFunction.__rpow__">[docs]</a>    <span class="k">def</span> <span class="nf">__rpow__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">base</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Raises the other Function to the power of ``self``.&quot;&quot;&quot;</span>
+
+        <span class="n">base</span> <span class="o">=</span> <span class="n">asfunction</span><span class="p">(</span><span class="n">base</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">Power</span><span class="p">(</span><span class="n">base</span><span class="o">=</span><span class="n">base</span><span class="p">,</span> <span class="n">exponent</span><span class="o">=</span><span class="bp">self</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="MathFunction.__pos__"><a class="viewcode-back" href="../../../API/math.html#moviemaker2.math.primitive.MathFunction.__pos__">[docs]</a>    <span class="k">def</span> <span class="nf">__pos__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Returns ``self``.&quot;&quot;&quot;</span>
+
+        <span class="k">return</span> <span class="bp">self</span>
+</div>
+<div class="viewcode-block" id="MathFunction.__neg__"><a class="viewcode-back" href="../../../API/math.html#moviemaker2.math.primitive.MathFunction.__neg__">[docs]</a>    <span class="k">def</span> <span class="nf">__neg__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Returns the :class:`Nagative` of ``self``.&quot;&quot;&quot;</span>
+
+        <span class="k">return</span> <span class="n">Neg</span><span class="p">(</span><span class="n">invertible</span><span class="o">=</span><span class="bp">self</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="MathFunction.sin"><a class="viewcode-back" href="../../../API/math.html#moviemaker2.math.primitive.MathFunction.sin">[docs]</a>    <span class="k">def</span> <span class="nf">sin</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Takes the sine.&quot;&quot;&quot;</span>
+
+        <span class="k">return</span> <span class="n">Sin</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="MathFunction.cos"><a class="viewcode-back" href="../../../API/math.html#moviemaker2.math.primitive.MathFunction.cos">[docs]</a>    <span class="k">def</span> <span class="nf">cos</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Takes the cosine.&quot;&quot;&quot;</span>
+
+        <span class="k">return</span> <span class="n">Cos</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="MathFunction.exp"><a class="viewcode-back" href="../../../API/math.html#moviemaker2.math.primitive.MathFunction.exp">[docs]</a>    <span class="k">def</span> <span class="nf">exp</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Exponentiates.&quot;&quot;&quot;</span>
+
+        <span class="k">return</span> <span class="n">Exp</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="MathFunction.sum"><a class="viewcode-back" href="../../../API/math.html#moviemaker2.math.primitive.MathFunction.sum">[docs]</a>    <span class="k">def</span> <span class="nf">sum</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Returns a :class:`Sum` of self with the arguments for calling</span>
+<span class="sd">        ``.sum()`` given by the arguments given here.&quot;&quot;&quot;</span>
+
+        <span class="k">return</span> <span class="n">SumCall</span><span class="p">(</span><span class="n">array</span><span class="o">=</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="MathFunction.clip"><a class="viewcode-back" href="../../../API/math.html#moviemaker2.math.primitive.MathFunction.clip">[docs]</a>    <span class="k">def</span> <span class="nf">clip</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">low</span><span class="p">,</span> <span class="n">high</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Returns a :class:`Clip` instance of ``self`` with *low* and *high* </span>
+<span class="sd">        set up.&quot;&quot;&quot;</span>
+
+        <span class="k">return</span> <span class="n">Clip</span><span class="p">(</span><span class="n">leaf</span><span class="o">=</span><span class="bp">self</span><span class="p">,</span> <span class="n">low</span><span class="o">=</span><span class="n">low</span><span class="p">,</span> <span class="n">high</span><span class="o">=</span><span class="n">high</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="MathFunction.astype"><a class="viewcode-back" href="../../../API/math.html#moviemaker2.math.primitive.MathFunction.astype">[docs]</a>    <span class="k">def</span> <span class="nf">astype</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Returns a :class:`asarray` instance of ``self`` with *args* and</span>
+<span class="sd">        *kwargs* handed over.  Can be used for converting to other dtypes::</span>
+
+<span class="sd">            func.astype(dtype=numpy.int)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">return</span> <span class="n">asarray</span><span class="p">(</span><span class="n">array_like</span><span class="o">=</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="MathFunction.__getitem__"><a class="viewcode-back" href="../../../API/math.html#moviemaker2.math.primitive.MathFunction.__getitem__">[docs]</a>    <span class="k">def</span> <span class="nf">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Returns a :class:`Indexing` instance of ``self`` with *index* set</span>
+<span class="sd">        up.&quot;&quot;&quot;</span>
+
+        <span class="k">return</span> <span class="n">Indexing</span><span class="p">(</span><span class="n">items</span><span class="o">=</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="n">index</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="MathFunction.__or__"><a class="viewcode-back" href="../../../API/math.html#moviemaker2.math.primitive.MathFunction.__or__">[docs]</a>    <span class="k">def</span> <span class="nf">__or__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Piping is composition of Functions.  The pipe operator is designed</span>
+<span class="sd">        such that the wrapping function is written last: *other* will be </span>
+<span class="sd">        executed with the ouput of *self* as input.&quot;&quot;&quot;</span>
+
+        <span class="k">return</span> <span class="n">MathComposedFunction</span><span class="p">(</span><span class="n">a</span><span class="o">=</span><span class="bp">self</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="n">other</span><span class="p">)</span>
+</div></div>
+<div class="viewcode-block" id="MathComposedFunction"><a class="viewcode-back" href="../../../API/math.html#moviemaker2.math.primitive.MathComposedFunction">[docs]</a><span class="k">class</span> <span class="nc">MathComposedFunction</span><span class="p">(</span><span class="n">MathFunction</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Executes one function with the output of another.&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="MathComposedFunction.__init__"><a class="viewcode-back" href="../../../API/math.html#moviemaker2.math.primitive.MathComposedFunction.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;*b* will be executed with the output of *a* as input.&quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">a</span> <span class="o">=</span> <span class="n">asfunction</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">b</span> <span class="o">=</span> <span class="n">asfunction</span><span class="p">(</span><span class="n">b</span><span class="p">)</span>
+    </div>
+<div class="viewcode-block" id="MathComposedFunction.__call__"><a class="viewcode-back" href="../../../API/math.html#moviemaker2.math.primitive.MathComposedFunction.__call__">[docs]</a>    <span class="k">def</span> <span class="nf">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Returns ``b(a(...))``.&quot;&quot;&quot;</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">b</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">a</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">))</span>
+</div></div>
+<div class="viewcode-block" id="MathConstant"><a class="viewcode-back" href="../../../API/math.html#moviemaker2.math.primitive.MathConstant">[docs]</a><span class="k">class</span> <span class="nc">MathConstant</span><span class="p">(</span><span class="n">Constant</span><span class="p">,</span> <span class="n">MathFunction</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;:class:`~moviemaker2.function.Constant`, extended by mathematical</span>
+<span class="sd">    overloads.&quot;&quot;&quot;</span>
+
+    <span class="k">pass</span>
+</div>
+<div class="viewcode-block" id="MathIdentity"><a class="viewcode-back" href="../../../API/math.html#moviemaker2.math.primitive.MathIdentity">[docs]</a><span class="k">class</span> <span class="nc">MathIdentity</span><span class="p">(</span><span class="n">Identity</span><span class="p">,</span> <span class="n">MathFunction</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;:class:`~moviemaker2.function.Identity`, extended by mathatical</span>
+<span class="sd">    overloads.&quot;&quot;&quot;</span>
+
+    <span class="k">pass</span>
+</div>
+<div class="viewcode-block" id="asmathfunction"><a class="viewcode-back" href="../../../API/math.html#moviemaker2.math.primitive.asmathfunction">[docs]</a><span class="k">def</span> <span class="nf">asmathfunction</span><span class="p">(</span><span class="n">mathfunction_like</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    *   If *mathfunction_like* is a :class:`MathFunction`, it is returned </span>
+<span class="sd">        unchanged.</span>
+<span class="sd">    *   If *mathfunction_like* is a :class:`~moviemaker2.function.Function`,</span>
+<span class="sd">        ``MathFunction(mathfunction_like)`` is returned.</span>
+<span class="sd">    *   If *function_like* is None, a :class:`MathIdentity` is returned.</span>
+<span class="sd">    *   Else, the *function_like* is interpreted as a :class:`MathConstant`.</span>
+
+<span class="sd">    For ``asmathfunctionv()``, ``asmathfunction()`` is applied on any element</span>
+<span class="sd">    of an array_like argument.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">mathfunction_like</span><span class="p">,</span> <span class="n">Function</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">mathfunction_like</span>
+    <span class="k">elif</span> <span class="n">mathfunction_like</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">MathIdentity</span><span class="p">()</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">MathConstant</span><span class="p">(</span><span class="n">mathfunction_like</span><span class="p">)</span>
+</div>
+<span class="n">asmathfunctionv</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">vectorize</span><span class="p">(</span><span class="n">asmathfunction</span><span class="p">)</span>
+
+<div class="viewcode-block" id="Sum"><a class="viewcode-back" href="../../../API/math.html#moviemaker2.math.primitive.Sum">[docs]</a><span class="k">class</span> <span class="nc">Sum</span><span class="p">(</span><span class="n">MathFunction</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Abstract sum Function.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    
+<div class="viewcode-block" id="Sum.__init__"><a class="viewcode-back" href="../../../API/math.html#moviemaker2.math.primitive.Sum.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">one</span><span class="p">,</span> <span class="n">two</span><span class="p">):</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">one</span> <span class="o">=</span> <span class="n">asfunction</span><span class="p">(</span><span class="n">one</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">two</span> <span class="o">=</span> <span class="n">asfunction</span><span class="p">(</span><span class="n">two</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="Sum.__call__"><a class="viewcode-back" href="../../../API/math.html#moviemaker2.math.primitive.Sum.__call__">[docs]</a>    <span class="k">def</span> <span class="nf">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">one</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">two</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+</div></div>
+<div class="viewcode-block" id="Product"><a class="viewcode-back" href="../../../API/math.html#moviemaker2.math.primitive.Product">[docs]</a><span class="k">class</span> <span class="nc">Product</span><span class="p">(</span><span class="n">MathFunction</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Abstract product Function.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    
+<div class="viewcode-block" id="Product.__init__"><a class="viewcode-back" href="../../../API/math.html#moviemaker2.math.primitive.Product.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">one</span><span class="p">,</span> <span class="n">two</span><span class="p">):</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">one</span> <span class="o">=</span> <span class="n">asfunction</span><span class="p">(</span><span class="n">one</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">two</span> <span class="o">=</span> <span class="n">asfunction</span><span class="p">(</span><span class="n">two</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="Product.__call__"><a class="viewcode-back" href="../../../API/math.html#moviemaker2.math.primitive.Product.__call__">[docs]</a>    <span class="k">def</span> <span class="nf">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">one</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">two</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+</div></div>
+<div class="viewcode-block" id="Quotient"><a class="viewcode-back" href="../../../API/math.html#moviemaker2.math.primitive.Quotient">[docs]</a><span class="k">class</span> <span class="nc">Quotient</span><span class="p">(</span><span class="n">MathFunction</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Abstract quotient Function.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    
+<div class="viewcode-block" id="Quotient.__init__"><a class="viewcode-back" href="../../../API/math.html#moviemaker2.math.primitive.Quotient.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">one</span><span class="p">,</span> <span class="n">two</span><span class="p">):</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">one</span> <span class="o">=</span> <span class="n">asfunction</span><span class="p">(</span><span class="n">one</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">two</span> <span class="o">=</span> <span class="n">asfunction</span><span class="p">(</span><span class="n">two</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="Quotient.__call__"><a class="viewcode-back" href="../../../API/math.html#moviemaker2.math.primitive.Quotient.__call__">[docs]</a>    <span class="k">def</span> <span class="nf">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">one</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">two</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+</div></div>
+<div class="viewcode-block" id="Cmp"><a class="viewcode-back" href="../../../API/math.html#moviemaker2.math.primitive.Cmp">[docs]</a><span class="k">class</span> <span class="nc">Cmp</span><span class="p">(</span><span class="n">MathFunction</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Abstract comparison Function.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="Cmp.__init__"><a class="viewcode-back" href="../../../API/math.html#moviemaker2.math.primitive.Cmp.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">A</span><span class="p">,</span> <span class="n">B</span><span class="p">):</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">A</span> <span class="o">=</span> <span class="n">asfunction</span><span class="p">(</span><span class="n">A</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">B</span> <span class="o">=</span> <span class="n">asfunction</span><span class="p">(</span><span class="n">B</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="Cmp.__call__"><a class="viewcode-back" href="../../../API/math.html#moviemaker2.math.primitive.Cmp.__call__">[docs]</a>    <span class="k">def</span> <span class="nf">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        
+        <span class="k">return</span> <span class="nb">cmp</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">A</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">B</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">))</span>
+</div></div>
+<div class="viewcode-block" id="Less"><a class="viewcode-back" href="../../../API/math.html#moviemaker2.math.primitive.Less">[docs]</a><span class="k">class</span> <span class="nc">Less</span><span class="p">(</span><span class="n">MathFunction</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Abstract comparison Function.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="Less.__init__"><a class="viewcode-back" href="../../../API/math.html#moviemaker2.math.primitive.Less.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">A</span><span class="p">,</span> <span class="n">B</span><span class="p">):</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">A</span> <span class="o">=</span> <span class="n">asfunction</span><span class="p">(</span><span class="n">A</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">B</span> <span class="o">=</span> <span class="n">asfunction</span><span class="p">(</span><span class="n">B</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="Less.__call__"><a class="viewcode-back" href="../../../API/math.html#moviemaker2.math.primitive.Less.__call__">[docs]</a>    <span class="k">def</span> <span class="nf">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">A</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">B</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+</div></div>
+<div class="viewcode-block" id="Greater"><a class="viewcode-back" href="../../../API/math.html#moviemaker2.math.primitive.Greater">[docs]</a><span class="k">class</span> <span class="nc">Greater</span><span class="p">(</span><span class="n">MathFunction</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Abstract comparison Function.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="Greater.__init__"><a class="viewcode-back" href="../../../API/math.html#moviemaker2.math.primitive.Greater.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">A</span><span class="p">,</span> <span class="n">B</span><span class="p">):</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">A</span> <span class="o">=</span> <span class="n">asfunction</span><span class="p">(</span><span class="n">A</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">B</span> <span class="o">=</span> <span class="n">asfunction</span><span class="p">(</span><span class="n">B</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="Greater.__call__"><a class="viewcode-back" href="../../../API/math.html#moviemaker2.math.primitive.Greater.__call__">[docs]</a>    <span class="k">def</span> <span class="nf">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">A</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">B</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+</div></div>
+<div class="viewcode-block" id="LessEqual"><a class="viewcode-back" href="../../../API/math.html#moviemaker2.math.primitive.LessEqual">[docs]</a><span class="k">class</span> <span class="nc">LessEqual</span><span class="p">(</span><span class="n">MathFunction</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Abstract comparison Function.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="LessEqual.__init__"><a class="viewcode-back" href="../../../API/math.html#moviemaker2.math.primitive.LessEqual.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">A</span><span class="p">,</span> <span class="n">B</span><span class="p">):</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">A</span> <span class="o">=</span> <span class="n">asfunction</span><span class="p">(</span><span class="n">A</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">B</span> <span class="o">=</span> <span class="n">asfunction</span><span class="p">(</span><span class="n">B</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="LessEqual.__call__"><a class="viewcode-back" href="../../../API/math.html#moviemaker2.math.primitive.LessEqual.__call__">[docs]</a>    <span class="k">def</span> <span class="nf">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">A</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">B</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+</div></div>
+<div class="viewcode-block" id="GreaterEqual"><a class="viewcode-back" href="../../../API/math.html#moviemaker2.math.primitive.GreaterEqual">[docs]</a><span class="k">class</span> <span class="nc">GreaterEqual</span><span class="p">(</span><span class="n">MathFunction</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Abstract comparison Function.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="GreaterEqual.__init__"><a class="viewcode-back" href="../../../API/math.html#moviemaker2.math.primitive.GreaterEqual.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">A</span><span class="p">,</span> <span class="n">B</span><span class="p">):</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">A</span> <span class="o">=</span> <span class="n">asfunction</span><span class="p">(</span><span class="n">A</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">B</span> <span class="o">=</span> <span class="n">asfunction</span><span class="p">(</span><span class="n">B</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="GreaterEqual.__call__"><a class="viewcode-back" href="../../../API/math.html#moviemaker2.math.primitive.GreaterEqual.__call__">[docs]</a>    <span class="k">def</span> <span class="nf">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">A</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">B</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+</div></div>
+<div class="viewcode-block" id="Equal"><a class="viewcode-back" href="../../../API/math.html#moviemaker2.math.primitive.Equal">[docs]</a><span class="k">class</span> <span class="nc">Equal</span><span class="p">(</span><span class="n">MathFunction</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Abstract comparison Function.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="Equal.__init__"><a class="viewcode-back" href="../../../API/math.html#moviemaker2.math.primitive.Equal.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">A</span><span class="p">,</span> <span class="n">B</span><span class="p">):</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">A</span> <span class="o">=</span> <span class="n">asfunction</span><span class="p">(</span><span class="n">A</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">B</span> <span class="o">=</span> <span class="n">asfunction</span><span class="p">(</span><span class="n">B</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="Equal.__call__"><a class="viewcode-back" href="../../../API/math.html#moviemaker2.math.primitive.Equal.__call__">[docs]</a>    <span class="k">def</span> <span class="nf">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">A</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">B</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+</div></div>
+<div class="viewcode-block" id="Not"><a class="viewcode-back" href="../../../API/math.html#moviemaker2.math.primitive.Not">[docs]</a><span class="k">class</span> <span class="nc">Not</span><span class="p">(</span><span class="n">MathFunction</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Abstract comparison Function.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="Not.__init__"><a class="viewcode-back" href="../../../API/math.html#moviemaker2.math.primitive.Not.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">A</span><span class="p">):</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">A</span> <span class="o">=</span> <span class="n">asfunction</span><span class="p">(</span><span class="n">A</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="Not.__call__"><a class="viewcode-back" href="../../../API/math.html#moviemaker2.math.primitive.Not.__call__">[docs]</a>    <span class="k">def</span> <span class="nf">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        
+        <span class="k">return</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">A</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+</div></div>
+<div class="viewcode-block" id="Power"><a class="viewcode-back" href="../../../API/math.html#moviemaker2.math.primitive.Power">[docs]</a><span class="k">class</span> <span class="nc">Power</span><span class="p">(</span><span class="n">MathFunction</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Abstract power Function.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    
+<div class="viewcode-block" id="Power.__init__"><a class="viewcode-back" href="../../../API/math.html#moviemaker2.math.primitive.Power.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">base</span><span class="p">,</span> <span class="n">exponent</span><span class="p">):</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">base</span> <span class="o">=</span> <span class="n">asfunction</span><span class="p">(</span><span class="n">base</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">exponent</span> <span class="o">=</span> <span class="n">asfunction</span><span class="p">(</span><span class="n">exponent</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="Power.__call__"><a class="viewcode-back" href="../../../API/math.html#moviemaker2.math.primitive.Power.__call__">[docs]</a>    <span class="k">def</span> <span class="nf">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">base</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">**</span> <span class="bp">self</span><span class="o">.</span><span class="n">exponent</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+</div></div>
+<div class="viewcode-block" id="Neg"><a class="viewcode-back" href="../../../API/math.html#moviemaker2.math.primitive.Neg">[docs]</a><span class="k">class</span> <span class="nc">Neg</span><span class="p">(</span><span class="n">MathFunction</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Abstract negative Function.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    
+<div class="viewcode-block" id="Neg.__init__"><a class="viewcode-back" href="../../../API/math.html#moviemaker2.math.primitive.Neg.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">invertible</span><span class="p">):</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">invertible</span> <span class="o">=</span> <span class="n">asfunction</span><span class="p">(</span><span class="n">invertible</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="Neg.__call__"><a class="viewcode-back" href="../../../API/math.html#moviemaker2.math.primitive.Neg.__call__">[docs]</a>    <span class="k">def</span> <span class="nf">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        
+        <span class="k">return</span> <span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">invertible</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+</div></div>
+<div class="viewcode-block" id="Cos"><a class="viewcode-back" href="../../../API/math.html#moviemaker2.math.primitive.Cos">[docs]</a><span class="k">class</span> <span class="nc">Cos</span><span class="p">(</span><span class="n">MathFunction</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Takes the cosine.&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="Cos.__init__"><a class="viewcode-back" href="../../../API/math.html#moviemaker2.math.primitive.Cos.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">angle</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;The value of *angle* is in radians.&quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">angle</span> <span class="o">=</span> <span class="n">asfunction</span><span class="p">(</span><span class="n">angle</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="Cos.__call__"><a class="viewcode-back" href="../../../API/math.html#moviemaker2.math.primitive.Cos.__call__">[docs]</a>    <span class="k">def</span> <span class="nf">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Calculates the cosine of the value of *angle* using </span>
+<span class="sd">        ``numpy.cos``.&quot;&quot;&quot;</span>
+
+        <span class="n">angle</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">angle</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">numpy</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">angle</span><span class="p">)</span>
+</div></div>
+<div class="viewcode-block" id="Sin"><a class="viewcode-back" href="../../../API/math.html#moviemaker2.math.primitive.Sin">[docs]</a><span class="k">class</span> <span class="nc">Sin</span><span class="p">(</span><span class="n">MathFunction</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Takes the sine.&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="Sin.__init__"><a class="viewcode-back" href="../../../API/math.html#moviemaker2.math.primitive.Sin.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">angle</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;The value of *angle* is in radians.&quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">angle</span> <span class="o">=</span> <span class="n">asfunction</span><span class="p">(</span><span class="n">angle</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="Sin.__call__"><a class="viewcode-back" href="../../../API/math.html#moviemaker2.math.primitive.Sin.__call__">[docs]</a>    <span class="k">def</span> <span class="nf">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Calculates the sine of the value of *angle* using </span>
+<span class="sd">        ``numpy.sin``.&quot;&quot;&quot;</span>
+
+        <span class="n">angle</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">angle</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">numpy</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">angle</span><span class="p">)</span>
+</div></div>
+<div class="viewcode-block" id="Exp"><a class="viewcode-back" href="../../../API/math.html#moviemaker2.math.primitive.Exp">[docs]</a><span class="k">class</span> <span class="nc">Exp</span><span class="p">(</span><span class="n">MathFunction</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Exponentiates.&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="Exp.__init__"><a class="viewcode-back" href="../../../API/math.html#moviemaker2.math.primitive.Exp.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">exponent</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;*exponent* is used as the argument to ``numpy.exp()``.&quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">exponent</span> <span class="o">=</span> <span class="n">asfunction</span><span class="p">(</span><span class="n">exponent</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="Exp.__call__"><a class="viewcode-back" href="../../../API/math.html#moviemaker2.math.primitive.Exp.__call__">[docs]</a>    <span class="k">def</span> <span class="nf">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Calculates ``exp()`` of ``.exponent()``.&quot;&quot;&quot;</span>
+
+        <span class="n">exponent</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">exponent</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">numpy</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">exponent</span><span class="p">)</span>
+</div></div>
+<div class="viewcode-block" id="SumCall"><a class="viewcode-back" href="../../../API/math.html#moviemaker2.math.primitive.SumCall">[docs]</a><span class="k">class</span> <span class="nc">SumCall</span><span class="p">(</span><span class="n">MathFunction</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Calles ``.sum()`` with predefined arguments.  This is intended for</span>
+<span class="sd">    use with ndarray-values Functions.&quot;&quot;&quot;</span>
+    
+<div class="viewcode-block" id="SumCall.__init__"><a class="viewcode-back" href="../../../API/math.html#moviemaker2.math.primitive.SumCall.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">array</span><span class="p">,</span> <span class="o">*</span><span class="n">sum_args</span><span class="p">,</span> <span class="o">**</span><span class="n">sum_kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;The value of *array* must have a ``.sum`` method.  The sum() method</span>
+<span class="sd">        will be called on call time with the arguments and kwargs given.&quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">array</span> <span class="o">=</span> <span class="n">asfunction</span><span class="p">(</span><span class="n">array</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sum_args</span> <span class="o">=</span> <span class="n">sum_args</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sum_kwargs</span> <span class="o">=</span> <span class="n">sum_kwargs</span>
+</div>
+<div class="viewcode-block" id="SumCall.__call__"><a class="viewcode-back" href="../../../API/math.html#moviemaker2.math.primitive.SumCall.__call__">[docs]</a>    <span class="k">def</span> <span class="nf">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Calls *array* with the arguments, and then calls ``.sum()`` on</span>
+<span class="sd">        the value with the arguments defined at initialisation time.&quot;&quot;&quot;</span>
+
+        <span class="n">array</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">array</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">sum_args</span><span class="p">,</span> <span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">sum_kwargs</span><span class="p">)</span>
+</div></div>
+<div class="viewcode-block" id="Indexing"><a class="viewcode-back" href="../../../API/math.html#moviemaker2.math.primitive.Indexing">[docs]</a><span class="k">class</span> <span class="nc">Indexing</span><span class="p">(</span><span class="n">MathFunction</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Returns an item from the value of another Function.</span>
+
+<span class="sd">    Examples:</span>
+
+<span class="sd">    1)  Indexing of a tuple with an integer.</span>
+<span class="sd">    2)  Indexing of a ndarray with any index accepted by the ndarray.</span>
+<span class="sd">    3)  Indexing of a dictionary.</span>
+
+<span class="sd">    The index is static, i.e., it isn&#39;t a Function.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="Indexing.__init__"><a class="viewcode-back" href="../../../API/math.html#moviemaker2.math.primitive.Indexing.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">,</span> <span class="n">items</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;*items* returns the items the Indexing chooses from.  The value</span>
+<span class="sd">        of *items* must support indexing.</span>
+<span class="sd">        </span>
+<span class="sd">        *index* might be any index accepted by the value of *items*.&quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">items</span> <span class="o">=</span> <span class="n">asfunction</span><span class="p">(</span><span class="n">items</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">index</span> <span class="o">=</span> <span class="n">asfunction</span><span class="p">(</span><span class="n">index</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="Indexing.__call__"><a class="viewcode-back" href="../../../API/math.html#moviemaker2.math.primitive.Indexing.__call__">[docs]</a>    <span class="k">def</span> <span class="nf">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Indexes the value of *items* with *index*.&quot;&quot;&quot;</span>
+
+        <span class="n">items</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">items</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="n">index</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">items</span><span class="p">[</span><span class="n">index</span><span class="p">]</span>
+</div></div>
+<div class="viewcode-block" id="AttributeAccess"><a class="viewcode-back" href="../../../API/math.html#moviemaker2.math.primitive.AttributeAccess">[docs]</a><span class="k">class</span> <span class="nc">AttributeAccess</span><span class="p">(</span><span class="n">MathFunction</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Returns an attribute from the value of another Function.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="AttributeAccess.__init__"><a class="viewcode-back" href="../../../API/math.html#moviemaker2.math.primitive.AttributeAccess.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">attribute</span><span class="p">,</span> <span class="n">host</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;*host* is the Function with values hosting the attribute named </span>
+<span class="sd">        *attribute*.&quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">host</span> <span class="o">=</span> <span class="n">asfunction</span><span class="p">(</span><span class="n">host</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">attribute</span> <span class="o">=</span> <span class="n">asfunction</span><span class="p">(</span><span class="n">attribute</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="AttributeAccess.__call__"><a class="viewcode-back" href="../../../API/math.html#moviemaker2.math.primitive.AttributeAccess.__call__">[docs]</a>    <span class="k">def</span> <span class="nf">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Returns the attribute *attribute* from the value of *host*.&quot;&quot;&quot;</span>
+
+        <span class="n">host</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="n">attribute</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">attribute</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">return</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">host</span><span class="p">,</span> <span class="n">attribute</span><span class="p">)</span>
+</div></div>
+<div class="viewcode-block" id="Clip"><a class="viewcode-back" href="../../../API/math.html#moviemaker2.math.primitive.Clip">[docs]</a><span class="k">class</span> <span class="nc">Clip</span><span class="p">(</span><span class="n">MathFunction</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Clips the leaf Function&#39;s value.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="Clip.__init__"><a class="viewcode-back" href="../../../API/math.html#moviemaker2.math.primitive.Clip.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">low</span><span class="p">,</span> <span class="n">high</span><span class="p">,</span> <span class="n">leaf</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;*low* is the Function giving the lower boundary, *high* gives the</span>
+<span class="sd">        upper boundary, and *leaf* is the Function to be clipped.&quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">low</span> <span class="o">=</span> <span class="n">asfunction</span><span class="p">(</span><span class="n">low</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">high</span> <span class="o">=</span> <span class="n">asfunction</span><span class="p">(</span><span class="n">high</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">leaf</span> <span class="o">=</span> <span class="n">asfunction</span><span class="p">(</span><span class="n">leaf</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="Clip.__call__"><a class="viewcode-back" href="../../../API/math.html#moviemaker2.math.primitive.Clip.__call__">[docs]</a>    <span class="k">def</span> <span class="nf">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Calls ``.low()``, ``.high()``, ``.leaf()``, and clips using the</span>
+<span class="sd">        values.&quot;&quot;&quot;</span>
+
+        <span class="n">low</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">low</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="n">high</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">high</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="n">leaf</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">leaf</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">numpy</span><span class="o">.</span><span class="n">clip</span><span class="p">(</span><span class="n">leaf</span><span class="p">,</span> <span class="n">low</span><span class="p">,</span> <span class="n">high</span><span class="p">)</span>
+</div></div>
+<div class="viewcode-block" id="asarray"><a class="viewcode-back" href="../../../API/math.html#moviemaker2.math.primitive.asarray">[docs]</a><span class="k">class</span> <span class="nc">asarray</span><span class="p">(</span><span class="n">MathFunction</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Converts ndarrays, with arbitrary arguments.&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="asarray.__init__"><a class="viewcode-back" href="../../../API/math.html#moviemaker2.math.primitive.asarray.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">array_like</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Converts the array_like-values Function *array_like* via</span>
+<span class="sd">        ``numpy.ndarray()`` with all *args* and *kwargs* given.&quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">array_like</span> <span class="o">=</span> <span class="n">asfunction</span><span class="p">(</span><span class="n">array_like</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">args</span> <span class="o">=</span> <span class="n">args</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">kwargs</span> <span class="o">=</span> <span class="n">kwargs</span>
+</div>
+    <span class="k">def</span> <span class="nf">reduce</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">array_like</span><span class="p">,</span> <span class="n">args</span><span class="p">,</span> <span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;If *array_like* is scalar, returns the call of the item with *args* </span>
+<span class="sd">        and *kwargs*.  Else, iterates.&quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">array_like</span><span class="p">,</span> <span class="nb">list</span><span class="p">)</span> <span class="ow">or</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">array_like</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">numpy</span><span class="o">.</span><span class="n">asarray</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">reduce</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="n">args</span><span class="p">,</span> <span class="n">kwargs</span><span class="p">)</span> \
+                <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">array_like</span><span class="p">])</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">asfunction</span><span class="p">(</span><span class="n">array_like</span><span class="p">)(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+<div class="viewcode-block" id="asarray.__call__"><a class="viewcode-back" href="../../../API/math.html#moviemaker2.math.primitive.asarray.__call__">[docs]</a>    <span class="k">def</span> <span class="nf">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Applies the args and kwargs from initialisation time onto</span>
+<span class="sd">        ``.array_like()`` via ``numpy.asarray()``.&quot;&quot;&quot;</span>
+
+        <span class="n">array_like</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">reduce</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">array_like</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">),</span> 
+            <span class="n">args</span><span class="p">,</span> <span class="n">kwargs</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">numpy</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">array_like</span><span class="p">,</span> <span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">kwargs</span><span class="p">)</span></div></div>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../../index.html">Moviemaker v0.1.0b documentation</a> &raquo;</li>
+          <li><a href="../../index.html" >Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2010--2011, Friedrich Romstedt.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.1.
+    </div>
+  </body>
+</html>

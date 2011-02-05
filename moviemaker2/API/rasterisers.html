@@ -1,0 +1,192 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>moviemaker2.rasterisers &mdash; Moviemaker v0.1.0b documentation</title>
+    <link rel="stylesheet" href="../_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.1.0b',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="Moviemaker v0.1.0b documentation" href="../index.html" />
+    <link rel="up" title="API" href="../API.html" />
+    <link rel="next" title="moviemaker2.stacks" href="stacks.html" />
+    <link rel="prev" title="moviemaker2.branch" href="branch.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="stacks.html" title="moviemaker2.stacks"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="branch.html" title="moviemaker2.branch"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">Moviemaker v0.1.0b documentation</a> &raquo;</li>
+          <li><a href="../API.html" accesskey="U">API</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="module-moviemaker2.rasterisers">
+<span id="moviemaker2-rasterisers"></span><h1>moviemaker2.rasterisers<a class="headerlink" href="#module-moviemaker2.rasterisers" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="module-moviemaker2.rasterisers.angle">
+<span id="moviemaker2-rasterisers-angle"></span><h2>moviemaker2.rasterisers.angle<a class="headerlink" href="#module-moviemaker2.rasterisers.angle" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="moviemaker2.rasterisers.angle.Angle">
+<em class="property">class </em><tt class="descclassname">moviemaker2.rasterisers.angle.</tt><tt class="descname">Angle</tt><big>(</big><em>mesh=None</em><big>)</big><a class="reference internal" href="../_modules/moviemaker2/rasterisers/angle.html#Angle"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#moviemaker2.rasterisers.angle.Angle" title="Permalink to this definition">¶</a></dt>
+<dd><p>Transforms a mesh into the angle of the mesh to the x axis.</p>
+<dl class="method">
+<dt id="moviemaker2.rasterisers.angle.Angle.__init__">
+<tt class="descname">__init__</tt><big>(</big><em>mesh=None</em><big>)</big><a class="reference internal" href="../_modules/moviemaker2/rasterisers/angle.html#Angle.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#moviemaker2.rasterisers.angle.Angle.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>mesh</em> is the mesh Function.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="moviemaker2.rasterisers.angle.Angle.__call__">
+<tt class="descname">__call__</tt><big>(</big><em>ps</em><big>)</big><a class="reference internal" href="../_modules/moviemaker2/rasterisers/angle.html#Angle.__call__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#moviemaker2.rasterisers.angle.Angle.__call__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the arctan2.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-moviemaker2.rasterisers.distance">
+<span id="moviemaker2-rasterisers-distance"></span><h2>moviemaker2.rasterisers.distance<a class="headerlink" href="#module-moviemaker2.rasterisers.distance" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="moviemaker2.rasterisers.distance.Distance">
+<em class="property">class </em><tt class="descclassname">moviemaker2.rasterisers.distance.</tt><tt class="descname">Distance</tt><big>(</big><em>mesh=None</em><big>)</big><a class="reference internal" href="../_modules/moviemaker2/rasterisers/distance.html#Distance"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#moviemaker2.rasterisers.distance.Distance" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates the distance in a mesh from the origin.</p>
+<dl class="method">
+<dt id="moviemaker2.rasterisers.distance.Distance.__init__">
+<tt class="descname">__init__</tt><big>(</big><em>mesh=None</em><big>)</big><a class="reference internal" href="../_modules/moviemaker2/rasterisers/distance.html#Distance.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#moviemaker2.rasterisers.distance.Distance.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>mesh</em> is the mesh generator.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="moviemaker2.rasterisers.distance.Distance.__call__">
+<tt class="descname">__call__</tt><big>(</big><em>ps</em><big>)</big><a class="reference internal" href="../_modules/moviemaker2/rasterisers/distance.html#Distance.__call__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#moviemaker2.rasterisers.distance.Distance.__call__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the distance of the points of the mesh from the origin.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-moviemaker2.rasterisers.scalarproduct">
+<span id="moviemaker2-rasterisers-scalarproduct"></span><h2>moviemaker2.rasterisers.scalarproduct<a class="headerlink" href="#module-moviemaker2.rasterisers.scalarproduct" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="moviemaker2.rasterisers.scalarproduct.ScalarProduct">
+<em class="property">class </em><tt class="descclassname">moviemaker2.rasterisers.scalarproduct.</tt><tt class="descname">ScalarProduct</tt><big>(</big><em>vector</em>, <em>mesh=None</em><big>)</big><a class="reference internal" href="../_modules/moviemaker2/rasterisers/scalarproduct.html#ScalarProduct"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#moviemaker2.rasterisers.scalarproduct.ScalarProduct" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates the scalar product of the mesh points with a given vector
+Function.  Useful for plane wave calculations.</p>
+<dl class="method">
+<dt id="moviemaker2.rasterisers.scalarproduct.ScalarProduct.__init__">
+<tt class="descname">__init__</tt><big>(</big><em>vector</em>, <em>mesh=None</em><big>)</big><a class="reference internal" href="../_modules/moviemaker2/rasterisers/scalarproduct.html#ScalarProduct.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#moviemaker2.rasterisers.scalarproduct.ScalarProduct.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>mesh</em> is the mesh Function, <em>vector</em> the vector Function.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="moviemaker2.rasterisers.scalarproduct.ScalarProduct.__call__">
+<tt class="descname">__call__</tt><big>(</big><em>ps</em><big>)</big><a class="reference internal" href="../_modules/moviemaker2/rasterisers/scalarproduct.html#ScalarProduct.__call__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#moviemaker2.rasterisers.scalarproduct.ScalarProduct.__call__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates the dot product of each mesh vector and the 
+<tt class="docutils literal"><span class="pre">.vector()</span></tt>.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">moviemaker2.rasterisers</a><ul>
+<li><a class="reference internal" href="#module-moviemaker2.rasterisers.angle">moviemaker2.rasterisers.angle</a></li>
+<li><a class="reference internal" href="#module-moviemaker2.rasterisers.distance">moviemaker2.rasterisers.distance</a></li>
+<li><a class="reference internal" href="#module-moviemaker2.rasterisers.scalarproduct">moviemaker2.rasterisers.scalarproduct</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="branch.html"
+                        title="previous chapter">moviemaker2.branch</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="stacks.html"
+                        title="next chapter">moviemaker2.stacks</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/API/rasterisers.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="stacks.html" title="moviemaker2.stacks"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="branch.html" title="moviemaker2.branch"
+             >previous</a> |</li>
+        <li><a href="../index.html">Moviemaker v0.1.0b documentation</a> &raquo;</li>
+          <li><a href="../API.html" >API</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2010--2011, Friedrich Romstedt.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.1.
+    </div>
+  </body>
+</html>

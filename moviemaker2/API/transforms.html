@@ -1,0 +1,171 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>moviemaker2.transforms &mdash; Moviemaker v0.1.0b documentation</title>
+    <link rel="stylesheet" href="../_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.1.0b',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="Moviemaker v0.1.0b documentation" href="../index.html" />
+    <link rel="up" title="API" href="../API.html" />
+    <link rel="next" title="Built-in Extensions" href="ext.html" />
+    <link rel="prev" title="moviemaker2.stacks" href="stacks.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="ext.html" title="Built-in Extensions"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="stacks.html" title="moviemaker2.stacks"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">Moviemaker v0.1.0b documentation</a> &raquo;</li>
+          <li><a href="../API.html" accesskey="U">API</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="module-moviemaker2.transforms">
+<span id="moviemaker2-transforms"></span><h1>moviemaker2.transforms<a class="headerlink" href="#module-moviemaker2.transforms" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="module-moviemaker2.transforms.polar">
+<span id="moviemaker2-transforms-polar"></span><h2>moviemaker2.transforms.polar<a class="headerlink" href="#module-moviemaker2.transforms.polar" title="Permalink to this headline">¶</a></h2>
+<p>Provides conversion between polar and cartesian coordinates.</p>
+<dl class="class">
+<dt id="moviemaker2.transforms.polar.Polar2DtoCartesian2D">
+<em class="property">class </em><tt class="descclassname">moviemaker2.transforms.polar.</tt><tt class="descname">Polar2DtoCartesian2D</tt><big>(</big><em>mesh=None</em><big>)</big><a class="reference internal" href="../_modules/moviemaker2/transforms/polar.html#Polar2DtoCartesian2D"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#moviemaker2.transforms.polar.Polar2DtoCartesian2D" title="Permalink to this definition">¶</a></dt>
+<dd><p>Computes cartesian 2D coordinates <tt class="docutils literal"><span class="pre">[y,</span> <span class="pre">x]</span></tt> from 2D polar 
+coordinates <tt class="docutils literal"><span class="pre">[r,</span> <span class="pre">phi]</span></tt>.</p>
+<dl class="method">
+<dt id="moviemaker2.transforms.polar.Polar2DtoCartesian2D.__init__">
+<tt class="descname">__init__</tt><big>(</big><em>mesh=None</em><big>)</big><a class="reference internal" href="../_modules/moviemaker2/transforms/polar.html#Polar2DtoCartesian2D.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#moviemaker2.transforms.polar.Polar2DtoCartesian2D.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>mesh</em> is in polar coordinates <tt class="docutils literal"><span class="pre">[r,</span> <span class="pre">phi]</span></tt>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="moviemaker2.transforms.polar.Polar2DtoCartesian2D.__call__">
+<tt class="descname">__call__</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/moviemaker2/transforms/polar.html#Polar2DtoCartesian2D.__call__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#moviemaker2.transforms.polar.Polar2DtoCartesian2D.__call__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates the cartesian coordinates <tt class="docutils literal"><span class="pre">[y,</span> <span class="pre">x]</span></tt> from the polar 
+coordinates.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="moviemaker2.transforms.polar.Cartesian2DtoPolar2D">
+<em class="property">class </em><tt class="descclassname">moviemaker2.transforms.polar.</tt><tt class="descname">Cartesian2DtoPolar2D</tt><big>(</big><em>mesh=None</em><big>)</big><a class="reference internal" href="../_modules/moviemaker2/transforms/polar.html#Cartesian2DtoPolar2D"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#moviemaker2.transforms.polar.Cartesian2DtoPolar2D" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates 2D polar coordinates <tt class="docutils literal"><span class="pre">[r,</span> <span class="pre">phi]</span></tt> from 2D cartesian 
+coordinates <tt class="docutils literal"><span class="pre">[y,</span> <span class="pre">x]</span></tt>.</p>
+<dl class="method">
+<dt id="moviemaker2.transforms.polar.Cartesian2DtoPolar2D.__init__">
+<tt class="descname">__init__</tt><big>(</big><em>mesh=None</em><big>)</big><a class="reference internal" href="../_modules/moviemaker2/transforms/polar.html#Cartesian2DtoPolar2D.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#moviemaker2.transforms.polar.Cartesian2DtoPolar2D.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>mesh</em> is in cartesian coordinates <tt class="docutils literal"><span class="pre">[y,</span> <span class="pre">x]</span></tt>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="moviemaker2.transforms.polar.Cartesian2DtoPolar2D.__call__">
+<tt class="descname">__call__</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/moviemaker2/transforms/polar.html#Cartesian2DtoPolar2D.__call__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#moviemaker2.transforms.polar.Cartesian2DtoPolar2D.__call__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates the polar coordinates <tt class="docutils literal"><span class="pre">[r,</span> <span class="pre">phi]</span></tt> from the cartesian 
+coordinates <tt class="docutils literal"><span class="pre">[y,</span> <span class="pre">x]</span></tt>.</p>
+<p>The angle is calculates mathematically positive starting in the 
+direction os <img class="math" src="../_images/math/09ee9d74659eb6547155a657c853fd5719e97191.png" alt="+x"/> with phi=0.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">moviemaker2.transforms</a><ul>
+<li><a class="reference internal" href="#module-moviemaker2.transforms.polar">moviemaker2.transforms.polar</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="stacks.html"
+                        title="previous chapter">moviemaker2.stacks</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="ext.html"
+                        title="next chapter">Built-in Extensions</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/API/transforms.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="ext.html" title="Built-in Extensions"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="stacks.html" title="moviemaker2.stacks"
+             >previous</a> |</li>
+        <li><a href="../index.html">Moviemaker v0.1.0b documentation</a> &raquo;</li>
+          <li><a href="../API.html" >API</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2010--2011, Friedrich Romstedt.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.1.
+    </div>
+  </body>
+</html>

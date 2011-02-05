@@ -1,0 +1,16 @@
+moviemaker2.parameter
+=====================
+
+.. automodule:: moviemaker2.parameter
+
+.. autoclass:: Ps
+    
+    .. automethod:: __init__
+    .. automethod:: extended
+    .. automethod:: retrieve
+
+.. autoclass:: p
+    
+    .. automethod:: __init__
+    .. automethod:: __call__
+    .. automethod:: store

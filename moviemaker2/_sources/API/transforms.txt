@@ -1,0 +1,20 @@
+moviemaker2.transforms
+======================
+
+.. automodule:: moviemaker2.transforms
+
+
+moviemaker2.transforms.polar
+----------------------------
+
+.. automodule:: moviemaker2.transforms.polar
+
+.. autoclass:: Polar2DtoCartesian2D
+
+    .. automethod:: __init__
+    .. automethod:: __call__
+
+.. autoclass:: Cartesian2DtoPolar2D
+
+    .. automethod:: __init__
+    .. automethod:: __call__

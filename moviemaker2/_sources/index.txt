@@ -1,0 +1,53 @@
+Welcome to Moviemaker2's Documentation!
+=======================================
+
+Contents:
+
+.. toctree::
+    :maxdepth: 1
+
+    Summary
+    Tutorials
+    Elements
+    Coding_Style
+    API
+
+How to proceed with this documentation
+--------------------------------------
+
+When you don't know what moviemaker2 is about, read the :ref:`Summary`.
+
+When you want an example of how moviemaker2 works out in code, try the
+:ref:`Tutorials`.  :ref:`Elements` will be good company in this, but not a
+necessary prerequisite.
+
+When you already know what moviemaker2 does, but want to know it's structured,
+read :ref:`Elements`.
+
+When you want to start your own moviemaker2 programs, but don't know really 
+how to do that, the :ref:`Coding Style` might help you.  Note, this is 
+especially about extending moviemaker2.
+
+When you want to know the API of a specific part of moviemaker2, check out the 
+:ref:`API`.
+
+
+Notes
+-----
+
+Moviemaker2 is still in flux.  The API might still change (and it did 
+sometimes quite dramatically).  So don't rely on this.
+
+The docs are still somewhat incomplete, may you please excuse this.
+
+Feel free to email me at friedrichromstedt@gmail.com if you have any
+thoughs, suggestions, or similar.
+
+
+Indices and tables
+------------------
+
+* :ref:`genindex`
+* :ref:`modindex`
+* :ref:`search`
+

@@ -1,0 +1,370 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Moving Dot Tutorial &mdash; Moviemaker v0.1.0b documentation</title>
+    <link rel="stylesheet" href="../_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.1.0b',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="Moviemaker v0.1.0b documentation" href="../index.html" />
+    <link rel="up" title="Tutorials" href="../Tutorials.html" />
+    <link rel="next" title="Elements of Moviemaker2" href="../Elements.html" />
+    <link rel="prev" title="Tutorials" href="../Tutorials.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../Elements.html" title="Elements of Moviemaker2"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="../Tutorials.html" title="Tutorials"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">Moviemaker v0.1.0b documentation</a> &raquo;</li>
+          <li><a href="../Tutorials.html" accesskey="U">Tutorials</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="moving-dot-tutorial">
+<span id="id1"></span><h1>Moving Dot Tutorial<a class="headerlink" href="#moving-dot-tutorial" title="Permalink to this headline">¶</a></h1>
+<p>This tutorial descibes how to code a dot moving in a circle, on white
+background.</p>
+<p>The complete code can be found at the <a class="reference internal" href="#moving-dot-tutorial-code"><em>end</em></a> of
+this tutorial.  You will be guided through the steps of writing it.</p>
+<div class="section" id="importing-moviemaker2">
+<h2>1. Importing moviemaker2<a class="headerlink" href="#importing-moviemaker2" title="Permalink to this headline">¶</a></h2>
+<p>Usually, one of the strenghes of moviemaker2 code is its shortness.  To avoid
+cluttering moviemaker2 scripts with <tt class="docutils literal"><span class="pre">moviemaker2.</span></tt> snippets, we do:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">moviemaker2</span> <span class="kn">import</span> <span class="o">*</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li>Don&#8217;t import non-moviemaker2 stuff in this manner.  Don&#8217;t even import
+moviemaker2 exts (extensions) in this way.</li>
+</ul>
+</div>
+<div class="section" id="generating-the-display-backend">
+<h2>2. Generating the display backend<a class="headerlink" href="#generating-the-display-backend" title="Permalink to this headline">¶</a></h2>
+<p>Yes, you can generate the actual display backend before creating something that
+is to render:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">Tkinter</span>
+<span class="kn">import</span> <span class="nn">moviemaker2.ext.tk</span>
+
+<span class="n">tk</span> <span class="o">=</span> <span class="n">Tkinter</span><span class="o">.</span><span class="n">Tk</span><span class="p">()</span>
+<span class="n">render_frame</span> <span class="o">=</span> <span class="n">moviemaker2</span><span class="o">.</span><span class="n">ext</span><span class="o">.</span><span class="n">tk</span><span class="o">.</span><span class="n">RenderFrame</span><span class="p">(</span><span class="n">tk</span><span class="p">,</span> <span class="n">nbins</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+<span class="n">render_frame</span><span class="o">.</span><span class="n">pack</span><span class="p">()</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li>The <tt class="docutils literal"><span class="pre">RenderFrame</span></tt> will automatically start to poll a queue, which we
+can feed with output from a Renderer <strong>&lt;TODOC: Renderer doc&gt;</strong>.</li>
+</ul>
+<p>In the very end of the code, we will do:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">tk</span><span class="o">.</span><span class="n">mainloop</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>The rendering will happen in separate threads.  When you click the close
+button of the Tk window, the render threads will exit.</p>
+</div>
+<div class="section" id="generating-the-mesh">
+<h2>3. Generating the mesh<a class="headerlink" href="#generating-the-mesh" title="Permalink to this headline">¶</a></h2>
+<p>We need some specs of the render frame:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">shape</span> <span class="o">=</span> <span class="p">(</span><span class="mi">300</span><span class="p">,</span> <span class="mi">400</span><span class="p">)</span>
+<span class="p">(</span><span class="n">shapey</span><span class="p">,</span> <span class="n">shapex</span><span class="p">)</span> <span class="o">=</span> <span class="n">shape</span>
+
+<span class="n">Y</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">shapey</span><span class="p">)[:,</span> <span class="n">numpy</span><span class="o">.</span><span class="n">newaxis</span><span class="p">]</span><span class="o">.</span><span class="n">repeat</span><span class="p">(</span><span class="n">shapex</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">X</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="mi">4</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="n">shapex</span><span class="p">)[</span><span class="n">numpy</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,</span> <span class="p">:]</span><span class="o">.</span><span class="n">repeat</span><span class="p">(</span><span class="n">shapey</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+<span class="n">mesh_array</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">asarray</span><span class="p">([</span><span class="n">Y</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">X</span><span class="o">.</span><span class="n">T</span><span class="p">])</span><span class="o">.</span><span class="n">T</span>
+</pre></div>
+</div>
+<p>Note, that the first dimension is, in meshes, the y axis, and the second
+one is the x axis.  This is how ndarrays print.  For layers, the very first
+axis is the band axis.</p>
+<p>The trick in the end makes sure the coordinate axis (Y or X mesh component)
+is the last one.  This is useful when subtracting e.g. a vector from a mesh,
+where broadcasting will do the job as expected (we will see this later).</p>
+</div>
+<div class="section" id="generating-the-point-position">
+<h2>4. Generating the point position<a class="headerlink" href="#generating-the-point-position" title="Permalink to this headline">¶</a></h2>
+<p>We want to express the coordinate of the point in polar coordinates.  The
+angle is the time.  The radius shall be fixed.  We write:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">numpy</span>
+
+<span class="n">point_position</span> <span class="o">=</span> <span class="n">asmatharray</span><span class="p">([</span><span class="o">-</span><span class="n">numpy</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">p</span><span class="p">(</span><span class="s">&#39;time/real&#39;</span><span class="p">)),</span> <span class="n">numpy</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">p</span><span class="p">(</span><span class="s">&#39;time/real&#39;</span><span class="p">))])</span> <span class="o">*</span> <span class="mi">2</span>
+</pre></div>
+</div>
+<p>There are several important things here to note:</p>
+<ul class="simple">
+<li><tt class="docutils literal"><span class="pre">asmatharray</span></tt> is a Function yielding ndarrays.</li>
+<li><tt class="docutils literal"><span class="pre">numpy.sin</span></tt> etc. can be applied to Functions.</li>
+<li><tt class="docutils literal"><span class="pre">p('time/real')</span></tt> is a Function yielding the realtime.</li>
+</ul>
+<p>The parameters are requested by <tt class="docutils literal"><span class="pre">p</span></tt> Functions.  Here, the <tt class="docutils literal"><span class="pre">'time/real'</span></tt>
+parameter will be set by the render object, along with <tt class="docutils literal"><span class="pre">'time/frame'</span></tt>.</p>
+<p>Due to our meshs coordinates, <tt class="docutils literal"><span class="pre">2</span></tt> is a good choice for the radius.</p>
+</div>
+<div class="section" id="rendering-the-point">
+<h2>5. Rendering the point<a class="headerlink" href="#rendering-the-point" title="Permalink to this headline">¶</a></h2>
+<p>Now, we want a raster layer from the point position, with a Gaussian
+point centered at the <tt class="docutils literal"><span class="pre">point_position</span></tt>.</p>
+<p>We first generate an <em>Extension</em> inserting the <tt class="docutils literal"><span class="pre">mesh</span></tt> as a parameter:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">mesh</span> <span class="o">=</span> <span class="n">Extension</span><span class="p">(</span><span class="n">p</span><span class="o">=</span><span class="n">p</span><span class="p">(</span><span class="s">&#39;mesh&#39;</span><span class="p">),</span> <span class="n">value</span><span class="o">=</span><span class="n">mesh_array</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>You can read this as a <em>&#8216;mesh&#8217; = mesh</em> expression, but it will be executed
+on call time.</p>
+<p>We can use this with the pipe operator to provide the <tt class="docutils literal"><span class="pre">mesh</span></tt> to other
+Functions.  We do this and create the mask for the raster layer in one
+step:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">moviemaker2.rasterisers.distance</span> <span class="kn">import</span> <span class="n">Distance</span>
+
+<span class="n">point_mask</span> <span class="o">=</span> <span class="n">mesh</span> <span class="o">|</span> <span class="n">numpy</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">Distance</span><span class="p">(</span><span class="n">p</span><span class="p">(</span><span class="s">&#39;mesh&#39;</span><span class="p">)</span> <span class="o">-</span> <span class="n">point_position</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">/</span> <span class="mf">0.1</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>This need certainly some elaboration:</p>
+<ul>
+<li><p class="first">The second part, after the pipe, should be clear.  It calculates the
+Gaussian function around <tt class="docutils literal"><span class="pre">point_position</span></tt> with widt <tt class="docutils literal"><span class="pre">0.1</span></tt>.  Only new
+is there <tt class="docutils literal"><span class="pre">Distance()</span></tt>, yielding a distance ndarray from a mesh.</p>
+</li>
+<li><p class="first">More interesting, is the <tt class="docutils literal"><span class="pre">mesh</span> <span class="pre">|</span> <span class="pre">...</span></tt> part.  It will execute <tt class="docutils literal"><span class="pre">mesh</span></tt>
+first, and feed the output of this into the part right of the pipe
+operator.  This results in the <tt class="docutils literal"><span class="pre">'mesh'</span></tt> parameter being inserted by
+<tt class="docutils literal"><span class="pre">mesh</span></tt> (its only functionality), and such it is available to
+<tt class="docutils literal"><span class="pre">p('mesh')</span></tt> in the calculation part after the pipe.</p>
+<p>You can pipe as many operands as you wish, they will all be executed in
+order:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">X</span> <span class="o">=</span> <span class="n">a</span> <span class="o">|</span> <span class="n">b</span> <span class="o">|</span> <span class="n">c</span>
+</pre></div>
+</div>
+</li>
+<li><p class="first"><em>Rasterisers</em> are Functions generating a raster mask or similar.</p>
+</li>
+</ul>
+<p>Now, we want an argb layer (alpha-red-green-blue) from this mask.  It shall
+be red coloured, and thus we do:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">zeros</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">shape</span><span class="p">)</span>
+<span class="n">point</span> <span class="o">=</span> <span class="n">asmatharray</span><span class="p">([</span><span class="n">point_mask</span><span class="p">,</span>
+                     <span class="n">point_mask</span><span class="p">,</span>
+                     <span class="mf">0.2</span> <span class="o">*</span> <span class="n">point_mask</span><span class="p">,</span>
+                     <span class="n">zeros</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="alpha-blending-onto-white-background">
+<h2>6. Alpha-blending onto white background<a class="headerlink" href="#alpha-blending-onto-white-background" title="Permalink to this headline">¶</a></h2>
+<p>We have now our red dot, with proper alpha channelling.  So we can blit it
+onto a white background:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">ones</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">shape</span><span class="p">)</span>
+
+<span class="n">white</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">asarray</span><span class="p">([</span><span class="n">ones</span><span class="p">,</span> <span class="n">ones</span><span class="p">,</span> <span class="n">ones</span><span class="p">,</span> <span class="n">ones</span><span class="p">])</span>
+<span class="n">alpha</span> <span class="o">=</span> <span class="n">AlphaBlendRasterStack</span><span class="p">(</span><span class="n">background</span><span class="o">=</span><span class="n">white</span><span class="p">)</span>
+<span class="n">alpha</span> <span class="o">^</span> <span class="n">point</span>
+</pre></div>
+</div>
+<p>That&#8217;s it.  Some more notes:</p>
+<ul>
+<li><p class="first">Accumulation of layers is done by <em>Stacks</em>.  Not by the layers themselves.
+Especially raster stacks will have a <em>background</em>.</p>
+</li>
+<li><p class="first">Addition of objects to stacks is done with the XOR operator <tt class="docutils literal"><span class="pre">^</span></tt>.  There
+is a return value, but the accumulation happens in-place.  The return
+values is, nevertheless, the extended stack, to provide for multiple
+accumulation:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">stack</span> <span class="o">^</span> <span class="n">layer1</span> <span class="o">^</span> <span class="n">layer2</span>
+</pre></div>
+</div>
+</li>
+</ul>
+</div>
+<div class="section" id="rendering">
+<h2>7. Rendering<a class="headerlink" href="#rendering" title="Permalink to this headline">¶</a></h2>
+<p>Now we&#8217;re nearly done.  We just need to convert it to a PIL image:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">moviemaker2.ext.PIL_from_argb</span>
+
+<span class="n">pil</span> <span class="o">=</span> <span class="n">moviemaker2</span><span class="o">.</span><span class="n">ext</span><span class="o">.</span><span class="n">PIL_from_argb</span><span class="o">.</span><span class="n">PILfromARGB</span><span class="p">()</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li>Exts should always be used explicitly.</li>
+</ul>
+<p>This thing (<tt class="docutils literal"><span class="pre">pil</span></tt>) should be stacked with an argb ndarray generator, like
+this: <tt class="docutils literal"><span class="pre">(alpha</span> <span class="pre">|</span> <span class="pre">pil)</span></tt>.  We use this as argument to <tt class="docutils literal"><span class="pre">Render()</span></tt>:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">moviemaker2.ext.render</span>
+
+<span class="n">render</span> <span class="o">=</span> <span class="n">moviemaker2</span><span class="o">.</span><span class="n">ext</span><span class="o">.</span><span class="n">render</span><span class="o">.</span><span class="n">Render</span><span class="p">(</span><span class="n">fn</span><span class="o">=</span><span class="p">(</span><span class="n">alpha</span> <span class="o">|</span> <span class="n">pil</span><span class="p">))</span>
+</pre></div>
+</div>
+<p>To finally generate frames, we call the <tt class="docutils literal"><span class="pre">Render()</span></tt>:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">os.path</span>
+
+<span class="n">render</span><span class="p">(</span><span class="n">framerate</span><span class="o">=</span><span class="mi">25</span><span class="p">,</span> <span class="n">directory</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s">&#39;Dot&#39;</span><span class="p">,</span> <span class="s">&#39;Frames&#39;</span><span class="p">),</span> <span class="n">extension</span><span class="o">=</span><span class="s">&#39;jpg&#39;</span><span class="p">,</span> <span class="n">startrealtime</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">stoprealtime</span><span class="o">=</span><span class="mf">6.5</span><span class="p">,</span> <span class="n">render_queue</span><span class="o">=</span><span class="n">render_frame</span><span class="o">.</span><span class="n">render_queue</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>and then our <tt class="docutils literal"><span class="pre">tk.mainloop()</span></tt> chimes in.  We will see the frames render.
+Note: We handed over <tt class="docutils literal"><span class="pre">render_queue=...</span></tt>.  This is the target where to notify
+about rendered frames.</p>
+<p>You must create the directory where to put the frames first (<tt class="docutils literal"><span class="pre">Dot/Frames/</span></tt>).</p>
+<p>Here&#8217;s an animated gif created from the frames.  You can download the gif
+<a class="reference download internal" href="../_downloads/Dot.gif"><tt class="xref download docutils literal"><span class="pre">here</span></tt></a>.</p>
+<img alt="../_images/Dot.gif" src="../_images/Dot.gif" />
+</div>
+<div class="section" id="code">
+<span id="moving-dot-tutorial-code"></span><h2>Code<a class="headerlink" href="#code" title="Permalink to this headline">¶</a></h2>
+<p>And here comes the full code.  It has been sorted to comply with
+well-established Python coding rules.  You can downlaod the code
+<a class="reference download internal" href="../_downloads/dot.py"><tt class="xref download docutils literal"><span class="pre">here</span></tt></a>.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">Tkinter</span>
+<span class="kn">import</span> <span class="nn">os.path</span>
+<span class="kn">import</span> <span class="nn">numpy</span>
+<span class="kn">from</span> <span class="nn">moviemaker2</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">moviemaker2.rasterisers.distance</span> <span class="kn">import</span> <span class="n">Distance</span>
+<span class="kn">import</span> <span class="nn">moviemaker2.ext.tk</span>
+<span class="kn">import</span> <span class="nn">moviemaker2.ext.PIL_from_argb</span>
+<span class="kn">import</span> <span class="nn">moviemaker2.ext.render</span>
+
+<span class="n">tk</span> <span class="o">=</span> <span class="n">Tkinter</span><span class="o">.</span><span class="n">Tk</span><span class="p">()</span>
+<span class="n">render_frame</span> <span class="o">=</span> <span class="n">moviemaker2</span><span class="o">.</span><span class="n">ext</span><span class="o">.</span><span class="n">tk</span><span class="o">.</span><span class="n">RenderFrame</span><span class="p">(</span><span class="n">tk</span><span class="p">,</span> <span class="n">nbins</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+<span class="n">render_frame</span><span class="o">.</span><span class="n">pack</span><span class="p">()</span>
+
+<span class="n">shape</span> <span class="o">=</span> <span class="p">(</span><span class="mi">300</span><span class="p">,</span> <span class="mi">400</span><span class="p">)</span>
+<span class="p">(</span><span class="n">shapey</span><span class="p">,</span> <span class="n">shapex</span><span class="p">)</span> <span class="o">=</span> <span class="n">shape</span>
+
+<span class="n">zeros</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">shape</span><span class="p">)</span>
+<span class="n">ones</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">shape</span><span class="p">)</span>
+
+<span class="n">Y</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">shapey</span><span class="p">)[:,</span> <span class="n">numpy</span><span class="o">.</span><span class="n">newaxis</span><span class="p">]</span><span class="o">.</span><span class="n">repeat</span><span class="p">(</span><span class="n">shapex</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">X</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="mi">4</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="n">shapex</span><span class="p">)[</span><span class="n">numpy</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,</span> <span class="p">:]</span><span class="o">.</span><span class="n">repeat</span><span class="p">(</span><span class="n">shapey</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">mesh_array</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">asarray</span><span class="p">([</span><span class="n">Y</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">X</span><span class="o">.</span><span class="n">T</span><span class="p">])</span><span class="o">.</span><span class="n">T</span>
+
+<span class="n">point_position</span> <span class="o">=</span> <span class="n">asmatharray</span><span class="p">([</span><span class="o">-</span><span class="n">numpy</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">p</span><span class="p">(</span><span class="s">&#39;time/real&#39;</span><span class="p">)),</span> <span class="n">numpy</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">p</span><span class="p">(</span><span class="s">&#39;time/real&#39;</span><span class="p">))])</span> <span class="o">*</span> <span class="mi">2</span>
+<span class="n">mesh</span> <span class="o">=</span> <span class="n">Extension</span><span class="p">(</span><span class="n">p</span><span class="o">=</span><span class="n">p</span><span class="p">(</span><span class="s">&#39;mesh&#39;</span><span class="p">),</span> <span class="n">value</span><span class="o">=</span><span class="n">mesh_array</span><span class="p">)</span>
+<span class="n">point_mask</span> <span class="o">=</span> <span class="n">mesh</span> <span class="o">|</span> <span class="n">numpy</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">Distance</span><span class="p">(</span><span class="n">p</span><span class="p">(</span><span class="s">&#39;mesh&#39;</span><span class="p">)</span> <span class="o">-</span> <span class="n">point_position</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">/</span> <span class="mf">0.1</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span>
+<span class="n">point</span> <span class="o">=</span> <span class="n">asmatharray</span><span class="p">([</span><span class="n">point_mask</span><span class="p">,</span>
+                     <span class="n">point_mask</span><span class="p">,</span>
+                     <span class="mf">0.2</span> <span class="o">*</span> <span class="n">point_mask</span><span class="p">,</span>
+                     <span class="n">zeros</span><span class="p">])</span>
+
+<span class="n">white</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">asarray</span><span class="p">([</span><span class="n">ones</span><span class="p">,</span> <span class="n">ones</span><span class="p">,</span> <span class="n">ones</span><span class="p">,</span> <span class="n">ones</span><span class="p">])</span>
+<span class="n">alpha</span> <span class="o">=</span> <span class="n">AlphaBlendRasterStack</span><span class="p">(</span><span class="n">background</span><span class="o">=</span><span class="n">white</span><span class="p">)</span>
+<span class="n">alpha</span> <span class="o">^</span> <span class="n">point</span>
+
+<span class="n">pil</span> <span class="o">=</span> <span class="n">moviemaker2</span><span class="o">.</span><span class="n">ext</span><span class="o">.</span><span class="n">PIL_from_argb</span><span class="o">.</span><span class="n">PILfromARGB</span><span class="p">()</span>
+<span class="n">render</span> <span class="o">=</span> <span class="n">moviemaker2</span><span class="o">.</span><span class="n">ext</span><span class="o">.</span><span class="n">render</span><span class="o">.</span><span class="n">Render</span><span class="p">(</span><span class="n">fn</span><span class="o">=</span><span class="p">(</span><span class="n">alpha</span> <span class="o">|</span> <span class="n">pil</span><span class="p">))</span>
+
+<span class="n">render</span><span class="p">(</span><span class="n">framerate</span><span class="o">=</span><span class="mi">25</span><span class="p">,</span> <span class="n">directory</span><span class="o">=</span><span class="s">&#39;Frames&#39;</span><span class="p">,</span> <span class="n">extension</span><span class="o">=</span><span class="s">&#39;jpg&#39;</span><span class="p">,</span> <span class="n">startrealtime</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">stoprealtime</span><span class="o">=</span><span class="mf">6.5</span><span class="p">,</span> <span class="n">render_queue</span><span class="o">=</span><span class="n">render_frame</span><span class="o">.</span><span class="n">render_queue</span><span class="p">)</span>
+
+<span class="n">tk</span><span class="o">.</span><span class="n">mainloop</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="where-to-go-from-here">
+<h2>Where to go from here<a class="headerlink" href="#where-to-go-from-here" title="Permalink to this headline">¶</a></h2>
+<p>Check out the other <a class="reference internal" href="../Tutorials.html#tutorials"><em>Tutorials</em></a> (<strong>TODOC</strong>) or go to the
+<a class="reference internal" href="../Elements.html#elements"><em>Elements of Moviemaker2</em></a> section.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Moving Dot Tutorial</a><ul>
+<li><a class="reference internal" href="#importing-moviemaker2">1. Importing moviemaker2</a></li>
+<li><a class="reference internal" href="#generating-the-display-backend">2. Generating the display backend</a></li>
+<li><a class="reference internal" href="#generating-the-mesh">3. Generating the mesh</a></li>
+<li><a class="reference internal" href="#generating-the-point-position">4. Generating the point position</a></li>
+<li><a class="reference internal" href="#rendering-the-point">5. Rendering the point</a></li>
+<li><a class="reference internal" href="#alpha-blending-onto-white-background">6. Alpha-blending onto white background</a></li>
+<li><a class="reference internal" href="#rendering">7. Rendering</a></li>
+<li><a class="reference internal" href="#code">Code</a></li>
+<li><a class="reference internal" href="#where-to-go-from-here">Where to go from here</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="../Tutorials.html"
+                        title="previous chapter">Tutorials</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="../Elements.html"
+                        title="next chapter">Elements of Moviemaker2</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/Tutorials/Dot.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../Elements.html" title="Elements of Moviemaker2"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="../Tutorials.html" title="Tutorials"
+             >previous</a> |</li>
+        <li><a href="../index.html">Moviemaker v0.1.0b documentation</a> &raquo;</li>
+          <li><a href="../Tutorials.html" >Tutorials</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2010--2011, Friedrich Romstedt.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.1.
+    </div>
+  </body>
+</html>

@@ -1,0 +1,188 @@
+moviemaker2.math
+================
+
+moviemaker2.math.primitive
+--------------------------
+
+.. automodule:: moviemaker2.math.primitive
+
+.. autoclass:: MathFunction
+
+    .. automethod:: __init__
+    .. automethod:: __call__
+    .. automethod:: __add__
+    .. automethod:: __radd__
+    .. automethod:: __sub__
+    .. automethod:: __rsub__
+    .. automethod:: __mul__
+    .. automethod:: __rmul__
+    .. automethod:: __div__
+    .. automethod:: __rdiv__
+    .. automethod:: __pow__
+    .. automethod:: __rpow__
+    .. automethod:: __pos__
+    .. automethod:: __neg__
+    .. automethod:: sin
+    .. automethod:: cos
+    .. automethod:: exp
+    .. automethod:: sum
+    .. automethod:: clip
+    .. automethod:: astype
+    .. automethod:: __getitem__
+    .. automethod:: __or__
+
+.. autoclass:: MathComposedFunction
+
+    .. automethod:: __init__
+    .. automethod:: __call__
+
+.. autoclass:: MathConstant
+
+.. autoclass:: MathIdentity
+
+.. autofunction:: asmathfunction
+
+.. autofunction:: asmathfunctionv
+
+.. autoclass:: Sum
+
+    .. automethod:: __init__
+    .. automethod:: __call__
+
+.. autoclass:: Product
+
+    .. automethod:: __init__
+    .. automethod:: __call__
+
+.. autoclass:: Quotient
+    
+    .. automethod:: __init__
+    .. automethod:: __call__
+
+.. autoclass:: Cmp
+    
+    .. automethod:: __init__
+    .. automethod:: __call__
+
+.. autoclass:: Less
+    
+    .. automethod:: __init__
+    .. automethod:: __call__
+
+.. autoclass:: Greater
+
+    .. automethod:: __init__
+    .. automethod:: __call__
+
+.. autoclass:: LessEqual
+    
+    .. automethod:: __init__
+    .. automethod:: __call__
+
+.. autoclass:: GreaterEqual
+    
+    .. automethod:: __init__
+    .. automethod:: __call__
+
+.. autoclass:: Equal
+    
+    .. automethod:: __init__
+    .. automethod:: __call__
+
+.. autoclass:: Not
+    
+    .. automethod:: __init__
+    .. automethod:: __call__
+
+.. autoclass:: Power
+    
+    .. automethod:: __init__
+    .. automethod:: __call__
+
+.. autoclass:: Neg
+
+    .. automethod:: __init__
+    .. automethod:: __call__
+
+.. autoclass:: Cos
+    
+    .. automethod:: __init__
+    .. automethod:: __call__
+
+.. autoclass:: Sin
+
+    .. automethod:: __init__
+    .. automethod:: __call__
+
+.. autoclass:: Exp
+    
+    .. automethod:: __init__
+    .. automethod:: __call__
+
+.. autoclass:: SumCall
+    
+    .. automethod:: __init__
+    .. automethod:: __call__
+
+.. autoclass:: Indexing
+
+    .. automethod:: __init__
+    .. automethod:: __call__
+
+.. autoclass:: AttributeAccess
+
+    .. automethod:: __init__
+    .. automethod:: __call__
+
+.. autoclass:: Clip
+    
+    .. automethod:: __init__
+    .. automethod:: __call__
+
+.. autoclass:: asarray
+    
+    .. automethod:: __init__
+    .. automethod:: __call__
+
+
+moviemaker2.math.polar
+----------------------
+
+.. automodule:: moviemaker2.math.polar
+
+.. autoclass:: Polar2DtoCartesian2D
+    
+    .. automethod:: __init__
+    .. automethod:: __call__
+
+.. autoclass:: Cartesian2DtoPolar2D
+    
+    .. automethod:: __init__
+    .. automethod:: __call__
+
+
+moviemaker2.math.interpolate
+----------------------------
+
+.. automodule:: moviemaker2.math.interpolate
+
+.. autoclass:: Interp
+    
+    .. automethod:: __init__
+    .. automethod:: __call__
+
+.. autoclass:: Spline
+    
+    .. automethod:: __init__
+    .. automethod:: __call__
+
+
+moviemaker2.math.polynomial
+---------------------------
+
+.. automodule:: moviemaker2.math.polynomial
+
+.. autoclass:: Polynomial
+
+    .. automethod:: __init__
+    .. automethod:: __call__

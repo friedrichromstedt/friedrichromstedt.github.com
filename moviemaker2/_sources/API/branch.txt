@@ -1,0 +1,9 @@
+moviemaker2.branch
+==================
+
+.. automodule:: moviemaker2.branch
+
+.. autoclass:: Branch
+
+    .. automethod:: __init__
+    .. automethod:: __call__

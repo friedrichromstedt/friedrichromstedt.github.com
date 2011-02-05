@@ -1,0 +1,230 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>moviemaker2.ext.render &mdash; Moviemaker v0.1.0b documentation</title>
+    <link rel="stylesheet" href="../../../_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '0.1.0b',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <link rel="top" title="Moviemaker v0.1.0b documentation" href="../../../index.html" />
+    <link rel="up" title="Module code" href="../../index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../../index.html">Moviemaker v0.1.0b documentation</a> &raquo;</li>
+          <li><a href="../../index.html" accesskey="U">Module code</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <h1>Source code for moviemaker2.ext.render</h1><div class="highlight"><pre>
+<span class="kn">import</span> <span class="nn">Queue</span>
+<span class="kn">import</span> <span class="nn">threading</span>
+<span class="kn">import</span> <span class="nn">traceback</span>
+<span class="kn">import</span> <span class="nn">os.path</span>
+<span class="kn">import</span> <span class="nn">numpy</span>
+<span class="kn">import</span> <span class="nn">numpypic</span>
+<span class="kn">from</span> <span class="nn">moviemaker2.parameter</span> <span class="kn">import</span> <span class="n">p</span><span class="p">,</span> <span class="n">Ps</span>
+<span class="kn">import</span> <span class="nn">moviemaker2.layer</span>
+<span class="kn">import</span> <span class="nn">moviemaker2.ext.render_capsules</span>
+
+<span class="sd">&quot;&quot;&quot;Provides a multithreaded rendering engine.&quot;&quot;&quot;</span>
+
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;Renderer&#39;</span><span class="p">]</span>
+
+<div class="viewcode-block" id="Render"><a class="viewcode-back" href="../../../API/ext.html#moviemaker2.ext.render.Render">[docs]</a><span class="k">class</span> <span class="nc">Render</span><span class="p">(</span><span class="n">moviemaker2</span><span class="o">.</span><span class="n">layer</span><span class="o">.</span><span class="n">Layer</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Runs the rendering.  Initially supported timelines are ``&#39;realtime&#39;`` </span>
+<span class="sd">    and ``&#39;frametime&#39;``.&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="Render.__init__"><a class="viewcode-back" href="../../../API/ext.html#moviemaker2.ext.render.Render.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fn</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        *   *fn* is the supplier of PIL images.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">fn</span> <span class="o">=</span> <span class="n">fn</span>
+</div>
+<div class="viewcode-block" id="Render.__call__"><a class="viewcode-back" href="../../../API/ext.html#moviemaker2.ext.render.Render.__call__">[docs]</a>    <span class="k">def</span> <span class="nf">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">framerate</span><span class="p">,</span> 
+            <span class="n">directory</span><span class="p">,</span> <span class="n">extension</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">nthreads</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
+            <span class="n">startrealtime</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">stoprealtime</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
+            <span class="n">startframetime</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">stopframetime</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
+            <span class="n">render_queue</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        *   *framerate* is fps.</span>
+<span class="sd">        *   *directory* is the output directory, *extension* the filename</span>
+<span class="sd">            extension.  *prefix* will be prepended to the filename.</span>
+<span class="sd">        *   Rendering will use *nthreads* threads.</span>
+<span class="sd">        *   Times can be given either by frametime or by realtime.  The </span>
+<span class="sd">            frametimes given have precedence over the realtimes given.</span>
+<span class="sd">        *   *render_queue* is optional, giving a capsule where to post</span>
+<span class="sd">            progress.</span>
+<span class="sd">        *   *args* and *kwargs* are handed over to the Layer this</span>
+<span class="sd">            ``BoundRenderLayer`` was bound to upon initialisation time.</span>
+
+<span class="sd">        Renders to HDD and puts ImageCapsules into *render_queue* if</span>
+<span class="sd">        given.</span>
+<span class="sd">        &quot;&quot;&quot;</span> 
+
+        <span class="k">if</span> <span class="n">extension</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="n">extension</span> <span class="o">=</span> <span class="s">&#39;png&#39;</span>
+        <span class="k">if</span> <span class="n">prefix</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="n">prefix</span> <span class="o">=</span> <span class="s">&#39;&#39;</span>
+        <span class="k">if</span> <span class="n">nthreads</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="n">nthreads</span> <span class="o">=</span> <span class="mi">1</span>
+        
+        <span class="n">file_template</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">directory</span><span class="p">,</span> 
+            <span class="s">&#39;</span><span class="si">%s%%</span><span class="s">06d.</span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">prefix</span><span class="p">,</span> <span class="n">extension</span><span class="p">))</span>
+
+        <span class="c"># Get the duration to render ...</span>
+
+        <span class="k">if</span> <span class="n">startrealtime</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="n">startframetime</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">startrealtime</span> <span class="o">*</span> <span class="n">framerate</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">stoprealtime</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="n">stopframetime</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">stoprealtime</span> <span class="o">*</span> <span class="n">framerate</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">startframetime</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="n">startframetime</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">startframetime</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">stopframetime</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="n">stopframetime</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">stopframetime</span><span class="p">)</span>
+
+        <span class="n">nframes</span> <span class="o">=</span> <span class="n">stopframetime</span> <span class="o">-</span> <span class="n">startframetime</span> <span class="o">+</span> <span class="mi">1</span>
+
+        <span class="c"># It is intentional that the stored times may deviate from the </span>
+        <span class="c"># times handed over, because they represent the times of frames.</span>
+        <span class="n">startrealtime</span> <span class="o">=</span> <span class="n">startframetime</span> <span class="o">/</span> <span class="nb">float</span><span class="p">(</span><span class="n">framerate</span><span class="p">)</span>
+        <span class="n">stoprealtime</span> <span class="o">=</span> <span class="n">stopframetime</span> <span class="o">/</span> <span class="nb">float</span><span class="p">(</span><span class="n">framerate</span><span class="p">)</span>
+
+        <span class="c"># Initialise the queue ...</span>
+
+        <span class="n">queue</span> <span class="o">=</span> <span class="n">Queue</span><span class="o">.</span><span class="n">Queue</span><span class="p">()</span>
+
+        <span class="k">for</span> <span class="n">frametime</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="n">startframetime</span><span class="p">,</span> <span class="n">stopframetime</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+            <span class="n">queue</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="n">frametime</span><span class="p">)</span>
+
+        <span class="c"># Announce the render ...</span>
+
+        <span class="k">if</span> <span class="n">render_queue</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="n">render_queue</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="n">moviemaker2</span><span class="o">.</span><span class="n">ext</span><span class="o">.</span><span class="n">render_capsules</span><span class="o">.</span><span class="n">AnnounceCapsule</span><span class="p">(</span>
+                <span class="n">nframes</span><span class="o">=</span><span class="n">nframes</span><span class="p">))</span>
+
+        <span class="c"># Start the render ...</span>
+
+        <span class="k">for</span> <span class="n">threadindex</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">nthreads</span><span class="p">):</span>
+            <span class="n">thread</span> <span class="o">=</span> <span class="n">threading</span><span class="o">.</span><span class="n">Thread</span><span class="p">(</span><span class="n">target</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_render</span><span class="p">,</span>
+                <span class="n">kwargs</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">queue</span><span class="o">=</span><span class="n">queue</span><span class="p">,</span>
+                            <span class="n">render_queue</span><span class="o">=</span><span class="n">render_queue</span><span class="p">,</span>
+                            <span class="n">framerate</span><span class="o">=</span><span class="n">framerate</span><span class="p">,</span>
+                            <span class="n">file_template</span><span class="o">=</span><span class="n">file_template</span><span class="p">,</span>
+                            <span class="n">startframetime</span><span class="o">=</span><span class="n">startframetime</span><span class="p">))</span>
+            <span class="n">thread</span><span class="o">.</span><span class="n">setDaemon</span><span class="p">(</span><span class="bp">True</span><span class="p">)</span>
+            <span class="n">thread</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+</div>
+    <span class="k">def</span> <span class="nf">_render</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">queue</span><span class="p">,</span> <span class="n">framerate</span><span class="p">,</span> <span class="n">file_template</span><span class="p">,</span> <span class="n">startframetime</span><span class="p">,</span>
+            <span class="n">render_queue</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;*render_queue* is optional.&quot;&quot;&quot;</span>
+       
+        <span class="n">frametimeline</span> <span class="o">=</span> <span class="n">p</span><span class="p">(</span><span class="s">&#39;time/frame&#39;</span><span class="p">)</span>
+        <span class="n">realtimeline</span> <span class="o">=</span> <span class="n">p</span><span class="p">(</span><span class="s">&#39;time/real&#39;</span><span class="p">)</span>
+
+        <span class="k">while</span> <span class="ow">not</span> <span class="n">queue</span><span class="o">.</span><span class="n">empty</span><span class="p">():</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="c"># Another thread may have raced, we have to not-block.</span>
+                <span class="n">frametime</span> <span class="o">=</span> <span class="n">queue</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">block</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+                <span class="n">realtime</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">frametime</span><span class="p">)</span> <span class="o">/</span> <span class="n">framerate</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="n">ps</span> <span class="o">=</span> <span class="n">Ps</span><span class="p">()</span>
+                    <span class="n">ps</span> <span class="o">=</span> <span class="n">frametimeline</span><span class="o">.</span><span class="n">store</span><span class="p">(</span><span class="n">ps</span><span class="p">,</span> <span class="n">frametime</span><span class="p">)</span>
+                    <span class="n">ps</span> <span class="o">=</span> <span class="n">realtimeline</span><span class="o">.</span><span class="n">store</span><span class="p">(</span><span class="n">ps</span><span class="p">,</span> <span class="n">realtime</span><span class="p">)</span>
+
+                    <span class="n">image</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fn</span><span class="p">(</span><span class="n">ps</span><span class="p">)</span>
+                    <span class="n">image</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">file_template</span> <span class="o">%</span> <span class="n">frametime</span><span class="p">)</span>
+
+                    <span class="k">if</span> <span class="n">render_queue</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+                        <span class="n">render_queue</span><span class="o">.</span><span class="n">put</span><span class="p">(</span>
+                            <span class="n">moviemaker2</span><span class="o">.</span><span class="n">ext</span><span class="o">.</span><span class="n">render_capsules</span><span class="o">.</span><span class="n">ResultCapsule</span><span class="p">(</span>
+                                <span class="n">image</span><span class="o">=</span><span class="n">image</span><span class="p">,</span> 
+                                <span class="n">frameindex</span><span class="o">=</span><span class="p">(</span><span class="n">frametime</span> <span class="o">-</span> <span class="n">startframetime</span><span class="p">)))</span>
+                <span class="k">except</span><span class="p">:</span>
+                    <span class="k">print</span> <span class="s">&quot;(Renderer) Exception in frame&quot;</span><span class="p">,</span> <span class="n">frametime</span><span class="p">,</span> 
+                    <span class="k">print</span> <span class="s">&quot;at time&quot;</span><span class="p">,</span> <span class="n">realtime</span><span class="p">,</span> <span class="s">&quot;:&quot;</span>
+                    <span class="n">traceback</span><span class="o">.</span><span class="n">print_exc</span><span class="p">()</span>
+                    <span class="k">if</span> <span class="n">render_queue</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+                        <span class="n">render_queue</span><span class="o">.</span><span class="n">put</span><span class="p">(</span>
+                            <span class="n">moviemaker2</span><span class="o">.</span><span class="n">ext</span><span class="o">.</span><span class="n">render_capsules</span><span class="o">.</span><span class="n">ResultCapsule</span><span class="p">(</span>
+                                <span class="n">image</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
+                                <span class="n">frameindex</span><span class="o">=</span><span class="p">(</span><span class="n">frametime</span> <span class="o">-</span> <span class="n">startframetime</span><span class="p">),</span>
+                                <span class="n">error</span><span class="o">=</span><span class="bp">True</span><span class="p">))</span>
+
+                <span class="n">queue</span><span class="o">.</span><span class="n">task_done</span><span class="p">()</span>
+            <span class="k">except</span> <span class="n">Queue</span><span class="o">.</span><span class="n">Empty</span><span class="p">:</span>
+                <span class="c"># Well, another thread was faster.</span>
+                <span class="k">pass</span></div>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../../index.html">Moviemaker v0.1.0b documentation</a> &raquo;</li>
+          <li><a href="../../index.html" >Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2010--2011, Friedrich Romstedt.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.1.
+    </div>
+  </body>
+</html>

@@ -1,0 +1,404 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Elements of Moviemaker2 &mdash; Moviemaker v0.1.0b documentation</title>
+    <link rel="stylesheet" href="_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.1.0b',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="Moviemaker v0.1.0b documentation" href="index.html" />
+    <link rel="next" title="Coding Style" href="Coding_Style.html" />
+    <link rel="prev" title="Moving Dot Tutorial" href="Tutorials/Dot.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="Coding_Style.html" title="Coding Style"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="Tutorials/Dot.html" title="Moving Dot Tutorial"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">Moviemaker v0.1.0b documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="elements-of-moviemaker2">
+<span id="elements"></span><h1>Elements of Moviemaker2<a class="headerlink" href="#elements-of-moviemaker2" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="functions">
+<span id="elements-functions"></span><h2>Functions<a class="headerlink" href="#functions" title="Permalink to this headline">¶</a></h2>
+<p>Most of the stuff passed around in moviemaker2 is callable.</p>
+<p>E.g., you can hand over as a position:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">x</span><span class="o">=</span><span class="n">p</span><span class="p">(</span><span class="s">&#39;time/relative&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><a class="reference internal" href="API/parameter.html#moviemaker2.parameter.p" title="moviemaker2.parameter.p"><tt class="xref py py-class docutils literal"><span class="pre">p</span></tt></a> is a class whose instances retrieve objects
+from a parameter object (class <a class="reference internal" href="API/parameter.html#moviemaker2.parameter.Ps" title="moviemaker2.parameter.Ps"><tt class="xref py py-class docutils literal"><span class="pre">Ps</span></tt></a>).  In this
+case, it returns the <tt class="docutils literal"><span class="pre">'time/relative'</span></tt> parameter.  When the algorithm needs
+the value of <em>x</em>, it will call the <em>x</em> variable (the object it holds) with a
+parameter object.</p>
+<p><a class="reference internal" href="API/parameter.html#moviemaker2.parameter.p" title="moviemaker2.parameter.p"><tt class="xref py py-class docutils literal"><span class="pre">p</span></tt></a> is a subclass of
+<a class="reference internal" href="API/math.html#moviemaker2.math.primitive.MathFunction" title="moviemaker2.math.primitive.MathFunction"><tt class="xref py py-class docutils literal"><span class="pre">moviemaker2.math.primitive.MathFunction</span></tt></a>, and can be used to compose
+functions using:</p>
+<ul class="simple">
+<li>Sum</li>
+<li>Difference</li>
+<li>Product</li>
+<li>Quotient</li>
+<li>Power</li>
+<li>Negative</li>
+<li>Cosine, Sine, including the calls of <tt class="docutils literal"><span class="pre">numpy.cos</span></tt> and <tt class="docutils literal"><span class="pre">numpy.sin</span></tt> on
+Functions</li>
+<li>Calls of <tt class="docutils literal"><span class="pre">numpy.sum()</span></tt> on Functions</li>
+<li>Indexing</li>
+<li>Attribute access (via
+<a class="reference internal" href="API/math.html#moviemaker2.math.primitive.AttributeAccess" title="moviemaker2.math.primitive.AttributeAccess"><tt class="xref py py-class docutils literal"><span class="pre">moviemaker2.math.primitive.AttributeAccess</span></tt></a>).</li>
+</ul>
+<p>Moviemaker2 functions usually act on parameter objects.  The more general
+Functions or MathFunction, which belong to the Function framework included in
+moviemaker2, are not really moviemaker2 specific, and hence accept any kind
+of arguments.  A Function&#8217;s <tt class="docutils literal"><span class="pre">__call__</span></tt> method might look like:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">def</span> <span class="nf">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+
+    <span class="c"># Evaluate the argument functions ...</span>
+
+    <span class="n">argument1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">argument1</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+    <span class="n">argument2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">argument2</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+    <span class="o">...</span>
+
+    <span class="c"># Do something with the values ...</span>
+
+    <span class="o">...</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="composed-functions">
+<span id="id1"></span><h2>Composed Functions<a class="headerlink" href="#composed-functions" title="Permalink to this headline">¶</a></h2>
+<p>Using Functions, one can write Functions, whose variables in the algorithms
+depend entirely on other Functions.  In the above example, the <tt class="docutils literal"><span class="pre">x</span></tt> variable
+of the point position is evaluated at call time, when the frame is rendered.
+Until then, the <tt class="docutils literal"><span class="pre">x</span></tt> is just a Function, its value is undetermined.</p>
+<p>Using composed functions, one is equipped with some kind of symbolic algebra
+system, a simple kind of course, and one can write things like:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">x</span><span class="o">=</span><span class="n">Cos</span><span class="p">(</span><span class="n">p</span><span class="p">(</span><span class="s">&#39;time/realtime&#39;</span><span class="p">))</span>
+</pre></div>
+</div>
+<p>Here, the <tt class="docutils literal"><span class="pre">p</span></tt> object will be called with the arguments given to
+the <tt class="docutils literal"><span class="pre">Cos</span></tt> object.  Note that <tt class="docutils literal"><span class="pre">Cos</span></tt> is <em>not</em> a Python function, but a
+<tt class="docutils literal"><span class="pre">Function</span></tt> <em>class</em>.  Meaning calling <tt class="docutils literal"><span class="pre">Cos</span></tt> does instantiate the class
+<tt class="docutils literal"><span class="pre">Cos</span></tt> with the initialisation argument <tt class="docutils literal"><span class="pre">p('time/realtime')</span></tt>.  This is
+fundamentally different from evaluating the ordinary <tt class="docutils literal"><span class="pre">numpy.cos()</span></tt> Python
+function on some numeric value.</p>
+<p>Composed Functions hand over the arguments of itself to the leaf functions.
+They <em>take</em> positional and keyword arguments, but they might be agnostic of
+the argument names, types, etc.  They leave interpretation of arguments to the
+Functions they are composed of.</p>
+</div>
+<div class="section" id="parameter-objects">
+<span id="elements-parameter-objects"></span><h2>Parameter Objects<a class="headerlink" href="#parameter-objects" title="Permalink to this headline">¶</a></h2>
+<p>Parameter objects (class <a class="reference internal" href="API/parameter.html#moviemaker2.parameter.Ps" title="moviemaker2.parameter.Ps"><tt class="xref py py-class docutils literal"><span class="pre">Ps</span></tt></a>) store all the
+parameters a renderer need for rendering a frame or a part of a frame.</p>
+<p><em>Time</em> is such a parameter, but it is not a special one at all.  The only
+speciality of some time parameters (namely <tt class="docutils literal"><span class="pre">'time/real'</span></tt> and
+<tt class="docutils literal"><span class="pre">'time/frame'</span></tt>) is that they are set by a special extension to moviemaker2,
+<a class="reference internal" href="API/ext.html#moviemaker2.ext.render.Render" title="moviemaker2.ext.render.Render"><tt class="xref py py-class docutils literal"><span class="pre">moviemaker2.ext.render.Render</span></tt></a>.</p>
+<p>Parameters use the <tt class="docutils literal"><span class="pre">group/value</span></tt> scheme, and it might be, that in future
+this is also represented by an object hierarchy in the <tt class="docutils literal"><span class="pre">Ps</span></tt> instance.  Atm,
+it is solely a convetion, and the names are just keys to a dictionary.</p>
+<p>As an example for how parameters interact, some moviemaker2 extension
+&#8220;motionblur&#8221; might set a parameter, <tt class="docutils literal"><span class="pre">blur/1</span></tt>, and calls some renderer with
+the extended <tt class="docutils literal"><span class="pre">Ps</span></tt> object.  Then this object might apply the <tt class="docutils literal"><span class="pre">blur/1</span></tt>
+onto <tt class="docutils literal"><span class="pre">time/real</span></tt> by subtraction, and thus the parameter becomes effective in
+rendering.</p>
+</div>
+<div class="section" id="extensions">
+<span id="elements-extensions"></span><h2>Extensions<a class="headerlink" href="#extensions" title="Permalink to this headline">¶</a></h2>
+<p>Extensions (with a capital E, lowercase extensions are extensions of
+functionality to moviemaker2), are instances of
+<a class="reference internal" href="API/extension.html#moviemaker2.extension.Extension" title="moviemaker2.extension.Extension"><tt class="xref py py-class docutils literal"><span class="pre">moviemaker2.extension.Extension</span></tt></a>.  They conduct some operation on
+the parameter object handed over (on call time).  Example:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">extended</span> <span class="o">=</span> <span class="n">Extension</span><span class="p">(</span><span class="n">target</span><span class="o">=</span><span class="n">basic</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="p">(</span><span class="n">p</span><span class="p">(</span><span class="s">&#39;time/real&#39;</span><span class="p">)</span> <span class="o">-</span> <span class="mf">1.5</span><span class="p">),</span>
+    <span class="n">p</span><span class="o">=</span><span class="n">p</span><span class="p">(</span><span class="s">&#39;time/relative&#39;</span><span class="p">))</span>
+</pre></div>
+</div>
+<p>This retrieves the <em>value</em> from <tt class="docutils literal"><span class="pre">(p('time/real')</span> <span class="pre">-</span> <span class="pre">1.5)</span></tt>, i.e., the output
+additional value will be relative to 1.5 seconds realtime.  It stores it using
+the parameter <tt class="docutils literal"><span class="pre">p</span></tt>, in this case, it stores it in the parameter
+<tt class="docutils literal"><span class="pre">'time/relative'</span></tt>, overwriting any previous storage there.  The output is
+stored in a copy of the original parameter object handed over on call time,
+and thus does not pollute the upper call layers, but only affects the target
+renderer.</p>
+</div>
+<div class="section" id="branchers">
+<h2>Branchers<a class="headerlink" href="#branchers" title="Permalink to this headline">¶</a></h2>
+<p>Branchers are used</p>
+<ol class="arabic simple">
+<li>To reduce computation overhead in case not all renders yield or must yield
+output at any call time</li>
+<li>To produce change of effects</li>
+</ol>
+<p>Example:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">brancher</span> <span class="o">=</span> <span class="n">Branch</span><span class="p">(</span><span class="n">fns</span><span class="o">=</span><span class="p">{</span><span class="bp">True</span><span class="p">:</span> <span class="n">useful</span><span class="p">,</span> <span class="bp">False</span><span class="p">:</span> <span class="n">bogus</span><span class="p">},</span>
+    <span class="n">choice</span><span class="o">=</span><span class="n">GreaterEqual</span><span class="p">(</span><span class="n">p</span><span class="p">(</span><span class="s">&#39;time/real&#39;</span><span class="p">),</span> <span class="mf">0.0</span><span class="p">))</span>
+</pre></div>
+</div>
+<p>This will return the call of <tt class="docutils literal"><span class="pre">bogus</span></tt> any time the <tt class="docutils literal"><span class="pre">brancher</span></tt> is called
+with <tt class="docutils literal"><span class="pre">time/real</span></tt> &lt; 0.</p>
+<p>In this case <em>choice</em> returns a boolean value, which is used as index to
+<em>fns</em>.  You might use also integer or anything else what is hashable as index
+to the <em>fns</em> object.</p>
+</div>
+<div class="section" id="rasterisers">
+<h2>Rasterisers<a class="headerlink" href="#rasterisers" title="Permalink to this headline">¶</a></h2>
+<p>Rasterisers are Functions that generate rasterised masks.  Rasterisers are
+usually composed of one or multiple p&#8217;s.</p>
+<p>Rasterisers are not intended to render complete pictures.  They do not supply
+multiple channel data.  Rasterisers should only supply <em>masks</em>, which can be
+used in any way, e.g. Rasterisers that generate R, G, B and alpha channels.</p>
+</div>
+<div class="section" id="vectorisers">
+<h2>Vectorisers<a class="headerlink" href="#vectorisers" title="Permalink to this headline">¶</a></h2>
+<p>Vectorisers are Functions that generate vectorised shapes.  This vector shapes
+are instances of a separate class and contain a number of Polygons.
+Vectorisers do not encode vector data for being output to a file.</p>
+<p>Vectorisers might be used for yielding lines, polygons, polyeders, etc., using</p>
+</div>
+<div class="section" id="meshes">
+<h2>Meshes<a class="headerlink" href="#meshes" title="Permalink to this headline">¶</a></h2>
+<p>Meshes are just a bundle of coordinate tuples.  To facilitate numpy operations
+on them, they&#8217;re numpy ndarrays.  In moviemaker2, the coordinate index is the
+last index of the mesh ndarray:</p>
+<ul class="simple">
+<li>Subtraction and addition of vectors works natively via braodcasting.</li>
+<li>Indicing the coordinate index happens via <tt class="docutils literal"><span class="pre">a[...,</span> <span class="pre">dimension]</span></tt>, with
+<tt class="docutils literal"><span class="pre">dimension</span></tt> being the dimension of the host space targeted.  This
+convention has to be followed in order to allow for arbitrary mesh shapes.
+There might be arbitrary many indices of the mesh not being the host space
+dimension index, but indexing the tuple of different points in the mesh.</li>
+</ul>
+</div>
+<div class="section" id="transforms">
+<span id="elements-transforms"></span><h2>Transforms<a class="headerlink" href="#transforms" title="Permalink to this headline">¶</a></h2>
+<p>Transforms transform meshes into meshes.</p>
+<p>Example: The <tt class="xref py py-class docutils literal"><span class="pre">Centre</span></tt> Transform
+subtracts a vector Function from the mesh Function given.</p>
+<p>Transform often have the default parameter <tt class="docutils literal"><span class="pre">mesh=None</span></tt>, giving the
+ability to leave the <tt class="docutils literal"><span class="pre">mesh</span></tt> initialisation argument alone, and passing the
+mesh directly to <tt class="docutils literal"><span class="pre">__call__</span></tt>.  This works because <tt class="xref docutils literal"><span class="pre">None</span></tt> is interpreted by
+<tt class="docutils literal"><span class="pre">asfunction</span></tt> as the identity Function.
+point data and p&#8217;s.</p>
+</div>
+<div class="section" id="layers-and-stacks">
+<span id="elements-layers-and-stacks"></span><h2>Layers and Stacks<a class="headerlink" href="#layers-and-stacks" title="Permalink to this headline">¶</a></h2>
+<p>Layers are not a distinct class in moviemaker2, but still they are one of
+the most prominent feature.  Every Function can be a layer.  The only
+prerequisite is that its return value complies with the constraints imposed
+by the Stack.  Stacks are those object accumulating layers, and they <em>are</em>
+distinct classes.  One can make objects of Stacks, and apply layers to them:</p>
+<div class="highlight-python"><pre>stack = moviemaker2.AdditiveRasterStack(background=&lt;something&gt;)
+stack ^ layer1 ^ layer2</pre>
+</div>
+<p><a class="reference internal" href="API/stacks.html#moviemaker2.stacks.stack.Stack" title="moviemaker2.stacks.stack.Stack"><tt class="xref py py-class docutils literal"><span class="pre">Stack</span></tt></a> is a subcloss of MathFunctions.  Thus
+Stacks are callable, returning the accumulated (or: combined) result of all
+the stacks present in them.  There is no restriction on how many stacks a
+layer might be attributed to, and layers can be removed from stacks after they
+have been added.</p>
+<p>Layers might be combined (built-in):</p>
+<ol class="loweralpha simple">
+<li>By addition (<a class="reference internal" href="API/stacks.html#moviemaker2.stacks.raster.AdditiveRasterStack" title="moviemaker2.stacks.raster.AdditiveRasterStack"><tt class="xref py py-class docutils literal"><span class="pre">AdditiveRasterStack</span></tt></a>)</li>
+<li>By alpha blending
+(<a class="reference internal" href="API/stacks.html#moviemaker2.stacks.raster.AlphaBlendRasterStack" title="moviemaker2.stacks.raster.AlphaBlendRasterStack"><tt class="xref py py-class docutils literal"><span class="pre">AlphaBlendRasterStack</span></tt></a>)</li>
+</ol>
+<p>There is of course room for writing your own favouring combination method,
+just subclassing from <a class="reference internal" href="API/stacks.html#moviemaker2.stacks.stack.Stack" title="moviemaker2.stacks.stack.Stack"><tt class="xref py py-class docutils literal"><span class="pre">moviemaker2.stacks.stack.Stack</span></tt></a>.</p>
+<p>The interpretation of the alpha channel depends on the blitting method.  For
+the addition method, it is used as an ordinary channel; for alpha blending, it
+acts as opaqueness.</p>
+<p>One can alter the resolution of the result frames by just feeding in another
+size specification.</p>
+<div class="section" id="special-combination-methods">
+<h3>Special Combination Methods<a class="headerlink" href="#special-combination-methods" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="result-and-alpha-channel">
+<h4>Result and Alpha Channel<a class="headerlink" href="#result-and-alpha-channel" title="Permalink to this headline">¶</a></h4>
+<p>Layers might be generated from:</p>
+<ol class="arabic simple">
+<li>A value channel (R, G, B, whatever).</li>
+<li>An alpha channel.  The interpretation of the alpha channel depends on
+the blend mode.</li>
+</ol>
+<p>The alpha channel is useful, because it affects all value channels
+simultaneously, separating colour mass from nominal colour.  Nevertheless,
+it is likely possible that several (value, alpha) combinations yield the
+same result (ambiguity).</p>
+<p>Alpha channels as well as colour channels are [0, 1] valued, but can exceed
+this range if it is useful.  At least, 0 means &#8220;nothing&#8221;, and 1 means &#8220;full&#8221;.</p>
+</div>
+<div class="section" id="combination-of-layers">
+<h4>Combination of Layers<a class="headerlink" href="#combination-of-layers" title="Permalink to this headline">¶</a></h4>
+<p>The formulas are (<img class="math" src="_images/math/eff43e84f8a3bcf7b6965f0a3248bc4d3a9d0cd4.png" alt="R"/> is the blended result, <img class="math" src="_images/math/c117e8403b3b9cf74d2f63f6627aa17c1995e3bc.png" alt="C_i"/> are the colour
+values of the layers, and <img class="math" src="_images/math/7e46fc708bb0d019ec0b54d24b166024d6c146ff.png" alt="\alpha_i"/> are the alpha channels of the
+layers):</p>
+<ul>
+<li><p class="first">For addition:</p>
+<div class="math">
+<p><img src="_images/math/5933ab733e9daccd359a24a7f7614ca6496b5351.png" alt="R = \sum_i C_i \alpha_i" /></p>
+</div></li>
+<li><p class="first">For alpha blending:</p>
+<div class="math">
+<p><img src="_images/math/2e4178f5707f401508c3a4b3b29daef8719b0123.png" alt="R_{i+1} = R_i \cdot (1 - \alpha_{i + 1}) + C_{i + 1} \alpha_{i + 1}" /></p>
+</div></li>
+</ul>
+<p>Modification of layer yields is done:</p>
+<ul>
+<li><p class="first">For addition:</p>
+<div class="math">
+<p><img src="_images/math/2204570257f441e9f74a63bb9acfce2eb35b112d.png" alt="(R, \alpha)
+= (R_i + R_{i + 1}, \alpha_i + \alpha_{i + 1})" /></p>
+</div><p>The result values and the opacity add up.  You can imagine this like
+adding drops of glowing colour onto a glass plate.</p>
+</li>
+<li><p class="first">For alpha blending:</p>
+<div class="math">
+<p><img src="_images/math/4a3f9aa9fdcf48173788cc88d633848692f9f098.png" alt="(R, \alpha)
+= (R_i \cdot (1 - \alpha_{i + 1}) + R_{i + 1},
+    \alpha_i \cdot (1 - \alpha_{i + 1}) + \alpha_{i + 1})" /></p>
+</div><p>For explaining this formalas, consider the semi-transparent pixel as
+boolean transparent with a fully opaque and a fully transparent section.
+This is fully equivalent to the semi-transparent full pixel.</p>
+<p>Explanation for the alpha channel: Watching the layer stack from above,
+the opacity is <img class="math" src="_images/math/ea175313d6df353b387dbf807962587290bdf6eb.png" alt="\alpha_{i + 1}"/> at least from the top layer, and
+through the tranparent section of the pixel, the opacity of the rest of
+the stack is visible: <img class="math" src="_images/math/c85fb1e88b5e96ef6cddbb89ce71f245b72729c9.png" alt="\alpha_i \cdot (1 - \alpha_{i + 1})"/>.</p>
+<p>Explanation for the result channel: This is working by:</p>
+<ol class="arabic simple">
+<li>The first layer has some defined background (e.g., black).</li>
+<li>Each next layer covers a section of each pixel by its opaque section.</li>
+</ol>
+<p>The formulas for <em>R</em> and <img class="math" src="_images/math/10f32377ac67d94f764f12a15ea987e88c85d3e1.png" alt="\alpha"/> have a common structure:  They
+combine some quantity <em>X</em> for layer <em>i</em> and layer <em>i</em> + 1 by:</p>
+<div class="math">
+<p><img src="_images/math/38d22758be72f7ecbbe74dc836be0bcba0d9e094.png" alt="X = X_i \cdot (1 - \alpha_{i + 1}) + X_{i + 1}" /></p>
+</div><p>It follows that both <em>R</em> and <img class="math" src="_images/math/10f32377ac67d94f764f12a15ea987e88c85d3e1.png" alt="\alpha"/> band are combined the same
+way controlled by the <img class="math" src="_images/math/10f32377ac67d94f764f12a15ea987e88c85d3e1.png" alt="\alpha"/> band.</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="section" id="where-to-go-from-here">
+<h2>Where to go from here<a class="headerlink" href="#where-to-go-from-here" title="Permalink to this headline">¶</a></h2>
+<p>If you did not check it out already, the <a class="reference internal" href="Tutorials.html#tutorials"><em>Tutorials</em></a> might be interesting
+for you.  Otherwise the <a class="reference internal" href="API.html#api"><em>API</em></a> might help you coding.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Elements of Moviemaker2</a><ul>
+<li><a class="reference internal" href="#functions">Functions</a></li>
+<li><a class="reference internal" href="#composed-functions">Composed Functions</a></li>
+<li><a class="reference internal" href="#parameter-objects">Parameter Objects</a></li>
+<li><a class="reference internal" href="#extensions">Extensions</a></li>
+<li><a class="reference internal" href="#branchers">Branchers</a></li>
+<li><a class="reference internal" href="#rasterisers">Rasterisers</a></li>
+<li><a class="reference internal" href="#vectorisers">Vectorisers</a></li>
+<li><a class="reference internal" href="#meshes">Meshes</a></li>
+<li><a class="reference internal" href="#transforms">Transforms</a></li>
+<li><a class="reference internal" href="#layers-and-stacks">Layers and Stacks</a><ul>
+<li><a class="reference internal" href="#special-combination-methods">Special Combination Methods</a><ul>
+<li><a class="reference internal" href="#result-and-alpha-channel">Result and Alpha Channel</a></li>
+<li><a class="reference internal" href="#combination-of-layers">Combination of Layers</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#where-to-go-from-here">Where to go from here</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="Tutorials/Dot.html"
+                        title="previous chapter">Moving Dot Tutorial</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="Coding_Style.html"
+                        title="next chapter">Coding Style</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/Elements.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="Coding_Style.html" title="Coding Style"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="Tutorials/Dot.html" title="Moving Dot Tutorial"
+             >previous</a> |</li>
+        <li><a href="index.html">Moviemaker v0.1.0b documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2010--2011, Friedrich Romstedt.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.1.
+    </div>
+  </body>
+</html>

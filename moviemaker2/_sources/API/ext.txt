@@ -1,0 +1,60 @@
+Built-in Extensions
+===================
+
+.. automodule:: moviemaker2.ext
+
+
+moviemaker2.ext.multid
+----------------------
+
+.. automodule:: moviemaker2.ext.multid
+
+.. autoclass:: Multid
+
+    .. automethod:: __init__
+    .. automethod:: __call__
+
+
+moviemaker2.ext.render
+-------------------------
+
+.. automodule:: moviemaker2.ext.render
+
+.. autoclass:: Render
+
+    .. automethod:: __init__
+    .. automethod:: __call__
+
+
+moviemaker2.ext.render_capsules
+-------------------------------
+
+.. automodule:: moviemaker2.ext.render_capsules
+
+.. autoclass:: AnnounceCapsule
+
+    .. automethod:: __init__
+
+.. autoclass:: ResultCapsule
+    
+    .. automethod:: __init__
+
+moviemaker2.ext.tk
+------------------
+
+.. automodule:: moviemaker2.ext.tk
+
+.. autoclass:: RenderFrame
+    
+    .. automethod:: __init__
+    .. automethod:: setup
+    .. automethod:: start
+    .. automethod:: poll
+
+.. autoclass:: StatusBar
+    
+    .. automethod:: __init__
+    .. automethod:: setup
+    .. automethod:: enable
+    .. automethod:: check_set_green
+    .. automethod:: error

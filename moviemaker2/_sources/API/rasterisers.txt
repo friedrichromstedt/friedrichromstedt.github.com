@@ -1,0 +1,37 @@
+moviemaker2.rasterisers
+=======================
+
+.. automodule:: moviemaker2.rasterisers
+
+
+moviemaker2.rasterisers.angle
+-----------------------------
+
+.. automodule:: moviemaker2.rasterisers.angle
+
+.. autoclass:: Angle
+
+    .. automethod:: __init__
+    .. automethod:: __call__
+
+
+moviemaker2.rasterisers.distance
+--------------------------------
+
+.. automodule:: moviemaker2.rasterisers.distance
+
+.. autoclass:: Distance
+
+    .. automethod:: __init__
+    .. automethod:: __call__
+
+
+moviemaker2.rasterisers.scalarproduct
+-------------------------------------
+
+.. automodule:: moviemaker2.rasterisers.scalarproduct
+
+.. autoclass:: ScalarProduct
+
+    .. automethod:: __init__
+    .. automethod:: __call__

@@ -1,0 +1,207 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>moviemaker2.stacks &mdash; Moviemaker v0.1.0b documentation</title>
+    <link rel="stylesheet" href="../_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.1.0b',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="Moviemaker v0.1.0b documentation" href="../index.html" />
+    <link rel="up" title="API" href="../API.html" />
+    <link rel="next" title="moviemaker2.transforms" href="transforms.html" />
+    <link rel="prev" title="moviemaker2.rasterisers" href="rasterisers.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="transforms.html" title="moviemaker2.transforms"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="rasterisers.html" title="moviemaker2.rasterisers"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">Moviemaker v0.1.0b documentation</a> &raquo;</li>
+          <li><a href="../API.html" accesskey="U">API</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="module-moviemaker2.stacks">
+<span id="moviemaker2-stacks"></span><h1>moviemaker2.stacks<a class="headerlink" href="#module-moviemaker2.stacks" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="module-moviemaker2.stacks.stack">
+<span id="moviemaker2-stacks-stack"></span><h2>moviemaker2.stacks.stack<a class="headerlink" href="#module-moviemaker2.stacks.stack" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="moviemaker2.stacks.stack.Stack">
+<em class="property">class </em><tt class="descclassname">moviemaker2.stacks.stack.</tt><tt class="descname">Stack</tt><a class="reference internal" href="../_modules/moviemaker2/stacks/stack.html#Stack"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#moviemaker2.stacks.stack.Stack" title="Permalink to this definition">¶</a></dt>
+<dd><p>Base class for stacks with layers.</p>
+<dl class="method">
+<dt id="moviemaker2.stacks.stack.Stack.__init__">
+<tt class="descname">__init__</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/moviemaker2/stacks/stack.html#Stack.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#moviemaker2.stacks.stack.Stack.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialises the <tt class="docutils literal"><span class="pre">.layers</span></tt> attribute to the empty list.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="moviemaker2.stacks.stack.Stack.__xor__">
+<tt class="descname">__xor__</tt><big>(</big><em>other</em><big>)</big><a class="reference internal" href="../_modules/moviemaker2/stacks/stack.html#Stack.__xor__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#moviemaker2.stacks.stack.Stack.__xor__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Stack <em>other</em> onto <em>self</em>.  Acts in-place!  This is done so that
+derived classes do not have to overlaod just to get the return class
+right.  Anyway, returns <em>self</em>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="moviemaker2.stacks.stack.Stack.add_top">
+<tt class="descname">add_top</tt><big>(</big><em>other</em><big>)</big><a class="reference internal" href="../_modules/moviemaker2/stacks/stack.html#Stack.add_top"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#moviemaker2.stacks.stack.Stack.add_top" title="Permalink to this definition">¶</a></dt>
+<dd><p>Stacks <em>other</em> onto <em>self</em>.  Acts in-place.  Like 
+<a class="reference internal" href="#moviemaker2.stacks.stack.Stack.__xor__" title="moviemaker2.stacks.stack.Stack.__xor__"><tt class="xref py py-meth docutils literal"><span class="pre">__xor__()</span></tt></a>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="moviemaker2.stacks.stack.Stack.add_bottom">
+<tt class="descname">add_bottom</tt><big>(</big><em>other</em><big>)</big><a class="reference internal" href="../_modules/moviemaker2/stacks/stack.html#Stack.add_bottom"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#moviemaker2.stacks.stack.Stack.add_bottom" title="Permalink to this definition">¶</a></dt>
+<dd><p>Stacks <em>other</em> at the bottom of <em>self</em>.  Acts in-place.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="moviemaker2.stacks.stack.Stack.insert">
+<tt class="descname">insert</tt><big>(</big><em>index</em>, <em>other</em><big>)</big><a class="reference internal" href="../_modules/moviemaker2/stacks/stack.html#Stack.insert"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#moviemaker2.stacks.stack.Stack.insert" title="Permalink to this definition">¶</a></dt>
+<dd><p>Stacks <em>other</em> by insert()&#8217;ing it into the layer list.  Acts
+in-place.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="moviemaker2.stacks.stack.Stack.remove">
+<tt class="descname">remove</tt><big>(</big><em>other</em><big>)</big><a class="reference internal" href="../_modules/moviemaker2/stacks/stack.html#Stack.remove"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#moviemaker2.stacks.stack.Stack.remove" title="Permalink to this definition">¶</a></dt>
+<dd><p>Removes the first occurence of <em>other</em> from <em>self</em>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="moviemaker2.stacks.stack.Stack.__delitem__">
+<tt class="descname">__delitem__</tt><big>(</big><em>key</em><big>)</big><a class="reference internal" href="../_modules/moviemaker2/stacks/stack.html#Stack.__delitem__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#moviemaker2.stacks.stack.Stack.__delitem__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Removes the object indexed by <em>key</em> from the layer list.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-moviemaker2.stacks.raster">
+<span id="moviemaker2-stacks-raster"></span><h2>moviemaker2.stacks.raster<a class="headerlink" href="#module-moviemaker2.stacks.raster" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="moviemaker2.stacks.raster.AdditiveRasterStack">
+<em class="property">class </em><tt class="descclassname">moviemaker2.stacks.raster.</tt><tt class="descname">AdditiveRasterStack</tt><big>(</big><em>background</em><big>)</big><a class="reference internal" href="../_modules/moviemaker2/stacks/raster.html#AdditiveRasterStack"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#moviemaker2.stacks.raster.AdditiveRasterStack" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="method">
+<dt id="moviemaker2.stacks.raster.AdditiveRasterStack.__call__">
+<tt class="descname">__call__</tt><big>(</big><em>ps</em><big>)</big><a class="reference internal" href="../_modules/moviemaker2/stacks/raster.html#AdditiveRasterStack.__call__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#moviemaker2.stacks.raster.AdditiveRasterStack.__call__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Adds up the layers.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="moviemaker2.stacks.raster.AlphaBlendRasterStack">
+<em class="property">class </em><tt class="descclassname">moviemaker2.stacks.raster.</tt><tt class="descname">AlphaBlendRasterStack</tt><big>(</big><em>background</em><big>)</big><a class="reference internal" href="../_modules/moviemaker2/stacks/raster.html#AlphaBlendRasterStack"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#moviemaker2.stacks.raster.AlphaBlendRasterStack" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="method">
+<dt id="moviemaker2.stacks.raster.AlphaBlendRasterStack.__call__">
+<tt class="descname">__call__</tt><big>(</big><em>ps</em><big>)</big><a class="reference internal" href="../_modules/moviemaker2/stacks/raster.html#AlphaBlendRasterStack.__call__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#moviemaker2.stacks.raster.AlphaBlendRasterStack.__call__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Blends the layers one after the other.  The alpha channel is the
+first channel.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">moviemaker2.stacks</a><ul>
+<li><a class="reference internal" href="#module-moviemaker2.stacks.stack">moviemaker2.stacks.stack</a></li>
+<li><a class="reference internal" href="#module-moviemaker2.stacks.raster">moviemaker2.stacks.raster</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="rasterisers.html"
+                        title="previous chapter">moviemaker2.rasterisers</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="transforms.html"
+                        title="next chapter">moviemaker2.transforms</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/API/stacks.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="transforms.html" title="moviemaker2.transforms"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="rasterisers.html" title="moviemaker2.rasterisers"
+             >previous</a> |</li>
+        <li><a href="../index.html">Moviemaker v0.1.0b documentation</a> &raquo;</li>
+          <li><a href="../API.html" >API</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2010--2011, Friedrich Romstedt.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.1.
+    </div>
+  </body>
+</html>

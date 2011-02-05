@@ -1,0 +1,137 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>moviemaker2.branch &mdash; Moviemaker v0.1.0b documentation</title>
+    <link rel="stylesheet" href="../_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.1.0b',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="Moviemaker v0.1.0b documentation" href="../index.html" />
+    <link rel="up" title="API" href="../API.html" />
+    <link rel="next" title="moviemaker2.rasterisers" href="rasterisers.html" />
+    <link rel="prev" title="moviemaker2.extension" href="extension.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="rasterisers.html" title="moviemaker2.rasterisers"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="extension.html" title="moviemaker2.extension"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">Moviemaker v0.1.0b documentation</a> &raquo;</li>
+          <li><a href="../API.html" accesskey="U">API</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="module-moviemaker2.branch">
+<span id="moviemaker2-branch"></span><h1>moviemaker2.branch<a class="headerlink" href="#module-moviemaker2.branch" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="moviemaker2.branch.Branch">
+<em class="property">class </em><tt class="descclassname">moviemaker2.branch.</tt><tt class="descname">Branch</tt><big>(</big><em>fns</em>, <em>choice</em><big>)</big><a class="reference internal" href="../_modules/moviemaker2/branch.html#Branch"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#moviemaker2.branch.Branch" title="Permalink to this definition">¶</a></dt>
+<dd><p>On being called, the <tt class="docutils literal"><span class="pre">Branch</span></tt> evaluates a selector, and chooses
+one Function based on the value.</p>
+<dl class="method">
+<dt id="moviemaker2.branch.Branch.__init__">
+<tt class="descname">__init__</tt><big>(</big><em>fns</em>, <em>choice</em><big>)</big><a class="reference internal" href="../_modules/moviemaker2/branch.html#Branch.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#moviemaker2.branch.Branch.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>choice</em> gives an index into <em>fns</em>.  Especially, <em>fns</em> might
+be a dictionary, mapping return values onto Functions.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="moviemaker2.branch.Branch.__call__">
+<tt class="descname">__call__</tt><big>(</big><em>ps</em><big>)</big><a class="reference internal" href="../_modules/moviemaker2/branch.html#Branch.__call__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#moviemaker2.branch.Branch.__call__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Evaluates <tt class="docutils literal"><span class="pre">.choice(ps)</span></tt> and calls the appropriate function.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="extension.html"
+                        title="previous chapter">moviemaker2.extension</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="rasterisers.html"
+                        title="next chapter">moviemaker2.rasterisers</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/API/branch.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="rasterisers.html" title="moviemaker2.rasterisers"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="extension.html" title="moviemaker2.extension"
+             >previous</a> |</li>
+        <li><a href="../index.html">Moviemaker v0.1.0b documentation</a> &raquo;</li>
+          <li><a href="../API.html" >API</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2010--2011, Friedrich Romstedt.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.1.
+    </div>
+  </body>
+</html>

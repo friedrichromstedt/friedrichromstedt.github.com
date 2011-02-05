@@ -1,0 +1,188 @@
+.. _Summary:
+
+Summary of the Project
+======================
+
+State: Early Feb 2011.
+
+
+Task
+----
+
+Moviemaker is intended for the purpose of frame generation (for video making).  
+The functionality is:
+
+*   Generation of all frames of the video.
+*   Write the frame generation code in pure Python.
+*   Ability to use input data from audio in the generation of frames.
+
+
+Prerequisites
+-------------
+
+The following prerequisites are necessary to use moviemaker2:
+
+*   A text editor for the frame generation code (functional code).  The author
+    uses a console text editor.
+*   A frame composition program, to generate video files out of frame files.
+    The author uses `avidemux <http://www.avidemux.org>`_.
+*   A separate sound file, if sound is wanted, which can be integrated by the
+    frame composition program.  (``avidemux`` can do that.)
+*   A good knowledge of the Python language, since the frame generation code
+    is pure Python.
+
+
+Design decisions
+----------------
+
+Functional vs. Object-Oriented Event Code
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+The first version of moviemaker used in the beginning static classes for each
+event.  This turned out to cause:
+
+*   High overhead in code writing for each event class
+*   Little customisability of event structure by the user.
+
+A second attemt, using functional programming, revealed:
+
+*   Functional event codes are of similar length, if not shorter, than
+    purely object-oriented code.
+*   Functional events are directly customisable, because their structure is
+    directly written down; the code is not used to instantiate a specialised
+    class.
+
+Thus functional events provide the full functionality needed like an event
+class, with the code length of only the instantiation.  Since the objects
+under consideration do not exchange messages except being called, no object
+orientation is needed.
+
+The approach works out by calling the objects generating the frames with 
+appropriate arguments.  Due to the syntacical similarity of instantiating 
+classes and calling functions, code turns out to be beautiful and elegant
+(see :ref:`composed_functions`).
+
+
+Design of Moviemaker
+^^^^^^^^^^^^^^^^^^^^
+
+The design of moviemaker1 is only mentionend when a comparison is educating
+for the user.  Moviemaker2 uses similar concepts as moviemaker1.
+
+Ingredients of moviemaker2:
+
+*   Parameter objects and parameters.  (:ref:`Elements*Parameter Objects`.)  
+    This allows for e.g. tracking different timelines in a single parameter 
+    collection.  
+
+*   A functional programming framework.  (:ref:`Elements*Functions`.)  This 
+    comprises abstract Functions, a way to interpret non-functional arguments 
+    as Functions,  basic Function classes with numerical and operational 
+    overloads.
+
+*   An elegant solution for altering the parameters on call time.
+    (:ref:`Elements*Extensions`.)  This is used to do e.g. arithmetics with 
+    parameters.
+
+*   A transformation framework for transforming meshes between coordinate
+    systems.  (:ref:`Elements*Transforms`.)
+
+*   Layering from the beginning.  (:ref:`Elements*Layers and Stacks`.)  This 
+    comprises:
+    
+    a)  The ability to combine different effects as layers of the final frame.
+
+    b)  Very short, powerful, and easily readable combination syntax of layers
+        with very little overhead in coding.
+
+    c)  Trees of Layers by combining Stacks into Stacks.
+
+    (new in moviemaker2; moviemaker1 used Event classes instead of Stacks.
+    Events could be added to other Events.  This lead to less readable and
+    counterintuitive coding practice, because the innermost events had to be
+    created first, wrapping them in modification Events.  In moviemaker2,
+    it is up to the user in what order to create modification and "source"
+    Layers.)
+
+*   Different effects.  This comprises:
+    
+    a)  Effect without external input.  Those transform coordinates and
+        times into colour shades in the frame.
+
+    b)  Effects which transform other frames' output.  This includes weighting
+        them, combining them, taking them apart and putting them together in
+        another way, etc.
+
+    c)  Effects with sound input.  This includes tonal analysis, and 
+        visualisation of time sequence data coming from Gabor analysis as
+        colour "fluxes".
+
+    See some other doc **TODOC**
+
+*   A graphical render display (frame snapshot and  status bar), conversion
+    to PIL images, storage on HDD.  The graphical system is completely 
+    optional and decoupled.  See <some other doc **TODOC**>
+
+
+Current Status of the Project
+-----------------------------
+
+moviemaker1 has already been used for several video projects:
+
+*   `Ben Folds - Gone <http://www.vimeo.com/16803156>`_
+*   `Bombay Bicycle Club - Evening/Morning 
+    <http://www.youtube.com/watch?v=EVEbdrPZPD0b>`_
+*   `Kevin MacLeod - Wounded <http://www.vimeo.com/18403461>`_
+
+The refactor of moviemaker1 into moviemaker2 started after finishing these
+videos, and the most difficult thing was to get the new design right.  In 
+fact, the current moviemaker2 version is the fourth attempt to get it right.
+There were two attempts in each version so far.  Most specialised events from 
+moviemaker1 are not yet ported, but it is expected to be feasible much more 
+effortless than the design transformation.  The events present in moviemaker1
+are:
+
+*   `Anaglyph <http://en.wikipedia.org/wiki/Anaglyph_image>`_ generation.
+*   Frame reader from other videos, which must be decomposed into frames
+    already.
+*   Subdividing a frame into a grid of cells and moving the cells around.
+*   Music visualisation by tonal analysis.
+*   Shrinking and expanding of raster frames
+*   Alpha-weighting an raster renderer.
+
+Besides moviemaker, the Gabor analysis for sound analysis and parts of the 
+music visualisation code has been implemented in an independent project, which 
+is not covered here.  This project, the ``quotavis`` project, is comparable in 
+size to moviemaker2.
+
+
+Future of ``moviemaker2``
+-------------------------
+
+I'm deeply satisfied with the Functional approach in moviemaker and how it 
+works out (Functions and Parameters), and I think it is feasible to use 
+the concepts to provide vector rendering functionality.  The by far largest 
+part in this project is the polygon generation, intersection and modification 
+code.  This is in planning phase, and concrete ideas how polygon intersection 
+can work out already exist.
+
+In the far future, moviemaker2 shall become a scientific plotting tool.  This 
+might be an extension package, containing multiple extensions to moviemaker2, 
+which add to the built-in extensions.  It seems, that moviemaker2 might have 
+several advantages over other plotting tools:
+
+1.  Layering
+2.  Knowledge of size of figure on render time.  This leads to possibilities
+    like automatic Axes adjustment to label size, label truncation and 
+    automatic wrap, etc.
+3.  3D channels, correct clipping, while keeping the layered approach up.
+4.  Color conversion functionality (e.g. grayscale conversion).
+5.  Native support for connected axes
+6.  Storable and loadable figures.
+7.  No reference loops.
+
+
+Where to go from here
+---------------------
+
+You might read the :ref:`Elements` or switch over to the :ref:`Tutorials`.

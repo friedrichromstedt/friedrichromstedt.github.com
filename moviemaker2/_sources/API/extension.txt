@@ -1,0 +1,9 @@
+moviemaker2.extension
+=====================
+
+.. automodule:: moviemaker2.extension
+
+.. autoclass:: Extension
+
+    .. automethod:: __init__
+    .. automethod:: __call__

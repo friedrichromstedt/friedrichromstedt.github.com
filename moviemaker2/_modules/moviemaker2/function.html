@@ -1,0 +1,163 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>moviemaker2.function &mdash; Moviemaker v0.1.0b documentation</title>
+    <link rel="stylesheet" href="../../_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '0.1.0b',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="top" title="Moviemaker v0.1.0b documentation" href="../../index.html" />
+    <link rel="up" title="Module code" href="../index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../index.html">Moviemaker v0.1.0b documentation</a> &raquo;</li>
+          <li><a href="../index.html" accesskey="U">Module code</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <h1>Source code for moviemaker2.function</h1><div class="highlight"><pre>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">*   Defining math overloads requires that the mathematical Functions are at</span>
+<span class="sd">    hand.  But those are derivatives of ``Function``.  So we would have to</span>
+<span class="sd">    define the Functions for mathematical overloads in the same scope as the</span>
+<span class="sd">    Function base class.</span>
+
+<span class="sd">*   Defining the ``Function`` class first, it is possible to define </span>
+<span class="sd">    mathematical Functions in ``moviemaker2.math``, when defining the </span>
+<span class="sd">    ``MathFunction`` class, which has mathematical overloads using those</span>
+<span class="sd">    mathematical Functions.</span>
+
+<span class="sd">*   Tests whether an object is a function or not require only testing if the</span>
+<span class="sd">    object is an instance of ``Function``.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span>
+
+<span class="c"># Only export for ``from xx import *`` the really useful objects:</span>
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;Function&#39;</span><span class="p">,</span> <span class="s">&#39;asfunction&#39;</span><span class="p">,</span> <span class="s">&#39;asfunctionv&#39;</span><span class="p">]</span>
+
+<div class="viewcode-block" id="Function"><a class="viewcode-back" href="../../API/function.html#moviemaker2.function.Function">[docs]</a><span class="k">class</span> <span class="nc">Function</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;The base class of all Functions.  It is a bare class without any </span>
+<span class="sd">    attributes.  Used in ``isinstance(object, Function)``.&quot;&quot;&quot;</span>
+
+    <span class="k">pass</span>
+</div>
+<div class="viewcode-block" id="Constant"><a class="viewcode-back" href="../../API/function.html#moviemaker2.function.Constant">[docs]</a><span class="k">class</span> <span class="nc">Constant</span><span class="p">(</span><span class="n">Function</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    A Function yielding always the same value.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="Constant.__init__"><a class="viewcode-back" href="../../API/function.html#moviemaker2.function.Constant.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        *value* is the value of the Constant.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="n">value</span>
+</div>
+<div class="viewcode-block" id="Constant.__call__"><a class="viewcode-back" href="../../API/function.html#moviemaker2.function.Constant.__call__">[docs]</a>    <span class="k">def</span> <span class="nf">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Returns the constant value.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">value</span>
+</div></div>
+<div class="viewcode-block" id="Identity"><a class="viewcode-back" href="../../API/function.html#moviemaker2.function.Identity">[docs]</a><span class="k">class</span> <span class="nc">Identity</span><span class="p">(</span><span class="n">Function</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Returns always its argument(s).  If called with precisely one </span>
+<span class="sd">    argument, returns the argument as a scalar, else the argument vector</span>
+<span class="sd">    is returned.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="Identity.__call__"><a class="viewcode-back" href="../../API/function.html#moviemaker2.function.Identity.__call__">[docs]</a>    <span class="k">def</span> <span class="nf">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">args</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">args</span>
+</div></div>
+<div class="viewcode-block" id="asfunction"><a class="viewcode-back" href="../../API/function.html#moviemaker2.function.asfunction">[docs]</a><span class="k">def</span> <span class="nf">asfunction</span><span class="p">(</span><span class="n">function_like</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    *   If *function_like* is a :class:`Function`, it is returned unchanged.</span>
+<span class="sd">    *   If *function_like* is None, an :class:`Identity` is returned.</span>
+<span class="sd">    *   Else, the *function_like* is interpreted as a :class:`Constant`.</span>
+<span class="sd">    </span>
+<span class="sd">    For ``asfunctionv()``, ``asfunction()`` is applied to any element of an </span>
+<span class="sd">    array_like argument.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">function_like</span><span class="p">,</span> <span class="n">Function</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">function_like</span>
+    <span class="k">elif</span> <span class="n">function_like</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">Identity</span><span class="p">()</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">Constant</span><span class="p">(</span><span class="n">function_like</span><span class="p">)</span>
+</div>
+<span class="n">asfunctionv</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">vectorize</span><span class="p">(</span><span class="n">asfunction</span><span class="p">)</span>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../index.html">Moviemaker v0.1.0b documentation</a> &raquo;</li>
+          <li><a href="../index.html" >Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2010--2011, Friedrich Romstedt.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.1.
+    </div>
+  </body>
+</html>

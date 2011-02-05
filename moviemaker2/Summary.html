@@ -1,0 +1,297 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Summary of the Project &mdash; Moviemaker v0.1.0b documentation</title>
+    <link rel="stylesheet" href="_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.1.0b',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="Moviemaker v0.1.0b documentation" href="index.html" />
+    <link rel="next" title="Tutorials" href="Tutorials.html" />
+    <link rel="prev" title="Welcome to Moviemaker2’s Documentation!" href="index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="Tutorials.html" title="Tutorials"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="Welcome to Moviemaker2’s Documentation!"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">Moviemaker v0.1.0b documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="summary-of-the-project">
+<span id="summary"></span><h1>Summary of the Project<a class="headerlink" href="#summary-of-the-project" title="Permalink to this headline">¶</a></h1>
+<p>State: Early Feb 2011.</p>
+<div class="section" id="task">
+<h2>Task<a class="headerlink" href="#task" title="Permalink to this headline">¶</a></h2>
+<p>Moviemaker is intended for the purpose of frame generation (for video making).
+The functionality is:</p>
+<ul class="simple">
+<li>Generation of all frames of the video.</li>
+<li>Write the frame generation code in pure Python.</li>
+<li>Ability to use input data from audio in the generation of frames.</li>
+</ul>
+</div>
+<div class="section" id="prerequisites">
+<h2>Prerequisites<a class="headerlink" href="#prerequisites" title="Permalink to this headline">¶</a></h2>
+<p>The following prerequisites are necessary to use moviemaker2:</p>
+<ul class="simple">
+<li>A text editor for the frame generation code (functional code).  The author
+uses a console text editor.</li>
+<li>A frame composition program, to generate video files out of frame files.
+The author uses <a class="reference external" href="http://www.avidemux.org">avidemux</a>.</li>
+<li>A separate sound file, if sound is wanted, which can be integrated by the
+frame composition program.  (<tt class="docutils literal"><span class="pre">avidemux</span></tt> can do that.)</li>
+<li>A good knowledge of the Python language, since the frame generation code
+is pure Python.</li>
+</ul>
+</div>
+<div class="section" id="design-decisions">
+<h2>Design decisions<a class="headerlink" href="#design-decisions" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="functional-vs-object-oriented-event-code">
+<h3>Functional vs. Object-Oriented Event Code<a class="headerlink" href="#functional-vs-object-oriented-event-code" title="Permalink to this headline">¶</a></h3>
+<p>The first version of moviemaker used in the beginning static classes for each
+event.  This turned out to cause:</p>
+<ul class="simple">
+<li>High overhead in code writing for each event class</li>
+<li>Little customisability of event structure by the user.</li>
+</ul>
+<p>A second attemt, using functional programming, revealed:</p>
+<ul class="simple">
+<li>Functional event codes are of similar length, if not shorter, than
+purely object-oriented code.</li>
+<li>Functional events are directly customisable, because their structure is
+directly written down; the code is not used to instantiate a specialised
+class.</li>
+</ul>
+<p>Thus functional events provide the full functionality needed like an event
+class, with the code length of only the instantiation.  Since the objects
+under consideration do not exchange messages except being called, no object
+orientation is needed.</p>
+<p>The approach works out by calling the objects generating the frames with
+appropriate arguments.  Due to the syntacical similarity of instantiating
+classes and calling functions, code turns out to be beautiful and elegant
+(see <a class="reference internal" href="Elements.html#composed-functions"><em>Composed Functions</em></a>).</p>
+</div>
+<div class="section" id="design-of-moviemaker">
+<h3>Design of Moviemaker<a class="headerlink" href="#design-of-moviemaker" title="Permalink to this headline">¶</a></h3>
+<p>The design of moviemaker1 is only mentionend when a comparison is educating
+for the user.  Moviemaker2 uses similar concepts as moviemaker1.</p>
+<p>Ingredients of moviemaker2:</p>
+<ul>
+<li><p class="first">Parameter objects and parameters.  (<a class="reference internal" href="Elements.html#elements-parameter-objects"><em>Parameter Objects</em></a>.)
+This allows for e.g. tracking different timelines in a single parameter
+collection.</p>
+</li>
+<li><p class="first">A functional programming framework.  (<a class="reference internal" href="Elements.html#elements-functions"><em>Functions</em></a>.)  This
+comprises abstract Functions, a way to interpret non-functional arguments
+as Functions,  basic Function classes with numerical and operational
+overloads.</p>
+</li>
+<li><p class="first">An elegant solution for altering the parameters on call time.
+(<a class="reference internal" href="Elements.html#elements-extensions"><em>Extensions</em></a>.)  This is used to do e.g. arithmetics with
+parameters.</p>
+</li>
+<li><p class="first">A transformation framework for transforming meshes between coordinate
+systems.  (<a class="reference internal" href="Elements.html#elements-transforms"><em>Transforms</em></a>.)</p>
+</li>
+<li><p class="first">Layering from the beginning.  (<a class="reference internal" href="Elements.html#elements-layers-and-stacks"><em>Layers and Stacks</em></a>.)  This
+comprises:</p>
+<ol class="loweralpha simple">
+<li>The ability to combine different effects as layers of the final frame.</li>
+<li>Very short, powerful, and easily readable combination syntax of layers
+with very little overhead in coding.</li>
+<li>Trees of Layers by combining Stacks into Stacks.</li>
+</ol>
+<p>(new in moviemaker2; moviemaker1 used Event classes instead of Stacks.
+Events could be added to other Events.  This lead to less readable and
+counterintuitive coding practice, because the innermost events had to be
+created first, wrapping them in modification Events.  In moviemaker2,
+it is up to the user in what order to create modification and &#8220;source&#8221;
+Layers.)</p>
+</li>
+<li><p class="first">Different effects.  This comprises:</p>
+<ol class="loweralpha simple">
+<li>Effect without external input.  Those transform coordinates and
+times into colour shades in the frame.</li>
+<li>Effects which transform other frames&#8217; output.  This includes weighting
+them, combining them, taking them apart and putting them together in
+another way, etc.</li>
+<li>Effects with sound input.  This includes tonal analysis, and
+visualisation of time sequence data coming from Gabor analysis as
+colour &#8220;fluxes&#8221;.</li>
+</ol>
+<p>See some other doc <strong>TODOC</strong></p>
+</li>
+<li><p class="first">A graphical render display (frame snapshot and  status bar), conversion
+to PIL images, storage on HDD.  The graphical system is completely
+optional and decoupled.  See &lt;some other doc <strong>TODOC</strong>&gt;</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="section" id="current-status-of-the-project">
+<h2>Current Status of the Project<a class="headerlink" href="#current-status-of-the-project" title="Permalink to this headline">¶</a></h2>
+<p>moviemaker1 has already been used for several video projects:</p>
+<ul class="simple">
+<li><a class="reference external" href="http://www.vimeo.com/16803156">Ben Folds - Gone</a></li>
+<li><a class="reference external" href="http://www.youtube.com/watch?v=EVEbdrPZPD0b">Bombay Bicycle Club - Evening/Morning</a></li>
+<li><a class="reference external" href="http://www.vimeo.com/18403461">Kevin MacLeod - Wounded</a></li>
+</ul>
+<p>The refactor of moviemaker1 into moviemaker2 started after finishing these
+videos, and the most difficult thing was to get the new design right.  In
+fact, the current moviemaker2 version is the fourth attempt to get it right.
+There were two attempts in each version so far.  Most specialised events from
+moviemaker1 are not yet ported, but it is expected to be feasible much more
+effortless than the design transformation.  The events present in moviemaker1
+are:</p>
+<ul class="simple">
+<li><a class="reference external" href="http://en.wikipedia.org/wiki/Anaglyph_image">Anaglyph</a> generation.</li>
+<li>Frame reader from other videos, which must be decomposed into frames
+already.</li>
+<li>Subdividing a frame into a grid of cells and moving the cells around.</li>
+<li>Music visualisation by tonal analysis.</li>
+<li>Shrinking and expanding of raster frames</li>
+<li>Alpha-weighting an raster renderer.</li>
+</ul>
+<p>Besides moviemaker, the Gabor analysis for sound analysis and parts of the
+music visualisation code has been implemented in an independent project, which
+is not covered here.  This project, the <tt class="docutils literal"><span class="pre">quotavis</span></tt> project, is comparable in
+size to moviemaker2.</p>
+</div>
+<div class="section" id="future-of-moviemaker2">
+<h2>Future of <tt class="docutils literal"><span class="pre">moviemaker2</span></tt><a class="headerlink" href="#future-of-moviemaker2" title="Permalink to this headline">¶</a></h2>
+<p>I&#8217;m deeply satisfied with the Functional approach in moviemaker and how it
+works out (Functions and Parameters), and I think it is feasible to use
+the concepts to provide vector rendering functionality.  The by far largest
+part in this project is the polygon generation, intersection and modification
+code.  This is in planning phase, and concrete ideas how polygon intersection
+can work out already exist.</p>
+<p>In the far future, moviemaker2 shall become a scientific plotting tool.  This
+might be an extension package, containing multiple extensions to moviemaker2,
+which add to the built-in extensions.  It seems, that moviemaker2 might have
+several advantages over other plotting tools:</p>
+<ol class="arabic simple">
+<li>Layering</li>
+<li>Knowledge of size of figure on render time.  This leads to possibilities
+like automatic Axes adjustment to label size, label truncation and
+automatic wrap, etc.</li>
+<li>3D channels, correct clipping, while keeping the layered approach up.</li>
+<li>Color conversion functionality (e.g. grayscale conversion).</li>
+<li>Native support for connected axes</li>
+<li>Storable and loadable figures.</li>
+<li>No reference loops.</li>
+</ol>
+</div>
+<div class="section" id="where-to-go-from-here">
+<h2>Where to go from here<a class="headerlink" href="#where-to-go-from-here" title="Permalink to this headline">¶</a></h2>
+<p>You might read the <a class="reference internal" href="Elements.html#elements"><em>Elements of Moviemaker2</em></a> or switch over to the <a class="reference internal" href="Tutorials.html#tutorials"><em>Tutorials</em></a>.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Summary of the Project</a><ul>
+<li><a class="reference internal" href="#task">Task</a></li>
+<li><a class="reference internal" href="#prerequisites">Prerequisites</a></li>
+<li><a class="reference internal" href="#design-decisions">Design decisions</a><ul>
+<li><a class="reference internal" href="#functional-vs-object-oriented-event-code">Functional vs. Object-Oriented Event Code</a></li>
+<li><a class="reference internal" href="#design-of-moviemaker">Design of Moviemaker</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#current-status-of-the-project">Current Status of the Project</a></li>
+<li><a class="reference internal" href="#future-of-moviemaker2">Future of <tt class="docutils literal"><span class="pre">moviemaker2</span></tt></a></li>
+<li><a class="reference internal" href="#where-to-go-from-here">Where to go from here</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="index.html"
+                        title="previous chapter">Welcome to Moviemaker2&#8217;s Documentation!</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="Tutorials.html"
+                        title="next chapter">Tutorials</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/Summary.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="Tutorials.html" title="Tutorials"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="Welcome to Moviemaker2’s Documentation!"
+             >previous</a> |</li>
+        <li><a href="index.html">Moviemaker v0.1.0b documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2010--2011, Friedrich Romstedt.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.1.
+    </div>
+  </body>
+</html>

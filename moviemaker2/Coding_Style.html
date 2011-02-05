@@ -1,0 +1,183 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Coding Style &mdash; Moviemaker v0.1.0b documentation</title>
+    <link rel="stylesheet" href="_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.1.0b',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="Moviemaker v0.1.0b documentation" href="index.html" />
+    <link rel="next" title="API" href="API.html" />
+    <link rel="prev" title="Elements of Moviemaker2" href="Elements.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="API.html" title="API"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="Elements.html" title="Elements of Moviemaker2"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">Moviemaker v0.1.0b documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="coding-style">
+<span id="id1"></span><h1>Coding Style<a class="headerlink" href="#coding-style" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="coding-functions">
+<h2>Coding Functions<a class="headerlink" href="#coding-functions" title="Permalink to this headline">¶</a></h2>
+<p>Composed Functions, in the case that they do not belong to the moviemaker2
+framework (but are rather abstract functions, belonging to the Function
+framework):</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">moviemaker2.function</span> <span class="kn">import</span> <span class="n">asfunction</span>
+<span class="kn">from</span> <span class="nn">moviemaker2.math.primitive</span> <span class="kn">import</span> <span class="n">MathFunction</span>
+
+<span class="k">class</span> <span class="nc">Sum</span><span class="p">(</span><span class="n">MathFunction</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">one</span><span class="p">,</span> <span class="n">two</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">one</span> <span class="o">=</span> <span class="n">asfunction</span><span class="p">(</span><span class="n">one</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">two</span> <span class="o">=</span> <span class="n">asfunction</span><span class="p">(</span><span class="n">two</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">one</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">two</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li>Use <a class="reference internal" href="API/function.html#moviemaker2.function.asfunction" title="moviemaker2.function.asfunction"><tt class="xref py py-func docutils literal"><span class="pre">moviemaker2.function.asfunction()</span></tt></a> or
+<a class="reference internal" href="API/math.html#moviemaker2.math.primitive.asmathfunction" title="moviemaker2.math.primitive.asmathfunction"><tt class="xref py py-func docutils literal"><span class="pre">moviemaker2.math.primitive.asmathfunction()</span></tt></a> to ensure that
+constants can be handed over, and None gets interpreted as the identity.</li>
+</ul>
+<p>If they are moviemaker2 specific Functions:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">class</span> <span class="nc">PlaneWave</span><span class="p">(</span><span class="n">MathFunction</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">Y</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">wavevector</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Y</span> <span class="o">=</span> <span class="n">asfunction</span><span class="p">(</span><span class="n">Y</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">X</span> <span class="o">=</span> <span class="n">asfunction</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">wavevector</span> <span class="o">=</span> <span class="n">asfunction</span><span class="p">(</span><span class="n">wavevector</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ps</span><span class="p">):</span>
+        <span class="n">Y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Y</span><span class="p">(</span><span class="n">ps</span><span class="p">)</span>
+        <span class="n">X</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">X</span><span class="p">(</span><span class="n">ps</span><span class="p">)</span>
+        <span class="n">wavevector</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">wavevector</span><span class="p">(</span><span class="n">ps</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="p">(</span><span class="n">asarray</span><span class="p">([</span><span class="n">Y</span><span class="p">,</span> <span class="n">X</span><span class="p">])</span> <span class="o">*</span> <span class="n">wavevector</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li>Use the argument <tt class="docutils literal"><span class="pre">ps</span></tt> directly in the <tt class="docutils literal"><span class="pre">__call__</span></tt>, since moviemaker2
+Functions act on parameter objects always.</li>
+</ul>
+<p>Following guidelines:</p>
+<ul class="simple">
+<li>Do not distinguish explicitly between functions and values in naming
+convention of variables.</li>
+<li>Name the leaf Functions after their purpose, do use <tt class="docutils literal"><span class="pre">wavevector</span></tt>, but
+not <tt class="docutils literal"><span class="pre">wavevector_func</span></tt>.</li>
+<li>Store the functions in an attribute of the object: <tt class="docutils literal"><span class="pre">self.wavevector</span> <span class="pre">=</span>
+<span class="pre">asfunction(wavevector)</span></tt>.</li>
+<li>Use <a class="reference internal" href="API/function.html#moviemaker2.function.asfunction" title="moviemaker2.function.asfunction"><tt class="xref py py-func docutils literal"><span class="pre">asfunction()</span></tt></a> or
+<a class="reference internal" href="API/math.html#moviemaker2.math.primitive.asmathfunction" title="moviemaker2.math.primitive.asmathfunction"><tt class="xref py py-func docutils literal"><span class="pre">asmathfunction()</span></tt></a>.  This ensures that:<ul>
+<li>Non-Function values are interpreted as constant Functions.</li>
+<li><tt class="xref docutils literal"><span class="pre">None</span></tt> is interpreted as the Identity function.</li>
+<li>In the case of <tt class="docutils literal"><span class="pre">asmathfunction</span></tt>, it adds arithemtic stuff like
+operator overlaods.</li>
+</ul>
+</li>
+<li>When using the function in <tt class="docutils literal"><span class="pre">__call__()</span></tt>, name the local scope variable
+same as the attribute, <tt class="docutils literal"><span class="pre">wavevector</span> <span class="pre">=</span> <span class="pre">self.wavevector(...)</span></tt>.</li>
+</ul>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Coding Style</a><ul>
+<li><a class="reference internal" href="#coding-functions">Coding Functions</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="Elements.html"
+                        title="previous chapter">Elements of Moviemaker2</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="API.html"
+                        title="next chapter">API</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/Coding_Style.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="API.html" title="API"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="Elements.html" title="Elements of Moviemaker2"
+             >previous</a> |</li>
+        <li><a href="index.html">Moviemaker v0.1.0b documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2010--2011, Friedrich Romstedt.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.1.
+    </div>
+  </body>
+</html>

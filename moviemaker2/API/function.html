@@ -1,0 +1,191 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>moviemaker2.function &mdash; Moviemaker v0.1.0b documentation</title>
+    <link rel="stylesheet" href="../_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.1.0b',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="Moviemaker v0.1.0b documentation" href="../index.html" />
+    <link rel="up" title="API" href="../API.html" />
+    <link rel="next" title="moviemaker2.math" href="math.html" />
+    <link rel="prev" title="API" href="../API.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="math.html" title="moviemaker2.math"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="../API.html" title="API"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">Moviemaker v0.1.0b documentation</a> &raquo;</li>
+          <li><a href="../API.html" accesskey="U">API</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="module-moviemaker2.function">
+<span id="moviemaker2-function"></span><h1>moviemaker2.function<a class="headerlink" href="#module-moviemaker2.function" title="Permalink to this headline">¶</a></h1>
+<ul class="simple">
+<li>Defining math overloads requires that the mathematical Functions are at
+hand.  But those are derivatives of <tt class="docutils literal"><span class="pre">Function</span></tt>.  So we would have to
+define the Functions for mathematical overloads in the same scope as the
+Function base class.</li>
+<li>Defining the <tt class="docutils literal"><span class="pre">Function</span></tt> class first, it is possible to define 
+mathematical Functions in <tt class="docutils literal"><span class="pre">moviemaker2.math</span></tt>, when defining the 
+<tt class="docutils literal"><span class="pre">MathFunction</span></tt> class, which has mathematical overloads using those
+mathematical Functions.</li>
+<li>Tests whether an object is a function or not require only testing if the
+object is an instance of <tt class="docutils literal"><span class="pre">Function</span></tt>.</li>
+</ul>
+<dl class="class">
+<dt id="moviemaker2.function.Function">
+<em class="property">class </em><tt class="descclassname">moviemaker2.function.</tt><tt class="descname">Function</tt><a class="reference internal" href="../_modules/moviemaker2/function.html#Function"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#moviemaker2.function.Function" title="Permalink to this definition">¶</a></dt>
+<dd><p>The base class of all Functions.  It is a bare class without any 
+attributes.  Used in <tt class="docutils literal"><span class="pre">isinstance(object,</span> <span class="pre">Function)</span></tt>.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="moviemaker2.function.Constant">
+<em class="property">class </em><tt class="descclassname">moviemaker2.function.</tt><tt class="descname">Constant</tt><big>(</big><em>value</em><big>)</big><a class="reference internal" href="../_modules/moviemaker2/function.html#Constant"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#moviemaker2.function.Constant" title="Permalink to this definition">¶</a></dt>
+<dd><p>A Function yielding always the same value.</p>
+<dl class="method">
+<dt id="moviemaker2.function.Constant.__init__">
+<tt class="descname">__init__</tt><big>(</big><em>value</em><big>)</big><a class="reference internal" href="../_modules/moviemaker2/function.html#Constant.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#moviemaker2.function.Constant.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>value</em> is the value of the Constant.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="moviemaker2.function.Constant.__call__">
+<tt class="descname">__call__</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/moviemaker2/function.html#Constant.__call__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#moviemaker2.function.Constant.__call__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the constant value.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="moviemaker2.function.Identity">
+<em class="property">class </em><tt class="descclassname">moviemaker2.function.</tt><tt class="descname">Identity</tt><a class="reference internal" href="../_modules/moviemaker2/function.html#Identity"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#moviemaker2.function.Identity" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns always its argument(s).  If called with precisely one 
+argument, returns the argument as a scalar, else the argument vector
+is returned.</p>
+<dl class="method">
+<dt id="moviemaker2.function.Identity.__call__">
+<tt class="descname">__call__</tt><big>(</big><em>*args</em><big>)</big><a class="reference internal" href="../_modules/moviemaker2/function.html#Identity.__call__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#moviemaker2.function.Identity.__call__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="moviemaker2.function.asfunction">
+<tt class="descclassname">moviemaker2.function.</tt><tt class="descname">asfunction</tt><big>(</big><em>function_like</em><big>)</big><a class="reference internal" href="../_modules/moviemaker2/function.html#asfunction"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#moviemaker2.function.asfunction" title="Permalink to this definition">¶</a></dt>
+<dd><ul class="simple">
+<li>If <em>function_like</em> is a <a class="reference internal" href="#moviemaker2.function.Function" title="moviemaker2.function.Function"><tt class="xref py py-class docutils literal"><span class="pre">Function</span></tt></a>, it is returned unchanged.</li>
+<li>If <em>function_like</em> is None, an <a class="reference internal" href="#moviemaker2.function.Identity" title="moviemaker2.function.Identity"><tt class="xref py py-class docutils literal"><span class="pre">Identity</span></tt></a> is returned.</li>
+<li>Else, the <em>function_like</em> is interpreted as a <a class="reference internal" href="#moviemaker2.function.Constant" title="moviemaker2.function.Constant"><tt class="xref py py-class docutils literal"><span class="pre">Constant</span></tt></a>.</li>
+</ul>
+<p>For <tt class="docutils literal"><span class="pre">asfunctionv()</span></tt>, <tt class="docutils literal"><span class="pre">asfunction()</span></tt> is applied to any element of an 
+array_like argument.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="moviemaker2.function.asfunctionv">
+<tt class="descclassname">moviemaker2.function.</tt><tt class="descname">asfunctionv</tt><big>(</big><em>pyfunc</em>, <em>otypes=''</em>, <em>doc=None</em><big>)</big><a class="headerlink" href="#moviemaker2.function.asfunctionv" title="Permalink to this definition">¶</a></dt>
+<dd><ul class="simple">
+<li>If <em>function_like</em> is a <a class="reference internal" href="#moviemaker2.function.Function" title="moviemaker2.function.Function"><tt class="xref py py-class docutils literal"><span class="pre">Function</span></tt></a>, it is returned unchanged.</li>
+<li>If <em>function_like</em> is None, an <a class="reference internal" href="#moviemaker2.function.Identity" title="moviemaker2.function.Identity"><tt class="xref py py-class docutils literal"><span class="pre">Identity</span></tt></a> is returned.</li>
+<li>Else, the <em>function_like</em> is interpreted as a <a class="reference internal" href="#moviemaker2.function.Constant" title="moviemaker2.function.Constant"><tt class="xref py py-class docutils literal"><span class="pre">Constant</span></tt></a>.</li>
+</ul>
+<p>For <tt class="docutils literal"><span class="pre">asfunctionv()</span></tt>, <tt class="docutils literal"><span class="pre">asfunction()</span></tt> is applied to any element of an 
+array_like argument.</p>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="../API.html"
+                        title="previous chapter">API</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="math.html"
+                        title="next chapter">moviemaker2.math</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/API/function.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="math.html" title="moviemaker2.math"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="../API.html" title="API"
+             >previous</a> |</li>
+        <li><a href="../index.html">Moviemaker v0.1.0b documentation</a> &raquo;</li>
+          <li><a href="../API.html" >API</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2010--2011, Friedrich Romstedt.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.1.
+    </div>
+  </body>
+</html>

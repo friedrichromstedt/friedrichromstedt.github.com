@@ -1,0 +1,290 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Built-in Extensions &mdash; Moviemaker v0.1.0b documentation</title>
+    <link rel="stylesheet" href="../_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.1.0b',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="Moviemaker v0.1.0b documentation" href="../index.html" />
+    <link rel="up" title="API" href="../API.html" />
+    <link rel="prev" title="moviemaker2.transforms" href="transforms.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="transforms.html" title="moviemaker2.transforms"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">Moviemaker v0.1.0b documentation</a> &raquo;</li>
+          <li><a href="../API.html" accesskey="U">API</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="module-moviemaker2.ext">
+<span id="built-in-extensions"></span><h1>Built-in Extensions<a class="headerlink" href="#module-moviemaker2.ext" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="module-moviemaker2.ext.multid">
+<span id="moviemaker2-ext-multid"></span><h2>moviemaker2.ext.multid<a class="headerlink" href="#module-moviemaker2.ext.multid" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="moviemaker2.ext.multid.Multid">
+<em class="property">class </em><tt class="descclassname">moviemaker2.ext.multid.</tt><tt class="descname">Multid</tt><big>(</big><em>target</em>, <em>stack</em>, <em>values</em>, <em>p</em><big>)</big><a class="reference internal" href="../_modules/moviemaker2/ext/multid.html#Multid"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#moviemaker2.ext.multid.Multid" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="method">
+<dt id="moviemaker2.ext.multid.Multid.__init__">
+<tt class="descname">__init__</tt><big>(</big><em>target</em>, <em>stack</em>, <em>values</em>, <em>p</em><big>)</big><a class="reference internal" href="../_modules/moviemaker2/ext/multid.html#Multid.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#moviemaker2.ext.multid.Multid.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>values</em> is an iterable.  There will be as many layers superimposed 
+as there are items in <em>values</em>.  <em>p</em> is used to store the values from
+<em>values</em>.  For each value, an Extension is generated, with that value,
+which is appended to the <em>stack</em> on call time.  <em>target</em> is the 
+supplier of layers called for each <em>value</em> by one of the 
+Extensions.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="moviemaker2.ext.multid.Multid.__call__">
+<tt class="descname">__call__</tt><big>(</big><em>ps</em><big>)</big><a class="reference internal" href="../_modules/moviemaker2/ext/multid.html#Multid.__call__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#moviemaker2.ext.multid.Multid.__call__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-moviemaker2.ext.render">
+<span id="moviemaker2-ext-render"></span><h2>moviemaker2.ext.render<a class="headerlink" href="#module-moviemaker2.ext.render" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="moviemaker2.ext.render.Render">
+<em class="property">class </em><tt class="descclassname">moviemaker2.ext.render.</tt><tt class="descname">Render</tt><big>(</big><em>fn</em><big>)</big><a class="reference internal" href="../_modules/moviemaker2/ext/render.html#Render"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#moviemaker2.ext.render.Render" title="Permalink to this definition">¶</a></dt>
+<dd><p>Runs the rendering.  Initially supported timelines are <tt class="docutils literal"><span class="pre">'realtime'</span></tt> 
+and <tt class="docutils literal"><span class="pre">'frametime'</span></tt>.</p>
+<dl class="method">
+<dt id="moviemaker2.ext.render.Render.__init__">
+<tt class="descname">__init__</tt><big>(</big><em>fn</em><big>)</big><a class="reference internal" href="../_modules/moviemaker2/ext/render.html#Render.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#moviemaker2.ext.render.Render.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><ul class="simple">
+<li><em>fn</em> is the supplier of PIL images.</li>
+</ul>
+</dd></dl>
+
+<dl class="method">
+<dt id="moviemaker2.ext.render.Render.__call__">
+<tt class="descname">__call__</tt><big>(</big><em>framerate</em>, <em>directory</em>, <em>extension=None</em>, <em>prefix=None</em>, <em>nthreads=None</em>, <em>startrealtime=None</em>, <em>stoprealtime=None</em>, <em>startframetime=None</em>, <em>stopframetime=None</em>, <em>render_queue=None</em>, <em>framestep=None</em><big>)</big><a class="reference internal" href="../_modules/moviemaker2/ext/render.html#Render.__call__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#moviemaker2.ext.render.Render.__call__" title="Permalink to this definition">¶</a></dt>
+<dd><ul class="simple">
+<li><em>framerate</em> is fps.</li>
+<li><em>directory</em> is the output directory, <em>extension</em> the filename
+extension.  <em>prefix</em> will be prepended to the filename.</li>
+<li>Rendering will use <em>nthreads</em> threads.</li>
+<li>Times can be given either by frametime or by realtime.  The 
+frametimes given have precedence over the realtimes given.</li>
+<li><em>render_queue</em> is optional, giving a capsule where to post
+progress.</li>
+<li><em>args</em> and <em>kwargs</em> are handed over to the Layer this
+<tt class="docutils literal"><span class="pre">BoundRenderLayer</span></tt> was bound to upon initialisation time.</li>
+<li>During rendering, the frametime is stepped with <em>framestep</em>.</li>
+</ul>
+<p>Renders to HDD and puts ImageCapsules into <em>render_queue</em> if
+given.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-moviemaker2.ext.render_capsules">
+<span id="moviemaker2-ext-render-capsules"></span><h2>moviemaker2.ext.render_capsules<a class="headerlink" href="#module-moviemaker2.ext.render_capsules" title="Permalink to this headline">¶</a></h2>
+<p>Capsules to be used with rendering.</p>
+<dl class="class">
+<dt id="moviemaker2.ext.render_capsules.AnnounceCapsule">
+<em class="property">class </em><tt class="descclassname">moviemaker2.ext.render_capsules.</tt><tt class="descname">AnnounceCapsule</tt><big>(</big><em>nframes</em><big>)</big><a class="reference internal" href="../_modules/moviemaker2/ext/render_capsules.html#AnnounceCapsule"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#moviemaker2.ext.render_capsules.AnnounceCapsule" title="Permalink to this definition">¶</a></dt>
+<dd><p>Holds the number of frames to be rendered.</p>
+<dl class="method">
+<dt id="moviemaker2.ext.render_capsules.AnnounceCapsule.__init__">
+<tt class="descname">__init__</tt><big>(</big><em>nframes</em><big>)</big><a class="reference internal" href="../_modules/moviemaker2/ext/render_capsules.html#AnnounceCapsule.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#moviemaker2.ext.render_capsules.AnnounceCapsule.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>nframes</em> is the number of frames to be rendered.  <em>shape</em> is the
+shape of the images transferred later.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="moviemaker2.ext.render_capsules.ResultCapsule">
+<em class="property">class </em><tt class="descclassname">moviemaker2.ext.render_capsules.</tt><tt class="descname">ResultCapsule</tt><big>(</big><em>image</em>, <em>frameindex</em>, <em>error=None</em><big>)</big><a class="reference internal" href="../_modules/moviemaker2/ext/render_capsules.html#ResultCapsule"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#moviemaker2.ext.render_capsules.ResultCapsule" title="Permalink to this definition">¶</a></dt>
+<dd><p>Holds an image and its frameindex.</p>
+<dl class="method">
+<dt id="moviemaker2.ext.render_capsules.ResultCapsule.__init__">
+<tt class="descname">__init__</tt><big>(</big><em>image</em>, <em>frameindex</em>, <em>error=None</em><big>)</big><a class="reference internal" href="../_modules/moviemaker2/ext/render_capsules.html#ResultCapsule.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#moviemaker2.ext.render_capsules.ResultCapsule.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>image</em> is a PIL image representing a frame resulting from 
+rendering.  <em>frameidx</em> is the index of the frame, always 
+starting with 0.  <em>error</em> (boolean) tells if there was an error.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-moviemaker2.ext.tk">
+<span id="moviemaker2-ext-tk"></span><h2>moviemaker2.ext.tk<a class="headerlink" href="#module-moviemaker2.ext.tk" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="moviemaker2.ext.tk.RenderFrame">
+<em class="property">class </em><tt class="descclassname">moviemaker2.ext.tk.</tt><tt class="descname">RenderFrame</tt><big>(</big><em>master</em>, <em>nbins=None</em>, <em>*frame_args</em>, <em>**frame_kwargs</em><big>)</big><a class="reference internal" href="../_modules/moviemaker2/ext/tk.html#RenderFrame"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#moviemaker2.ext.tk.RenderFrame" title="Permalink to this definition">¶</a></dt>
+<dd><p>A Tkinter.Frame which can render events with graphical feedback.  The
+.start() method must be called once to start the polling mechanism.</p>
+<p>Use the .render_queue as argument to a Renderer&#8217;s .render() method.</p>
+<dl class="method">
+<dt id="moviemaker2.ext.tk.RenderFrame.__init__">
+<tt class="descname">__init__</tt><big>(</big><em>master</em>, <em>nbins=None</em>, <em>*frame_args</em>, <em>**frame_kwargs</em><big>)</big><a class="reference internal" href="../_modules/moviemaker2/ext/tk.html#RenderFrame.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#moviemaker2.ext.tk.RenderFrame.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>nbins</em> is the number of sections used for the status bar.
+<em>frame_args</em> and <em>frame_kwargs</em> go to the <tt class="docutils literal"><span class="pre">Frame</span></tt> class.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="moviemaker2.ext.tk.RenderFrame.setup">
+<tt class="descname">setup</tt><big>(</big><em>nslots</em><big>)</big><a class="reference internal" href="../_modules/moviemaker2/ext/tk.html#RenderFrame.setup"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#moviemaker2.ext.tk.RenderFrame.setup" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets the slots and bin number.  <em>nslots</em> is the number of frames
+to be rendered.  <em>nbins</em> should be some reasonably smaller number.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="moviemaker2.ext.tk.RenderFrame.start">
+<tt class="descname">start</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/moviemaker2/ext/tk.html#RenderFrame.start"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#moviemaker2.ext.tk.RenderFrame.start" title="Permalink to this definition">¶</a></dt>
+<dd><p>Starts the polling mechanism essential for visual feedback.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="moviemaker2.ext.tk.RenderFrame.poll">
+<tt class="descname">poll</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/moviemaker2/ext/tk.html#RenderFrame.poll"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#moviemaker2.ext.tk.RenderFrame.poll" title="Permalink to this definition">¶</a></dt>
+<dd><p>Grabs all items from the .render_queue, displays the latest
+frame, and enables all frames&#8217; status slot.</p>
+<p>Will poll again after 100 ms.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="moviemaker2.ext.tk.StatusBar">
+<em class="property">class </em><tt class="descclassname">moviemaker2.ext.tk.</tt><tt class="descname">StatusBar</tt><big>(</big><em>master</em>, <em>nbins=None</em>, <em>*frame_args</em>, <em>**frame_kwargs</em><big>)</big><a class="reference internal" href="../_modules/moviemaker2/ext/tk.html#StatusBar"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#moviemaker2.ext.tk.StatusBar" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates a widget with lots of Labels to display progress in a 
+multithreaded rendering program.</p>
+<dl class="method">
+<dt id="moviemaker2.ext.tk.StatusBar.__init__">
+<tt class="descname">__init__</tt><big>(</big><em>master</em>, <em>nbins=None</em>, <em>*frame_args</em>, <em>**frame_kwargs</em><big>)</big><a class="reference internal" href="../_modules/moviemaker2/ext/tk.html#StatusBar.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#moviemaker2.ext.tk.StatusBar.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>nbins</em> is the number of bins to use.  For each bin, a Label will 
+be created (at least 1px wide).  All other args and kwargs go to 
+Frame.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="moviemaker2.ext.tk.StatusBar.setup">
+<tt class="descname">setup</tt><big>(</big><em>nslots</em><big>)</big><a class="reference internal" href="../_modules/moviemaker2/ext/tk.html#StatusBar.setup"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#moviemaker2.ext.tk.StatusBar.setup" title="Permalink to this definition">¶</a></dt>
+<dd><p>Setup the StatusBar.  If <em>nbins</em> &gt; <em>nslots</em>, <em>nbins</em> is set to 
+<em>nslots</em>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="moviemaker2.ext.tk.StatusBar.enable">
+<tt class="descname">enable</tt><big>(</big><em>slot</em><big>)</big><a class="reference internal" href="../_modules/moviemaker2/ext/tk.html#StatusBar.enable"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#moviemaker2.ext.tk.StatusBar.enable" title="Permalink to this definition">¶</a></dt>
+<dd><p>Turns on the label with index <em>slot</em>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="moviemaker2.ext.tk.StatusBar.check_set_green">
+<tt class="descname">check_set_green</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/moviemaker2/ext/tk.html#StatusBar.check_set_green"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#moviemaker2.ext.tk.StatusBar.check_set_green" title="Permalink to this definition">¶</a></dt>
+<dd><p>Checks if the process is finished.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="moviemaker2.ext.tk.StatusBar.error">
+<tt class="descname">error</tt><big>(</big><em>slot</em><big>)</big><a class="reference internal" href="../_modules/moviemaker2/ext/tk.html#StatusBar.error"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#moviemaker2.ext.tk.StatusBar.error" title="Permalink to this definition">¶</a></dt>
+<dd><p>Signals an error in slot SLOT.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Built-in Extensions</a><ul>
+<li><a class="reference internal" href="#module-moviemaker2.ext.multid">moviemaker2.ext.multid</a></li>
+<li><a class="reference internal" href="#module-moviemaker2.ext.render">moviemaker2.ext.render</a></li>
+<li><a class="reference internal" href="#module-moviemaker2.ext.render_capsules">moviemaker2.ext.render_capsules</a></li>
+<li><a class="reference internal" href="#module-moviemaker2.ext.tk">moviemaker2.ext.tk</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="transforms.html"
+                        title="previous chapter">moviemaker2.transforms</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/API/ext.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="transforms.html" title="moviemaker2.transforms"
+             >previous</a> |</li>
+        <li><a href="../index.html">Moviemaker v0.1.0b documentation</a> &raquo;</li>
+          <li><a href="../API.html" >API</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2010--2011, Friedrich Romstedt.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.1.
+    </div>
+  </body>
+</html>

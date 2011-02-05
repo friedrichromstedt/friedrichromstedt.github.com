@@ -1,0 +1,66 @@
+.. _Coding Style:
+
+Coding Style
+============
+
+Coding Functions
+----------------
+
+Composed Functions, in the case that they do not belong to the moviemaker2
+framework (but are rather abstract functions, belonging to the Function 
+framework)::
+
+    from moviemaker2.function import asfunction
+    from moviemaker2.math.primitive import MathFunction
+
+    class Sum(MathFunction):
+        def __init__(self, one, two):
+            self.one = asfunction(one)
+            self.two = asfunction(two)
+
+        def __call__(self, *args, **kwargs):
+            return self.one(*args, **kwargs) + self.two(*args, **kwargs)
+
+*   Use :func:`moviemaker2.function.asfunction` or 
+    :func:`moviemaker2.math.primitive.asmathfunction` to ensure that
+    constants can be handed over, and None gets interpreted as the identity.
+
+If they are moviemaker2 specific Functions::
+
+    class PlaneWave(MathFunction):
+        def __init__(self, Y, X, wavevector):
+            self.Y = asfunction(Y)
+            self.X = asfunction(X)
+            self.wavevector = asfunction(wavevector)
+
+        def __call__(self, ps):
+            Y = self.Y(ps)
+            X = self.X(ps)
+            wavevector = self.wavevector(ps)
+
+            return (asarray([Y, X]) * wavevector).sum(axis=0)
+
+*   Use the argument ``ps`` directly in the ``__call__``, since moviemaker2
+    Functions act on parameter objects always.
+
+Following guidelines:
+
+*   Do not distinguish explicitly between functions and values in naming
+    convention of variables.
+
+*   Name the leaf Functions after their purpose, do use ``wavevector``, but
+    not ``wavevector_func``.
+
+*   Store the functions in an attribute of the object: ``self.wavevector =
+    asfunction(wavevector)``.
+
+*   Use :func:`~moviemaker2.function.asfunction` or
+    :func:`~moviemaker2.math.primitive.asmathfunction`.  This ensures that:
+
+    -   Non-Function values are interpreted as constant Functions.
+    -   ``None`` is interpreted as the Identity function.
+    -   In the case of ``asmathfunction``, it adds arithemtic stuff like
+        operator overlaods.
+
+*   When using the function in ``__call__()``, name the local scope variable
+    same as the attribute, ``wavevector = self.wavevector(...)``.

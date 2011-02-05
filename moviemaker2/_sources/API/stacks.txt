@@ -1,0 +1,34 @@
+moviemaker2.stacks
+==================
+
+.. automodule:: moviemaker2.stacks
+
+
+moviemaker2.stacks.stack
+------------------------
+
+.. automodule:: moviemaker2.stacks.stack
+
+.. autoclass:: Stack
+
+    .. automethod:: __init__
+    .. automethod:: __xor__
+    .. automethod:: add_top
+    .. automethod:: add_bottom
+    .. automethod:: insert
+    .. automethod:: remove
+    .. automethod:: __delitem__
+
+
+moviemaker2.stacks.raster
+-------------------------
+
+.. automodule:: moviemaker2.stacks.raster
+
+.. autoclass:: AdditiveRasterStack
+    
+    .. automethod:: __call__
+
+.. autoclass:: AlphaBlendRasterStack
+    
+    .. automethod:: __call__

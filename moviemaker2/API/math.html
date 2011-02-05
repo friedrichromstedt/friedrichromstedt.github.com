@@ -1,0 +1,806 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>moviemaker2.math &mdash; Moviemaker v0.1.0b documentation</title>
+    <link rel="stylesheet" href="../_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.1.0b',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="Moviemaker v0.1.0b documentation" href="../index.html" />
+    <link rel="up" title="API" href="../API.html" />
+    <link rel="next" title="moviemaker2.parameter" href="parameter.html" />
+    <link rel="prev" title="moviemaker2.function" href="function.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="parameter.html" title="moviemaker2.parameter"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="function.html" title="moviemaker2.function"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">Moviemaker v0.1.0b documentation</a> &raquo;</li>
+          <li><a href="../API.html" accesskey="U">API</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="moviemaker2-math">
+<h1>moviemaker2.math<a class="headerlink" href="#moviemaker2-math" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="module-moviemaker2.math.primitive">
+<span id="moviemaker2-math-primitive"></span><h2>moviemaker2.math.primitive<a class="headerlink" href="#module-moviemaker2.math.primitive" title="Permalink to this headline">¶</a></h2>
+<p>The primitive arithmetic operations must be overloaded in the class definition
+directly, and therefore the returned Functions are defined in this module too,
+and not in <tt class="xref py py-mod docutils literal"><span class="pre">moviemaker.math</span></tt> where they belong to.  Nevertheless they 
+will be available through the <tt class="xref py py-mod docutils literal"><span class="pre">moviemaker.math</span></tt> module, too.</p>
+<dl class="class">
+<dt id="moviemaker2.math.primitive.MathFunction">
+<em class="property">class </em><tt class="descclassname">moviemaker2.math.primitive.</tt><tt class="descname">MathFunction</tt><big>(</big><em>wrap</em><big>)</big><a class="reference internal" href="../_modules/moviemaker2/math/primitive.html#MathFunction"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#moviemaker2.math.primitive.MathFunction" title="Permalink to this definition">¶</a></dt>
+<dd><p>Supports overloaded primitve arithmetics.  Can wrap an ordinary 
+Function, to extend it by math overloads.</p>
+<p>Examples:  (fXXX is a function for something &#8220;XXX&#8221;)</p>
+<ol class="arabic simple">
+<li><tt class="docutils literal"><span class="pre">fa</span> <span class="pre">+</span> <span class="pre">fb</span></tt>, etc.</li>
+<li><tt class="docutils literal"><span class="pre">numpy.cos(fangle)</span></tt>.  This works through the <a class="reference internal" href="#moviemaker2.math.primitive.MathFunction.cos" title="moviemaker2.math.primitive.MathFunction.cos"><tt class="xref py py-meth docutils literal"><span class="pre">cos()</span></tt></a> method.
+Same for <tt class="docutils literal"><span class="pre">numpy.sin(fangle)</span></tt>.</li>
+<li><tt class="docutils literal"><span class="pre">numpy.sum(farray,</span> <span class="pre">axis=1)</span></tt>.  This works through the <a class="reference internal" href="#moviemaker2.math.primitive.MathFunction.sum" title="moviemaker2.math.primitive.MathFunction.sum"><tt class="xref py py-meth docutils literal"><span class="pre">sum()</span></tt></a>
+method.</li>
+</ol>
+<dl class="method">
+<dt id="moviemaker2.math.primitive.MathFunction.__init__">
+<tt class="descname">__init__</tt><big>(</big><em>wrap</em><big>)</big><a class="reference internal" href="../_modules/moviemaker2/math/primitive.html#MathFunction.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#moviemaker2.math.primitive.MathFunction.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>wrap</em> is an ordinary Function, being used during __call__.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="moviemaker2.math.primitive.MathFunction.__call__">
+<tt class="descname">__call__</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/moviemaker2/math/primitive.html#MathFunction.__call__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#moviemaker2.math.primitive.MathFunction.__call__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calls just <tt class="docutils literal"><span class="pre">.wrap</span></tt>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="moviemaker2.math.primitive.MathFunction.__add__">
+<tt class="descname">__add__</tt><big>(</big><em>other</em><big>)</big><a class="reference internal" href="../_modules/moviemaker2/math/primitive.html#MathFunction.__add__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#moviemaker2.math.primitive.MathFunction.__add__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the <a class="reference internal" href="#moviemaker2.math.primitive.Sum" title="moviemaker2.math.primitive.Sum"><tt class="xref py py-class docutils literal"><span class="pre">Sum</span></tt></a> with another Function.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="moviemaker2.math.primitive.MathFunction.__radd__">
+<tt class="descname">__radd__</tt><big>(</big><em>other</em><big>)</big><a class="reference internal" href="../_modules/moviemaker2/math/primitive.html#MathFunction.__radd__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#moviemaker2.math.primitive.MathFunction.__radd__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the <a class="reference internal" href="#moviemaker2.math.primitive.Sum" title="moviemaker2.math.primitive.Sum"><tt class="xref py py-class docutils literal"><span class="pre">Sum</span></tt></a> with another Function.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="moviemaker2.math.primitive.MathFunction.__sub__">
+<tt class="descname">__sub__</tt><big>(</big><em>other</em><big>)</big><a class="reference internal" href="../_modules/moviemaker2/math/primitive.html#MathFunction.__sub__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#moviemaker2.math.primitive.MathFunction.__sub__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the <a class="reference internal" href="#moviemaker2.math.primitive.Sum" title="moviemaker2.math.primitive.Sum"><tt class="xref py py-class docutils literal"><span class="pre">Sum</span></tt></a> with the negative of the other 
+Function.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="moviemaker2.math.primitive.MathFunction.__rsub__">
+<tt class="descname">__rsub__</tt><big>(</big><em>other</em><big>)</big><a class="reference internal" href="../_modules/moviemaker2/math/primitive.html#MathFunction.__rsub__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#moviemaker2.math.primitive.MathFunction.__rsub__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the <a class="reference internal" href="#moviemaker2.math.primitive.Sum" title="moviemaker2.math.primitive.Sum"><tt class="xref py py-class docutils literal"><span class="pre">Sum</span></tt></a> of the other Function with the negative of
+<tt class="docutils literal"><span class="pre">self</span></tt>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="moviemaker2.math.primitive.MathFunction.__mul__">
+<tt class="descname">__mul__</tt><big>(</big><em>other</em><big>)</big><a class="reference internal" href="../_modules/moviemaker2/math/primitive.html#MathFunction.__mul__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#moviemaker2.math.primitive.MathFunction.__mul__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the <a class="reference internal" href="#moviemaker2.math.primitive.Product" title="moviemaker2.math.primitive.Product"><tt class="xref py py-class docutils literal"><span class="pre">Product</span></tt></a> with the other Function.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="moviemaker2.math.primitive.MathFunction.__rmul__">
+<tt class="descname">__rmul__</tt><big>(</big><em>other</em><big>)</big><a class="reference internal" href="../_modules/moviemaker2/math/primitive.html#MathFunction.__rmul__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#moviemaker2.math.primitive.MathFunction.__rmul__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the <a class="reference internal" href="#moviemaker2.math.primitive.Product" title="moviemaker2.math.primitive.Product"><tt class="xref py py-class docutils literal"><span class="pre">Product</span></tt></a> of the other Function with 
+<tt class="docutils literal"><span class="pre">self</span></tt>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="moviemaker2.math.primitive.MathFunction.__div__">
+<tt class="descname">__div__</tt><big>(</big><em>other</em><big>)</big><a class="reference internal" href="../_modules/moviemaker2/math/primitive.html#MathFunction.__div__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#moviemaker2.math.primitive.MathFunction.__div__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the <a class="reference internal" href="#moviemaker2.math.primitive.Quotient" title="moviemaker2.math.primitive.Quotient"><tt class="xref py py-class docutils literal"><span class="pre">Quotient</span></tt></a> with the other Function.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="moviemaker2.math.primitive.MathFunction.__rdiv__">
+<tt class="descname">__rdiv__</tt><big>(</big><em>other</em><big>)</big><a class="reference internal" href="../_modules/moviemaker2/math/primitive.html#MathFunction.__rdiv__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#moviemaker2.math.primitive.MathFunction.__rdiv__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the <a class="reference internal" href="#moviemaker2.math.primitive.Quotient" title="moviemaker2.math.primitive.Quotient"><tt class="xref py py-class docutils literal"><span class="pre">Quotient</span></tt></a> of the other Function with 
+<tt class="docutils literal"><span class="pre">self</span></tt>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="moviemaker2.math.primitive.MathFunction.__pow__">
+<tt class="descname">__pow__</tt><big>(</big><em>exponent</em><big>)</big><a class="reference internal" href="../_modules/moviemaker2/math/primitive.html#MathFunction.__pow__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#moviemaker2.math.primitive.MathFunction.__pow__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Raises <tt class="docutils literal"><span class="pre">self</span></tt> to the power of the other Function.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="moviemaker2.math.primitive.MathFunction.__rpow__">
+<tt class="descname">__rpow__</tt><big>(</big><em>base</em><big>)</big><a class="reference internal" href="../_modules/moviemaker2/math/primitive.html#MathFunction.__rpow__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#moviemaker2.math.primitive.MathFunction.__rpow__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Raises the other Function to the power of <tt class="docutils literal"><span class="pre">self</span></tt>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="moviemaker2.math.primitive.MathFunction.__pos__">
+<tt class="descname">__pos__</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/moviemaker2/math/primitive.html#MathFunction.__pos__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#moviemaker2.math.primitive.MathFunction.__pos__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns <tt class="docutils literal"><span class="pre">self</span></tt>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="moviemaker2.math.primitive.MathFunction.__neg__">
+<tt class="descname">__neg__</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/moviemaker2/math/primitive.html#MathFunction.__neg__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#moviemaker2.math.primitive.MathFunction.__neg__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the <tt class="xref py py-class docutils literal"><span class="pre">Nagative</span></tt> of <tt class="docutils literal"><span class="pre">self</span></tt>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="moviemaker2.math.primitive.MathFunction.sin">
+<tt class="descname">sin</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/moviemaker2/math/primitive.html#MathFunction.sin"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#moviemaker2.math.primitive.MathFunction.sin" title="Permalink to this definition">¶</a></dt>
+<dd><p>Takes the sine.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="moviemaker2.math.primitive.MathFunction.cos">
+<tt class="descname">cos</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/moviemaker2/math/primitive.html#MathFunction.cos"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#moviemaker2.math.primitive.MathFunction.cos" title="Permalink to this definition">¶</a></dt>
+<dd><p>Takes the cosine.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="moviemaker2.math.primitive.MathFunction.exp">
+<tt class="descname">exp</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/moviemaker2/math/primitive.html#MathFunction.exp"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#moviemaker2.math.primitive.MathFunction.exp" title="Permalink to this definition">¶</a></dt>
+<dd><p>Exponentiates.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="moviemaker2.math.primitive.MathFunction.sum">
+<tt class="descname">sum</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/moviemaker2/math/primitive.html#MathFunction.sum"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#moviemaker2.math.primitive.MathFunction.sum" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a <a class="reference internal" href="#moviemaker2.math.primitive.Sum" title="moviemaker2.math.primitive.Sum"><tt class="xref py py-class docutils literal"><span class="pre">Sum</span></tt></a> of self with the arguments for calling
+<tt class="docutils literal"><span class="pre">.sum()</span></tt> given by the arguments given here.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="moviemaker2.math.primitive.MathFunction.clip">
+<tt class="descname">clip</tt><big>(</big><em>low</em>, <em>high</em><big>)</big><a class="reference internal" href="../_modules/moviemaker2/math/primitive.html#MathFunction.clip"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#moviemaker2.math.primitive.MathFunction.clip" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a <a class="reference internal" href="#moviemaker2.math.primitive.Clip" title="moviemaker2.math.primitive.Clip"><tt class="xref py py-class docutils literal"><span class="pre">Clip</span></tt></a> instance of <tt class="docutils literal"><span class="pre">self</span></tt> with <em>low</em> and <em>high</em> 
+set up.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="moviemaker2.math.primitive.MathFunction.astype">
+<tt class="descname">astype</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/moviemaker2/math/primitive.html#MathFunction.astype"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#moviemaker2.math.primitive.MathFunction.astype" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a <tt class="xref py py-class docutils literal"><span class="pre">asarray</span></tt> instance of <tt class="docutils literal"><span class="pre">self</span></tt> with <em>args</em> and
+<em>kwargs</em> handed over.  Can be used for converting to other dtypes:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">func</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">dtype</span><span class="o">=</span><span class="n">numpy</span><span class="o">.</span><span class="n">int</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="moviemaker2.math.primitive.MathFunction.__getitem__">
+<tt class="descname">__getitem__</tt><big>(</big><em>index</em><big>)</big><a class="reference internal" href="../_modules/moviemaker2/math/primitive.html#MathFunction.__getitem__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#moviemaker2.math.primitive.MathFunction.__getitem__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a <a class="reference internal" href="#moviemaker2.math.primitive.Indexing" title="moviemaker2.math.primitive.Indexing"><tt class="xref py py-class docutils literal"><span class="pre">Indexing</span></tt></a> instance of <tt class="docutils literal"><span class="pre">self</span></tt> with <em>index</em> set
+up.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="moviemaker2.math.primitive.MathFunction.__or__">
+<tt class="descname">__or__</tt><big>(</big><em>other</em><big>)</big><a class="reference internal" href="../_modules/moviemaker2/math/primitive.html#MathFunction.__or__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#moviemaker2.math.primitive.MathFunction.__or__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Piping is composition of Functions.  The pipe operator is designed
+such that the wrapping function is written last: <em>other</em> will be 
+executed with the ouput of <em>self</em> as input.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="moviemaker2.math.primitive.MathComposedFunction">
+<em class="property">class </em><tt class="descclassname">moviemaker2.math.primitive.</tt><tt class="descname">MathComposedFunction</tt><big>(</big><em>a</em>, <em>b</em><big>)</big><a class="reference internal" href="../_modules/moviemaker2/math/primitive.html#MathComposedFunction"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#moviemaker2.math.primitive.MathComposedFunction" title="Permalink to this definition">¶</a></dt>
+<dd><p>Executes one function with the output of another.</p>
+<dl class="method">
+<dt id="moviemaker2.math.primitive.MathComposedFunction.__init__">
+<tt class="descname">__init__</tt><big>(</big><em>a</em>, <em>b</em><big>)</big><a class="reference internal" href="../_modules/moviemaker2/math/primitive.html#MathComposedFunction.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#moviemaker2.math.primitive.MathComposedFunction.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>b</em> will be executed with the output of <em>a</em> as input.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="moviemaker2.math.primitive.MathComposedFunction.__call__">
+<tt class="descname">__call__</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/moviemaker2/math/primitive.html#MathComposedFunction.__call__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#moviemaker2.math.primitive.MathComposedFunction.__call__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns <tt class="docutils literal"><span class="pre">b(a(...))</span></tt>.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="moviemaker2.math.primitive.MathConstant">
+<em class="property">class </em><tt class="descclassname">moviemaker2.math.primitive.</tt><tt class="descname">MathConstant</tt><big>(</big><em>value</em><big>)</big><a class="reference internal" href="../_modules/moviemaker2/math/primitive.html#MathConstant"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#moviemaker2.math.primitive.MathConstant" title="Permalink to this definition">¶</a></dt>
+<dd><p><a class="reference internal" href="function.html#moviemaker2.function.Constant" title="moviemaker2.function.Constant"><tt class="xref py py-class docutils literal"><span class="pre">Constant</span></tt></a>, extended by mathematical
+overloads.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="moviemaker2.math.primitive.MathIdentity">
+<em class="property">class </em><tt class="descclassname">moviemaker2.math.primitive.</tt><tt class="descname">MathIdentity</tt><a class="reference internal" href="../_modules/moviemaker2/math/primitive.html#MathIdentity"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#moviemaker2.math.primitive.MathIdentity" title="Permalink to this definition">¶</a></dt>
+<dd><p><a class="reference internal" href="function.html#moviemaker2.function.Identity" title="moviemaker2.function.Identity"><tt class="xref py py-class docutils literal"><span class="pre">Identity</span></tt></a>, extended by mathatical
+overloads.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="moviemaker2.math.primitive.asmathfunction">
+<tt class="descclassname">moviemaker2.math.primitive.</tt><tt class="descname">asmathfunction</tt><big>(</big><em>mathfunction_like</em><big>)</big><a class="reference internal" href="../_modules/moviemaker2/math/primitive.html#asmathfunction"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#moviemaker2.math.primitive.asmathfunction" title="Permalink to this definition">¶</a></dt>
+<dd><ul class="simple">
+<li>If <em>mathfunction_like</em> is a <a class="reference internal" href="#moviemaker2.math.primitive.MathFunction" title="moviemaker2.math.primitive.MathFunction"><tt class="xref py py-class docutils literal"><span class="pre">MathFunction</span></tt></a>, it is returned 
+unchanged.</li>
+<li>If <em>mathfunction_like</em> is a <a class="reference internal" href="function.html#moviemaker2.function.Function" title="moviemaker2.function.Function"><tt class="xref py py-class docutils literal"><span class="pre">Function</span></tt></a>,
+<tt class="docutils literal"><span class="pre">MathFunction(mathfunction_like)</span></tt> is returned.</li>
+<li>If <em>function_like</em> is None, a <a class="reference internal" href="#moviemaker2.math.primitive.MathIdentity" title="moviemaker2.math.primitive.MathIdentity"><tt class="xref py py-class docutils literal"><span class="pre">MathIdentity</span></tt></a> is returned.</li>
+<li>Else, the <em>function_like</em> is interpreted as a <a class="reference internal" href="#moviemaker2.math.primitive.MathConstant" title="moviemaker2.math.primitive.MathConstant"><tt class="xref py py-class docutils literal"><span class="pre">MathConstant</span></tt></a>.</li>
+</ul>
+<p>For <tt class="docutils literal"><span class="pre">asmathfunctionv()</span></tt>, <tt class="docutils literal"><span class="pre">asmathfunction()</span></tt> is applied on any element
+of an array_like argument.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="moviemaker2.math.primitive.asmathfunctionv">
+<tt class="descclassname">moviemaker2.math.primitive.</tt><tt class="descname">asmathfunctionv</tt><big>(</big><em>pyfunc</em>, <em>otypes=''</em>, <em>doc=None</em><big>)</big><a class="headerlink" href="#moviemaker2.math.primitive.asmathfunctionv" title="Permalink to this definition">¶</a></dt>
+<dd><ul class="simple">
+<li>If <em>mathfunction_like</em> is a <a class="reference internal" href="#moviemaker2.math.primitive.MathFunction" title="moviemaker2.math.primitive.MathFunction"><tt class="xref py py-class docutils literal"><span class="pre">MathFunction</span></tt></a>, it is returned 
+unchanged.</li>
+<li>If <em>mathfunction_like</em> is a <a class="reference internal" href="function.html#moviemaker2.function.Function" title="moviemaker2.function.Function"><tt class="xref py py-class docutils literal"><span class="pre">Function</span></tt></a>,
+<tt class="docutils literal"><span class="pre">MathFunction(mathfunction_like)</span></tt> is returned.</li>
+<li>If <em>function_like</em> is None, a <a class="reference internal" href="#moviemaker2.math.primitive.MathIdentity" title="moviemaker2.math.primitive.MathIdentity"><tt class="xref py py-class docutils literal"><span class="pre">MathIdentity</span></tt></a> is returned.</li>
+<li>Else, the <em>function_like</em> is interpreted as a <a class="reference internal" href="#moviemaker2.math.primitive.MathConstant" title="moviemaker2.math.primitive.MathConstant"><tt class="xref py py-class docutils literal"><span class="pre">MathConstant</span></tt></a>.</li>
+</ul>
+<p>For <tt class="docutils literal"><span class="pre">asmathfunctionv()</span></tt>, <tt class="docutils literal"><span class="pre">asmathfunction()</span></tt> is applied on any element
+of an array_like argument.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="moviemaker2.math.primitive.Sum">
+<em class="property">class </em><tt class="descclassname">moviemaker2.math.primitive.</tt><tt class="descname">Sum</tt><big>(</big><em>one</em>, <em>two</em><big>)</big><a class="reference internal" href="../_modules/moviemaker2/math/primitive.html#Sum"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#moviemaker2.math.primitive.Sum" title="Permalink to this definition">¶</a></dt>
+<dd><p>Abstract sum Function.</p>
+<dl class="method">
+<dt id="moviemaker2.math.primitive.Sum.__init__">
+<tt class="descname">__init__</tt><big>(</big><em>one</em>, <em>two</em><big>)</big><a class="reference internal" href="../_modules/moviemaker2/math/primitive.html#Sum.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#moviemaker2.math.primitive.Sum.__init__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="moviemaker2.math.primitive.Sum.__call__">
+<tt class="descname">__call__</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/moviemaker2/math/primitive.html#Sum.__call__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#moviemaker2.math.primitive.Sum.__call__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="moviemaker2.math.primitive.Product">
+<em class="property">class </em><tt class="descclassname">moviemaker2.math.primitive.</tt><tt class="descname">Product</tt><big>(</big><em>one</em>, <em>two</em><big>)</big><a class="reference internal" href="../_modules/moviemaker2/math/primitive.html#Product"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#moviemaker2.math.primitive.Product" title="Permalink to this definition">¶</a></dt>
+<dd><p>Abstract product Function.</p>
+<dl class="method">
+<dt id="moviemaker2.math.primitive.Product.__init__">
+<tt class="descname">__init__</tt><big>(</big><em>one</em>, <em>two</em><big>)</big><a class="reference internal" href="../_modules/moviemaker2/math/primitive.html#Product.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#moviemaker2.math.primitive.Product.__init__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="moviemaker2.math.primitive.Product.__call__">
+<tt class="descname">__call__</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/moviemaker2/math/primitive.html#Product.__call__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#moviemaker2.math.primitive.Product.__call__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="moviemaker2.math.primitive.Quotient">
+<em class="property">class </em><tt class="descclassname">moviemaker2.math.primitive.</tt><tt class="descname">Quotient</tt><big>(</big><em>one</em>, <em>two</em><big>)</big><a class="reference internal" href="../_modules/moviemaker2/math/primitive.html#Quotient"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#moviemaker2.math.primitive.Quotient" title="Permalink to this definition">¶</a></dt>
+<dd><p>Abstract quotient Function.</p>
+<dl class="method">
+<dt id="moviemaker2.math.primitive.Quotient.__init__">
+<tt class="descname">__init__</tt><big>(</big><em>one</em>, <em>two</em><big>)</big><a class="reference internal" href="../_modules/moviemaker2/math/primitive.html#Quotient.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#moviemaker2.math.primitive.Quotient.__init__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="moviemaker2.math.primitive.Quotient.__call__">
+<tt class="descname">__call__</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/moviemaker2/math/primitive.html#Quotient.__call__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#moviemaker2.math.primitive.Quotient.__call__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="moviemaker2.math.primitive.Cmp">
+<em class="property">class </em><tt class="descclassname">moviemaker2.math.primitive.</tt><tt class="descname">Cmp</tt><big>(</big><em>A</em>, <em>B</em><big>)</big><a class="reference internal" href="../_modules/moviemaker2/math/primitive.html#Cmp"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#moviemaker2.math.primitive.Cmp" title="Permalink to this definition">¶</a></dt>
+<dd><p>Abstract comparison Function.</p>
+<dl class="method">
+<dt id="moviemaker2.math.primitive.Cmp.__init__">
+<tt class="descname">__init__</tt><big>(</big><em>A</em>, <em>B</em><big>)</big><a class="reference internal" href="../_modules/moviemaker2/math/primitive.html#Cmp.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#moviemaker2.math.primitive.Cmp.__init__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="moviemaker2.math.primitive.Cmp.__call__">
+<tt class="descname">__call__</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/moviemaker2/math/primitive.html#Cmp.__call__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#moviemaker2.math.primitive.Cmp.__call__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="moviemaker2.math.primitive.Less">
+<em class="property">class </em><tt class="descclassname">moviemaker2.math.primitive.</tt><tt class="descname">Less</tt><big>(</big><em>A</em>, <em>B</em><big>)</big><a class="reference internal" href="../_modules/moviemaker2/math/primitive.html#Less"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#moviemaker2.math.primitive.Less" title="Permalink to this definition">¶</a></dt>
+<dd><p>Abstract comparison Function.</p>
+<dl class="method">
+<dt id="moviemaker2.math.primitive.Less.__init__">
+<tt class="descname">__init__</tt><big>(</big><em>A</em>, <em>B</em><big>)</big><a class="reference internal" href="../_modules/moviemaker2/math/primitive.html#Less.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#moviemaker2.math.primitive.Less.__init__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="moviemaker2.math.primitive.Less.__call__">
+<tt class="descname">__call__</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/moviemaker2/math/primitive.html#Less.__call__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#moviemaker2.math.primitive.Less.__call__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="moviemaker2.math.primitive.Greater">
+<em class="property">class </em><tt class="descclassname">moviemaker2.math.primitive.</tt><tt class="descname">Greater</tt><big>(</big><em>A</em>, <em>B</em><big>)</big><a class="reference internal" href="../_modules/moviemaker2/math/primitive.html#Greater"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#moviemaker2.math.primitive.Greater" title="Permalink to this definition">¶</a></dt>
+<dd><p>Abstract comparison Function.</p>
+<dl class="method">
+<dt id="moviemaker2.math.primitive.Greater.__init__">
+<tt class="descname">__init__</tt><big>(</big><em>A</em>, <em>B</em><big>)</big><a class="reference internal" href="../_modules/moviemaker2/math/primitive.html#Greater.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#moviemaker2.math.primitive.Greater.__init__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="moviemaker2.math.primitive.Greater.__call__">
+<tt class="descname">__call__</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/moviemaker2/math/primitive.html#Greater.__call__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#moviemaker2.math.primitive.Greater.__call__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="moviemaker2.math.primitive.LessEqual">
+<em class="property">class </em><tt class="descclassname">moviemaker2.math.primitive.</tt><tt class="descname">LessEqual</tt><big>(</big><em>A</em>, <em>B</em><big>)</big><a class="reference internal" href="../_modules/moviemaker2/math/primitive.html#LessEqual"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#moviemaker2.math.primitive.LessEqual" title="Permalink to this definition">¶</a></dt>
+<dd><p>Abstract comparison Function.</p>
+<dl class="method">
+<dt id="moviemaker2.math.primitive.LessEqual.__init__">
+<tt class="descname">__init__</tt><big>(</big><em>A</em>, <em>B</em><big>)</big><a class="reference internal" href="../_modules/moviemaker2/math/primitive.html#LessEqual.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#moviemaker2.math.primitive.LessEqual.__init__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="moviemaker2.math.primitive.LessEqual.__call__">
+<tt class="descname">__call__</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/moviemaker2/math/primitive.html#LessEqual.__call__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#moviemaker2.math.primitive.LessEqual.__call__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="moviemaker2.math.primitive.GreaterEqual">
+<em class="property">class </em><tt class="descclassname">moviemaker2.math.primitive.</tt><tt class="descname">GreaterEqual</tt><big>(</big><em>A</em>, <em>B</em><big>)</big><a class="reference internal" href="../_modules/moviemaker2/math/primitive.html#GreaterEqual"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#moviemaker2.math.primitive.GreaterEqual" title="Permalink to this definition">¶</a></dt>
+<dd><p>Abstract comparison Function.</p>
+<dl class="method">
+<dt id="moviemaker2.math.primitive.GreaterEqual.__init__">
+<tt class="descname">__init__</tt><big>(</big><em>A</em>, <em>B</em><big>)</big><a class="reference internal" href="../_modules/moviemaker2/math/primitive.html#GreaterEqual.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#moviemaker2.math.primitive.GreaterEqual.__init__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="moviemaker2.math.primitive.GreaterEqual.__call__">
+<tt class="descname">__call__</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/moviemaker2/math/primitive.html#GreaterEqual.__call__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#moviemaker2.math.primitive.GreaterEqual.__call__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="moviemaker2.math.primitive.Equal">
+<em class="property">class </em><tt class="descclassname">moviemaker2.math.primitive.</tt><tt class="descname">Equal</tt><big>(</big><em>A</em>, <em>B</em><big>)</big><a class="reference internal" href="../_modules/moviemaker2/math/primitive.html#Equal"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#moviemaker2.math.primitive.Equal" title="Permalink to this definition">¶</a></dt>
+<dd><p>Abstract comparison Function.</p>
+<dl class="method">
+<dt id="moviemaker2.math.primitive.Equal.__init__">
+<tt class="descname">__init__</tt><big>(</big><em>A</em>, <em>B</em><big>)</big><a class="reference internal" href="../_modules/moviemaker2/math/primitive.html#Equal.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#moviemaker2.math.primitive.Equal.__init__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="moviemaker2.math.primitive.Equal.__call__">
+<tt class="descname">__call__</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/moviemaker2/math/primitive.html#Equal.__call__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#moviemaker2.math.primitive.Equal.__call__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="moviemaker2.math.primitive.Not">
+<em class="property">class </em><tt class="descclassname">moviemaker2.math.primitive.</tt><tt class="descname">Not</tt><big>(</big><em>A</em><big>)</big><a class="reference internal" href="../_modules/moviemaker2/math/primitive.html#Not"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#moviemaker2.math.primitive.Not" title="Permalink to this definition">¶</a></dt>
+<dd><p>Abstract comparison Function.</p>
+<dl class="method">
+<dt id="moviemaker2.math.primitive.Not.__init__">
+<tt class="descname">__init__</tt><big>(</big><em>A</em><big>)</big><a class="reference internal" href="../_modules/moviemaker2/math/primitive.html#Not.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#moviemaker2.math.primitive.Not.__init__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="moviemaker2.math.primitive.Not.__call__">
+<tt class="descname">__call__</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/moviemaker2/math/primitive.html#Not.__call__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#moviemaker2.math.primitive.Not.__call__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="moviemaker2.math.primitive.Power">
+<em class="property">class </em><tt class="descclassname">moviemaker2.math.primitive.</tt><tt class="descname">Power</tt><big>(</big><em>base</em>, <em>exponent</em><big>)</big><a class="reference internal" href="../_modules/moviemaker2/math/primitive.html#Power"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#moviemaker2.math.primitive.Power" title="Permalink to this definition">¶</a></dt>
+<dd><p>Abstract power Function.</p>
+<dl class="method">
+<dt id="moviemaker2.math.primitive.Power.__init__">
+<tt class="descname">__init__</tt><big>(</big><em>base</em>, <em>exponent</em><big>)</big><a class="reference internal" href="../_modules/moviemaker2/math/primitive.html#Power.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#moviemaker2.math.primitive.Power.__init__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="moviemaker2.math.primitive.Power.__call__">
+<tt class="descname">__call__</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/moviemaker2/math/primitive.html#Power.__call__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#moviemaker2.math.primitive.Power.__call__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="moviemaker2.math.primitive.Neg">
+<em class="property">class </em><tt class="descclassname">moviemaker2.math.primitive.</tt><tt class="descname">Neg</tt><big>(</big><em>invertible</em><big>)</big><a class="reference internal" href="../_modules/moviemaker2/math/primitive.html#Neg"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#moviemaker2.math.primitive.Neg" title="Permalink to this definition">¶</a></dt>
+<dd><p>Abstract negative Function.</p>
+<dl class="method">
+<dt id="moviemaker2.math.primitive.Neg.__init__">
+<tt class="descname">__init__</tt><big>(</big><em>invertible</em><big>)</big><a class="reference internal" href="../_modules/moviemaker2/math/primitive.html#Neg.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#moviemaker2.math.primitive.Neg.__init__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="moviemaker2.math.primitive.Neg.__call__">
+<tt class="descname">__call__</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/moviemaker2/math/primitive.html#Neg.__call__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#moviemaker2.math.primitive.Neg.__call__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="moviemaker2.math.primitive.Cos">
+<em class="property">class </em><tt class="descclassname">moviemaker2.math.primitive.</tt><tt class="descname">Cos</tt><big>(</big><em>angle=None</em><big>)</big><a class="reference internal" href="../_modules/moviemaker2/math/primitive.html#Cos"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#moviemaker2.math.primitive.Cos" title="Permalink to this definition">¶</a></dt>
+<dd><p>Takes the cosine.</p>
+<dl class="method">
+<dt id="moviemaker2.math.primitive.Cos.__init__">
+<tt class="descname">__init__</tt><big>(</big><em>angle=None</em><big>)</big><a class="reference internal" href="../_modules/moviemaker2/math/primitive.html#Cos.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#moviemaker2.math.primitive.Cos.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>The value of <em>angle</em> is in radians.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="moviemaker2.math.primitive.Cos.__call__">
+<tt class="descname">__call__</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/moviemaker2/math/primitive.html#Cos.__call__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#moviemaker2.math.primitive.Cos.__call__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates the cosine of the value of <em>angle</em> using 
+<tt class="docutils literal"><span class="pre">numpy.cos</span></tt>.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="moviemaker2.math.primitive.Sin">
+<em class="property">class </em><tt class="descclassname">moviemaker2.math.primitive.</tt><tt class="descname">Sin</tt><big>(</big><em>angle=None</em><big>)</big><a class="reference internal" href="../_modules/moviemaker2/math/primitive.html#Sin"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#moviemaker2.math.primitive.Sin" title="Permalink to this definition">¶</a></dt>
+<dd><p>Takes the sine.</p>
+<dl class="method">
+<dt id="moviemaker2.math.primitive.Sin.__init__">
+<tt class="descname">__init__</tt><big>(</big><em>angle=None</em><big>)</big><a class="reference internal" href="../_modules/moviemaker2/math/primitive.html#Sin.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#moviemaker2.math.primitive.Sin.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>The value of <em>angle</em> is in radians.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="moviemaker2.math.primitive.Sin.__call__">
+<tt class="descname">__call__</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/moviemaker2/math/primitive.html#Sin.__call__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#moviemaker2.math.primitive.Sin.__call__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates the sine of the value of <em>angle</em> using 
+<tt class="docutils literal"><span class="pre">numpy.sin</span></tt>.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="moviemaker2.math.primitive.Exp">
+<em class="property">class </em><tt class="descclassname">moviemaker2.math.primitive.</tt><tt class="descname">Exp</tt><big>(</big><em>exponent=None</em><big>)</big><a class="reference internal" href="../_modules/moviemaker2/math/primitive.html#Exp"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#moviemaker2.math.primitive.Exp" title="Permalink to this definition">¶</a></dt>
+<dd><p>Exponentiates.</p>
+<dl class="method">
+<dt id="moviemaker2.math.primitive.Exp.__init__">
+<tt class="descname">__init__</tt><big>(</big><em>exponent=None</em><big>)</big><a class="reference internal" href="../_modules/moviemaker2/math/primitive.html#Exp.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#moviemaker2.math.primitive.Exp.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>exponent</em> is used as the argument to <tt class="docutils literal"><span class="pre">numpy.exp()</span></tt>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="moviemaker2.math.primitive.Exp.__call__">
+<tt class="descname">__call__</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/moviemaker2/math/primitive.html#Exp.__call__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#moviemaker2.math.primitive.Exp.__call__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates <tt class="docutils literal"><span class="pre">exp()</span></tt> of <tt class="docutils literal"><span class="pre">.exponent()</span></tt>.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="moviemaker2.math.primitive.SumCall">
+<em class="property">class </em><tt class="descclassname">moviemaker2.math.primitive.</tt><tt class="descname">SumCall</tt><big>(</big><em>array</em>, <em>*sum_args</em>, <em>**sum_kwargs</em><big>)</big><a class="reference internal" href="../_modules/moviemaker2/math/primitive.html#SumCall"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#moviemaker2.math.primitive.SumCall" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calles <tt class="docutils literal"><span class="pre">.sum()</span></tt> with predefined arguments.  This is intended for
+use with ndarray-values Functions.</p>
+<dl class="method">
+<dt id="moviemaker2.math.primitive.SumCall.__init__">
+<tt class="descname">__init__</tt><big>(</big><em>array</em>, <em>*sum_args</em>, <em>**sum_kwargs</em><big>)</big><a class="reference internal" href="../_modules/moviemaker2/math/primitive.html#SumCall.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#moviemaker2.math.primitive.SumCall.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>The value of <em>array</em> must have a <tt class="docutils literal"><span class="pre">.sum</span></tt> method.  The sum() method
+will be called on call time with the arguments and kwargs given.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="moviemaker2.math.primitive.SumCall.__call__">
+<tt class="descname">__call__</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/moviemaker2/math/primitive.html#SumCall.__call__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#moviemaker2.math.primitive.SumCall.__call__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calls <em>array</em> with the arguments, and then calls <tt class="docutils literal"><span class="pre">.sum()</span></tt> on
+the value with the arguments defined at initialisation time.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="moviemaker2.math.primitive.Indexing">
+<em class="property">class </em><tt class="descclassname">moviemaker2.math.primitive.</tt><tt class="descname">Indexing</tt><big>(</big><em>index</em>, <em>items=None</em><big>)</big><a class="reference internal" href="../_modules/moviemaker2/math/primitive.html#Indexing"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#moviemaker2.math.primitive.Indexing" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns an item from the value of another Function.</p>
+<p>Examples:</p>
+<ol class="arabic simple">
+<li>Indexing of a tuple with an integer.</li>
+<li>Indexing of a ndarray with any index accepted by the ndarray.</li>
+<li>Indexing of a dictionary.</li>
+</ol>
+<p>The index is static, i.e., it isn&#8217;t a Function.</p>
+<dl class="method">
+<dt id="moviemaker2.math.primitive.Indexing.__init__">
+<tt class="descname">__init__</tt><big>(</big><em>index</em>, <em>items=None</em><big>)</big><a class="reference internal" href="../_modules/moviemaker2/math/primitive.html#Indexing.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#moviemaker2.math.primitive.Indexing.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>items</em> returns the items the Indexing chooses from.  The value
+of <em>items</em> must support indexing.</p>
+<p><em>index</em> might be any index accepted by the value of <em>items</em>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="moviemaker2.math.primitive.Indexing.__call__">
+<tt class="descname">__call__</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/moviemaker2/math/primitive.html#Indexing.__call__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#moviemaker2.math.primitive.Indexing.__call__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Indexes the value of <em>items</em> with <em>index</em>.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="moviemaker2.math.primitive.AttributeAccess">
+<em class="property">class </em><tt class="descclassname">moviemaker2.math.primitive.</tt><tt class="descname">AttributeAccess</tt><big>(</big><em>attribute</em>, <em>host=None</em><big>)</big><a class="reference internal" href="../_modules/moviemaker2/math/primitive.html#AttributeAccess"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#moviemaker2.math.primitive.AttributeAccess" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns an attribute from the value of another Function.</p>
+<dl class="method">
+<dt id="moviemaker2.math.primitive.AttributeAccess.__init__">
+<tt class="descname">__init__</tt><big>(</big><em>attribute</em>, <em>host=None</em><big>)</big><a class="reference internal" href="../_modules/moviemaker2/math/primitive.html#AttributeAccess.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#moviemaker2.math.primitive.AttributeAccess.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>host</em> is the Function with values hosting the attribute named 
+<em>attribute</em>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="moviemaker2.math.primitive.AttributeAccess.__call__">
+<tt class="descname">__call__</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/moviemaker2/math/primitive.html#AttributeAccess.__call__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#moviemaker2.math.primitive.AttributeAccess.__call__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the attribute <em>attribute</em> from the value of <em>host</em>.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="moviemaker2.math.primitive.Clip">
+<em class="property">class </em><tt class="descclassname">moviemaker2.math.primitive.</tt><tt class="descname">Clip</tt><big>(</big><em>low</em>, <em>high</em>, <em>leaf=None</em><big>)</big><a class="reference internal" href="../_modules/moviemaker2/math/primitive.html#Clip"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#moviemaker2.math.primitive.Clip" title="Permalink to this definition">¶</a></dt>
+<dd><p>Clips the leaf Function&#8217;s value.</p>
+<dl class="method">
+<dt id="moviemaker2.math.primitive.Clip.__init__">
+<tt class="descname">__init__</tt><big>(</big><em>low</em>, <em>high</em>, <em>leaf=None</em><big>)</big><a class="reference internal" href="../_modules/moviemaker2/math/primitive.html#Clip.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#moviemaker2.math.primitive.Clip.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>low</em> is the Function giving the lower boundary, <em>high</em> gives the
+upper boundary, and <em>leaf</em> is the Function to be clipped.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="moviemaker2.math.primitive.Clip.__call__">
+<tt class="descname">__call__</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/moviemaker2/math/primitive.html#Clip.__call__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#moviemaker2.math.primitive.Clip.__call__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calls <tt class="docutils literal"><span class="pre">.low()</span></tt>, <tt class="docutils literal"><span class="pre">.high()</span></tt>, <tt class="docutils literal"><span class="pre">.leaf()</span></tt>, and clips using the
+values.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-moviemaker2.math.polar">
+<span id="moviemaker2-math-polar"></span><h2>moviemaker2.math.polar<a class="headerlink" href="#module-moviemaker2.math.polar" title="Permalink to this headline">¶</a></h2>
+<p>Provides conversion between polar and cartesian coordinates.</p>
+<dl class="class">
+<dt id="moviemaker2.math.polar.Polar2DtoCartesian2D">
+<em class="property">class </em><tt class="descclassname">moviemaker2.math.polar.</tt><tt class="descname">Polar2DtoCartesian2D</tt><big>(</big><em>r</em>, <em>phi</em><big>)</big><a class="reference internal" href="../_modules/moviemaker2/math/polar.html#Polar2DtoCartesian2D"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#moviemaker2.math.polar.Polar2DtoCartesian2D" title="Permalink to this definition">¶</a></dt>
+<dd><p>Computes cartesian 2D coordinates from 2D polar coordinates.</p>
+<dl class="method">
+<dt id="moviemaker2.math.polar.Polar2DtoCartesian2D.__init__">
+<tt class="descname">__init__</tt><big>(</big><em>r</em>, <em>phi</em><big>)</big><a class="reference internal" href="../_modules/moviemaker2/math/polar.html#Polar2DtoCartesian2D.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#moviemaker2.math.polar.Polar2DtoCartesian2D.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>r</em> and <em>phi</em> are the polar coordinates.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="moviemaker2.math.polar.Polar2DtoCartesian2D.__call__">
+<tt class="descname">__call__</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/moviemaker2/math/polar.html#Polar2DtoCartesian2D.__call__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#moviemaker2.math.polar.Polar2DtoCartesian2D.__call__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates the cartesian coordinates from the polar coordinates.
+The result of <em>r</em> and <em>phi</em> must be of compatible shape.</p>
+<p>Return a ndarray <tt class="docutils literal"><span class="pre">[y,</span> <span class="pre">x]</span></tt>.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="moviemaker2.math.polar.Cartesian2DtoPolar2D">
+<em class="property">class </em><tt class="descclassname">moviemaker2.math.polar.</tt><tt class="descname">Cartesian2DtoPolar2D</tt><big>(</big><em>y</em>, <em>x</em><big>)</big><a class="reference internal" href="../_modules/moviemaker2/math/polar.html#Cartesian2DtoPolar2D"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#moviemaker2.math.polar.Cartesian2DtoPolar2D" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates 2D polar coordinates from 2D cartesian coordinates.</p>
+<dl class="method">
+<dt id="moviemaker2.math.polar.Cartesian2DtoPolar2D.__init__">
+<tt class="descname">__init__</tt><big>(</big><em>y</em>, <em>x</em><big>)</big><a class="reference internal" href="../_modules/moviemaker2/math/polar.html#Cartesian2DtoPolar2D.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#moviemaker2.math.polar.Cartesian2DtoPolar2D.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>x</em> and <em>y</em> are the cartesian coordinates.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="moviemaker2.math.polar.Cartesian2DtoPolar2D.__call__">
+<tt class="descname">__call__</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/moviemaker2/math/polar.html#Cartesian2DtoPolar2D.__call__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#moviemaker2.math.polar.Cartesian2DtoPolar2D.__call__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates the polar coordaintes from the cartesian coordinates.</p>
+<p>The value of <em>x</em> and <em>y</em> must at least be of compatible shape.</p>
+<p>The angle is calculates mathematically positive starting in the 
+direction os +x with phi=0.</p>
+<p>Returns a ndarray <tt class="docutils literal"><span class="pre">[r,</span> <span class="pre">phi]</span></tt></p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-moviemaker2.math.interpolate">
+<span id="moviemaker2-math-interpolate"></span><h2>moviemaker2.math.interpolate<a class="headerlink" href="#module-moviemaker2.math.interpolate" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="moviemaker2.math.interpolate.Interp">
+<em class="property">class </em><tt class="descclassname">moviemaker2.math.interpolate.</tt><tt class="descname">Interp</tt><big>(</big><em>xp</em>, <em>fp</em>, <em>x</em>, <em>left=None</em>, <em>right=None</em><big>)</big><a class="reference internal" href="../_modules/moviemaker2/math/interpolate.html#Interp"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#moviemaker2.math.interpolate.Interp" title="Permalink to this definition">¶</a></dt>
+<dd><p>The pendant to <tt class="docutils literal"><span class="pre">numpy.interp()</span></tt>.</p>
+<dl class="method">
+<dt id="moviemaker2.math.interpolate.Interp.__init__">
+<tt class="descname">__init__</tt><big>(</big><em>xp</em>, <em>fp</em>, <em>x</em>, <em>left=None</em>, <em>right=None</em><big>)</big><a class="reference internal" href="../_modules/moviemaker2/math/interpolate.html#Interp.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#moviemaker2.math.interpolate.Interp.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Arguments are like for <tt class="docutils literal"><span class="pre">numpy.interp()</span></tt>.  If <em>left</em> or <em>right</em> 
+is None, <em>None</em> is handed over to <tt class="docutils literal"><span class="pre">numpy.interp()</span></tt> in <tt class="docutils literal"><span class="pre">__call__</span></tt>
+(i.e., <tt class="xref docutils literal"><span class="pre">None</span></tt> is not interpreted as the identity Function).</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="moviemaker2.math.interpolate.Interp.__call__">
+<tt class="descname">__call__</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/moviemaker2/math/interpolate.html#Interp.__call__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#moviemaker2.math.interpolate.Interp.__call__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calls <tt class="docutils literal"><span class="pre">numpy.interp()</span></tt> with <tt class="docutils literal"><span class="pre">.xp()</span></tt>, <tt class="docutils literal"><span class="pre">.fp()</span></tt>, <tt class="docutils literal"><span class="pre">.left()</span></tt>,
+<tt class="docutils literal"><span class="pre">.right()</span></tt>.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="moviemaker2.math.interpolate.Spline">
+<em class="property">class </em><tt class="descclassname">moviemaker2.math.interpolate.</tt><tt class="descname">Spline</tt><big>(</big><em>points</em>, <em>progress</em><big>)</big><a class="reference internal" href="../_modules/moviemaker2/math/interpolate.html#Spline"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#moviemaker2.math.interpolate.Spline" title="Permalink to this definition">¶</a></dt>
+<dd><p>Carries out spline interpolation.</p>
+<dl class="method">
+<dt id="moviemaker2.math.interpolate.Spline.__init__">
+<tt class="descname">__init__</tt><big>(</big><em>points</em>, <em>progress</em><big>)</big><a class="reference internal" href="../_modules/moviemaker2/math/interpolate.html#Spline.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#moviemaker2.math.interpolate.Spline.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>points</em> is a sequence of points of the spline.  <em>progress</em> is the
+real-valued [0, 1] progress value of the spline.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="moviemaker2.math.interpolate.Spline.__call__">
+<tt class="descname">__call__</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/moviemaker2/math/interpolate.html#Spline.__call__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#moviemaker2.math.interpolate.Spline.__call__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Spline-interpolates the result of <tt class="docutils literal"><span class="pre">.points()</span></tt> at the position
+<tt class="docutils literal"><span class="pre">.progress()</span></tt>.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-moviemaker2.math.polynomial">
+<span id="moviemaker2-math-polynomial"></span><h2>moviemaker2.math.polynomial<a class="headerlink" href="#module-moviemaker2.math.polynomial" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="moviemaker2.math.polynomial.Polynomial">
+<em class="property">class </em><tt class="descclassname">moviemaker2.math.polynomial.</tt><tt class="descname">Polynomial</tt><big>(</big><em>coefficients</em>, <em>x=None</em>, <em>null=None</em><big>)</big><a class="reference internal" href="../_modules/moviemaker2/math/polynomial.html#Polynomial"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#moviemaker2.math.polynomial.Polynomial" title="Permalink to this definition">¶</a></dt>
+<dd><p>Implements polynomials with Functions a coefficients and argument.</p>
+<dl class="method">
+<dt id="moviemaker2.math.polynomial.Polynomial.__init__">
+<tt class="descname">__init__</tt><big>(</big><em>coefficients</em>, <em>x=None</em>, <em>null=None</em><big>)</big><a class="reference internal" href="../_modules/moviemaker2/math/polynomial.html#Polynomial.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#moviemaker2.math.polynomial.Polynomial.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>coefficients</em> gives the coefficients of the polynomial.  <em>x</em> gives
+the argument of the polynomial.  <em>null</em> is the null with respect to
++, and <tt class="xref docutils literal"><span class="pre">None</span></tt> means ordinary 0.0.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="moviemaker2.math.polynomial.Polynomial.__call__">
+<tt class="descname">__call__</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/moviemaker2/math/polynomial.html#Polynomial.__call__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#moviemaker2.math.polynomial.Polynomial.__call__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the polynomial specified by <tt class="docutils literal"><span class="pre">.coefficients()</span></tt> at the
+position <tt class="docutils literal"><span class="pre">.x()</span></tt>.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">moviemaker2.math</a><ul>
+<li><a class="reference internal" href="#module-moviemaker2.math.primitive">moviemaker2.math.primitive</a></li>
+<li><a class="reference internal" href="#module-moviemaker2.math.polar">moviemaker2.math.polar</a></li>
+<li><a class="reference internal" href="#module-moviemaker2.math.interpolate">moviemaker2.math.interpolate</a></li>
+<li><a class="reference internal" href="#module-moviemaker2.math.polynomial">moviemaker2.math.polynomial</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="function.html"
+                        title="previous chapter">moviemaker2.function</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="parameter.html"
+                        title="next chapter">moviemaker2.parameter</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/API/math.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="parameter.html" title="moviemaker2.parameter"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="function.html" title="moviemaker2.function"
+             >previous</a> |</li>
+        <li><a href="../index.html">Moviemaker v0.1.0b documentation</a> &raquo;</li>
+          <li><a href="../API.html" >API</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2010--2011, Friedrich Romstedt.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.1.
+    </div>
+  </body>
+</html>
