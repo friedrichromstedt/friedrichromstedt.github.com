@@ -1,0 +1,225 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>priops.classes &mdash; priops v0.1.0b documentation</title>
+    <link rel="stylesheet" href="../../_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '0.1.0b',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="shortcut icon" href="../../_static/favicon.ico"/>
+    <link rel="top" title="priops v0.1.0b documentation" href="../../index.html" />
+    <link rel="up" title="Module code" href="../index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../index.html">priops v0.1.0b documentation</a> &raquo;</li>
+          <li><a href="../index.html" accesskey="U">Module code</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <h1>Source code for priops.classes</h1><div class="highlight"><pre>
+<span class="sd">&quot;&quot;&quot;Classes for dealing with classes in priops.&quot;&quot;&quot;</span>
+
+<span class="kn">from</span> <span class="nn">priops.node</span> <span class="kn">import</span> <span class="n">Node</span>
+<span class="kn">from</span> <span class="nn">priops.pathfinder</span> <span class="kn">import</span> <span class="n">Pathfinder</span>
+
+<div class="viewcode-block" id="InstanceNode"><a class="viewcode-back" href="../../priops.classes.html#priops.classes.InstanceNode">[docs]</a><span class="k">class</span> <span class="nc">InstanceNode</span><span class="p">(</span><span class="n">Node</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;This Node tells that it fulfils the specifications of another Node if</span>
+<span class="sd">    all elements of *self* are instances of the classes in the other node.&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="InstanceNode.fulfils_specification"><a class="viewcode-back" href="../../priops.classes.html#priops.classes.InstanceNode.fulfils_specification">[docs]</a>    <span class="k">def</span> <span class="nf">fulfils_specification</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other_node</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;If the lengthes of *self* and *other_node* mismatch, then the</span>
+<span class="sd">        node does not fulfil the *other_node* specification.  Else, *self*</span>
+<span class="sd">        fulfils the *other_node* specification, if each element of *self* is</span>
+<span class="sd">        an instance of the corresponding element of *other_node*.  ``None``</span>
+<span class="sd">        wildcards in *other_node* are respected.&quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="n">other_node</span><span class="p">):</span>
+            <span class="k">return</span> <span class="bp">False</span>
+        <span class="k">for</span> <span class="p">(</span><span class="n">self_element</span><span class="p">,</span> <span class="n">other_element</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other_node</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">other_element</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span> <span class="ow">and</span> \
+            <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">self_element</span><span class="p">,</span> <span class="n">other_element</span><span class="p">):</span>
+                <span class="k">return</span> <span class="bp">False</span>
+        <span class="k">return</span> <span class="bp">True</span>
+</div>
+<div class="viewcode-block" id="InstanceNode.__getitem__"><a class="viewcode-back" href="../../priops.classes.html#priops.classes.InstanceNode.__getitem__">[docs]</a>    <span class="k">def</span> <span class="nf">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;If a slice is requested, a sub-``InstanceNode`` is returned.  Else,</span>
+<span class="sd">        the element is returned.&quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="nb">slice</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">InstanceNode</span><span class="p">(</span><span class="n">node</span><span class="o">=</span><span class="n">Node</span><span class="o">.</span><span class="n">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">Node</span><span class="o">.</span><span class="n">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">)</span>
+</div></div>
+<div class="viewcode-block" id="ClassNode"><a class="viewcode-back" href="../../priops.classes.html#priops.classes.ClassNode">[docs]</a><span class="k">class</span> <span class="nc">ClassNode</span><span class="p">(</span><span class="n">Node</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;This node tells that it fulfils another specification if all elements</span>
+<span class="sd">    of *self* are subclasses of the corresponding element in the other </span>
+<span class="sd">    node.&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="ClassNode.fulfils_specification"><a class="viewcode-back" href="../../priops.classes.html#priops.classes.ClassNode.fulfils_specification">[docs]</a>    <span class="k">def</span> <span class="nf">fulfils_specification</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other_node</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;If the lengthes of *self* and *other_node* mismatch, then the</span>
+<span class="sd">        node does not fulfil the *other_node* specification.  Else, *self*</span>
+<span class="sd">        fulfils the *other_node* specification, if each element of *self* is</span>
+<span class="sd">        a subclass of the corresponding element of *other_node*.  ``None``</span>
+<span class="sd">        wildcards in *other_node* are respected.&quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="n">other_node</span><span class="p">):</span>
+            <span class="k">return</span> <span class="bp">False</span>
+        <span class="k">for</span> <span class="p">(</span><span class="n">self_element</span><span class="p">,</span> <span class="n">other_element</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other_node</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">other_element</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span> <span class="ow">and</span> \
+            <span class="ow">not</span> <span class="nb">issubclass</span><span class="p">(</span><span class="n">self_element</span><span class="p">,</span> <span class="n">other_element</span><span class="p">):</span>
+                <span class="k">return</span> <span class="bp">False</span>
+        <span class="k">return</span> <span class="bp">True</span>
+</div>
+<div class="viewcode-block" id="ClassNode.__getitem__"><a class="viewcode-back" href="../../priops.classes.html#priops.classes.ClassNode.__getitem__">[docs]</a>    <span class="k">def</span> <span class="nf">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;If a slice is requested, a sub-``ClassNode`` is returned.  Else,</span>
+<span class="sd">        the element is returned.&quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="nb">slice</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">ClassNode</span><span class="p">(</span><span class="n">node</span><span class="o">=</span><span class="n">Node</span><span class="o">.</span><span class="n">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">Node</span><span class="o">.</span><span class="n">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">)</span>
+</div></div>
+<div class="viewcode-block" id="ClassPathfinder"><a class="viewcode-back" href="../../priops.classes.html#priops.classes.ClassPathfinder">[docs]</a><span class="k">class</span> <span class="nc">ClassPathfinder</span><span class="p">(</span><span class="n">Pathfinder</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;This :class:`~priops.pathfinder.Pathfinder` can be called, and the </span>
+<span class="sd">    input node will be constructed from </span>
+<span class="sd">    :class:`~priops.classes.InstanceNode`.&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="ClassPathfinder.__init__"><a class="viewcode-back" href="../../priops.classes.html#priops.classes.ClassPathfinder.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">priop</span><span class="p">,</span> <span class="n">output_node</span><span class="p">,</span> <span class="n">max_components</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> 
+            <span class="n">max_weight</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">scalar</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Initialises the pathfinding algorith, and arranges for searching</span>
+<span class="sd">        for output nodes *output_node*.  *output_node* might contain ``None`` </span>
+<span class="sd">        wildcards.</span>
+<span class="sd">        </span>
+<span class="sd">        *scalar* determines how to handle the argument tuple to the call of </span>
+<span class="sd">        the object.  If true, the call must happen with exactly one argument, </span>
+<span class="sd">        and a scalar input node will be used.  Else, the input node will be </span>
+<span class="sd">        non-scalar, and an arbitrary number of arguments is allowed.  The </span>
+<span class="sd">        default is ``False``.&quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="n">scalar</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="n">scalar</span> <span class="o">=</span> <span class="bp">False</span>
+
+        <span class="n">Pathfinder</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">priop</span><span class="o">=</span><span class="n">priop</span><span class="p">,</span> <span class="n">max_components</span><span class="o">=</span><span class="n">max_components</span><span class="p">,</span>
+            <span class="n">max_weight</span><span class="o">=</span><span class="n">max_weight</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">output_node</span> <span class="o">=</span> <span class="n">output_node</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">scalar</span> <span class="o">=</span> <span class="n">scalar</span>
+    </div>
+<div class="viewcode-block" id="ClassPathfinder.get_path"><a class="viewcode-back" href="../../priops.classes.html#priops.classes.ClassPathfinder.get_path">[docs]</a>    <span class="k">def</span> <span class="nf">get_path</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">arguments</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Finds a path to process the *arguments*.&quot;&quot;&quot;</span>
+        
+        <span class="c"># Construct the input node ...</span>
+        <span class="n">input_node</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_input_node</span><span class="p">(</span><span class="o">*</span><span class="n">arguments</span><span class="p">)</span>
+
+        <span class="c"># Find the path ...</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">find_path</span><span class="p">(</span><span class="n">input_node</span><span class="o">=</span><span class="n">input_node</span><span class="p">,</span> 
+            <span class="n">output_node</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">output_node</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="ClassPathfinder.__call__"><a class="viewcode-back" href="../../priops.classes.html#priops.classes.ClassPathfinder.__call__">[docs]</a>    <span class="k">def</span> <span class="nf">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">arguments</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Processes non-internode data to non-internode data.  The </span>
+<span class="sd">        *arguments* are seen as non-internode data of the corresponding input </span>
+<span class="sd">        node.  Returned is the non-internode data as returned by </span>
+<span class="sd">        *self.output_node*.&quot;&quot;&quot;</span>
+        
+        <span class="c"># Construct the input node ...</span>
+        <span class="n">input_node</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_input_node</span><span class="p">(</span><span class="o">*</span><span class="n">arguments</span><span class="p">)</span>
+
+        <span class="c"># Prepare the arguments for intra-edge traversal ...</span>
+        <span class="c"># This is done by the postprocess() method of the input node.</span>
+        <span class="n">internode_input</span> <span class="o">=</span> <span class="n">input_node</span><span class="o">.</span><span class="n">tointer</span><span class="p">(</span><span class="n">arguments</span><span class="p">)</span>
+
+        <span class="c"># Find the path ...</span>
+        <span class="n">path</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">find_path</span><span class="p">(</span><span class="n">input_node</span><span class="o">=</span><span class="n">input_node</span><span class="p">,</span> 
+            <span class="n">output_node</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">output_node</span><span class="p">)</span>
+
+        <span class="c"># Get the intra-edge output data stream ...</span>
+        <span class="n">internode_output</span> <span class="o">=</span> <span class="n">path</span><span class="p">(</span><span class="n">internode_input</span><span class="p">)</span>
+
+        <span class="c"># Construct the non-internode output data ...</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">output_node</span><span class="o">.</span><span class="n">frominter</span><span class="p">(</span><span class="n">internode_output</span><span class="p">)</span>
+</div>
+    <span class="k">def</span> <span class="nf">_get_input_node</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">arguments</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;If *self* is scalar, returns a scalar :class:`InstanceNode`.  Else,</span>
+<span class="sd">        returns a non-scalar :class:`InstanceNode`.&quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">scalar</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">arguments</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&#39;Scalar argument required&#39;</span><span class="p">)</span>
+            <span class="n">input_node</span> <span class="o">=</span> <span class="n">InstanceNode</span><span class="p">(</span><span class="n">item</span><span class="o">=</span><span class="n">arguments</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">input_node</span> <span class="o">=</span> <span class="n">InstanceNode</span><span class="p">(</span><span class="n">items</span><span class="o">=</span><span class="n">arguments</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">input_node</span></div>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../../index.html">
+              <img class="logo" src="../../_static/logo.png" alt="Logo"/>
+            </a></p>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../index.html">priops v0.1.0b documentation</a> &raquo;</li>
+          <li><a href="../index.html" >Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2011, Friedrich Romstedt.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
+    </div>
+  </body>
+</html>

@@ -1,0 +1,75 @@
+Where Normal Coercion Rules May Fail
+====================================
+
+The Problem
+-----------
+
+There is a not-so-uncommon cornercase in which the class-oriented operator concept yields unwanted results.  The situation is as follows:
+
+*   Class ``A`` is array-like and implements the operation with subclasses of ``A``.  Operands which are not an instance of ``A`` are assumed to be scalar-like.  Hence they are applied to each element of the ``A`` instance.
+
+*   Class ``B`` is array-like too, but cannot be derived from ``A`` because it *is* not an ``A``.  ``B`` implements the array coercion operation with ``A``, both in forward as well as in reverse mode.
+
+*   ``B`` also implements forward- and reverse operation with scalars (that is, objects that are neither ``A`` instances nor ``B`` instances).
+
+Now, consider the following expression::
+
+    A() + B()
+
+The following happens:
+
+1.  ``A()`` checks if it can operate with ``B()``.
+    
+    a.  ``B()`` is not ``A``-like.  So it's scalar-like.
+    b.  ``B()`` is hence applied to each element of ``A()``.
+
+2.  The elements of ``A()`` cannot deal with ``B()``, since ``B()`` is in fact an array.
+
+3.  So the reverse operation on ``B()`` is invoked, with each of the elements of ``A()``.
+
+4.  ``B()`` applies the scalar elements of ``A()`` to each of its elements in turn.
+
+5.  One ends up with the following situation::
+
+
+        .      A()      +      B()                                                         =                            A() + B()
+
+                                            +---------------------+--------------------+       +----------------------------+-----------------------------+
+                                            |                     |                    |       |                            |                             |
+                            +---+---+       |        +---+---+    |        +---+---+   |       |   +---------+---------+    |    +---------+---------+    |
+            +---+---+       | a | b |       |        | a | b |    |        | a | b |   |       |   |  1 + a  |  1 + b  |    |    |  2 + a  |  2 + b  |    |
+            | 1 | 2 |   +   +---+---+   =   |  1  +  +---+---+    |  2  +  +---+---+   |   =   |   +---------+---------+    |    +---------+---------+    |
+            +---+---+       | c | d |       |        | c | d |    |        | c | d |   |       |   |  1 + c  |  1 + d  |    |    |  2 + d  |  2 + d  |    |
+                            +---+---+       |        +---+---+    |        +---+---+   |       |   +---------+---------+    |    +---------+---------+    |
+                                            |                     |                    |       |                            |                             |
+                                            +---------------------+--------------------+       +----------------------------+-----------------------------+
+
+Expected (wanted) is the broadcast of ``A()`` to the shape of ``B()`` and an element-wise operation ``+`` on each pair.  This is what happens on ``B() + A()``::
+           
+    .      B()     +       A()                                      =         B() + A()
+
+        +---+---+                       +---+---+       +---+---+       +---------+---------+
+        | a | b |       +---+---+       | a | b |       | 1 | 1 |       |  a + 1  |  b + 1  |
+        +---+---+   +   | 1 | 2 |   =   +---+---+   +   +---+---+   =   +---------+---------+
+        | c | d |       +---+---+       | c | d |       | 2 | 2 |       |  c + 2  |  d + 2  |
+        +---+---+                       +---+---+       +---+---+       +---------+---------+
+
+Thus the ignorance of ``A`` on the probably later introduced class ``B`` leads to an unexcepted result.
+
+Fixing this problem is not easy.  When one has usually no access anymore to the implementation of ``A``, it seems even impossible.  If one still has access to some hooks in the implementation of ``A``, one can monkey-patch ``A``, but this is 
+error-prone and little portable to scenarios where many packages want to access ``A``'s hooks.  Especially for the ``numpy`` case, this monkey-patching *is possible*, although it lets the application currently crash on exit (April 2011, numpy
+1.5.1).
+
+
+The priops Approach
+-------------------
+
+``priops`` encourages all packages involved (here those of ``A`` and ``B``) to give their power of deciding what to do away, to the Priop defined in the ``priops`` package.  There are as many Priops for as many types of operation as needed.  Priops
+consists of a description of the possible operations, optionally together with some cost measure (which might be boolean, for simplicity).
+
+When one wants to use the priop, one retrieves a kind of handle for the priop, defining the search criteria.  This handle's function is to find a path of operations using the information stored in the Priop once the specification of the operation 
+are known (classes of objects, output type ...).
+
+There exists a common data format for operator information exchange between concatenated operations used to carry out the request, and there exists a framework implementing the graph notions used.
+
+The priops approach can be localised to a non-global usecase by instantiating the classes provided by priops in the namespace where they are needed.

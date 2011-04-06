@@ -1,0 +1,293 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>priops.node &mdash; priops v0.1.0b documentation</title>
+    <link rel="stylesheet" href="../../_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '0.1.0b',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="shortcut icon" href="../../_static/favicon.ico"/>
+    <link rel="top" title="priops v0.1.0b documentation" href="../../index.html" />
+    <link rel="up" title="Module code" href="../index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../index.html">priops v0.1.0b documentation</a> &raquo;</li>
+          <li><a href="../index.html" accesskey="U">Module code</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <h1>Source code for priops.node</h1><div class="highlight"><pre>
+<div class="viewcode-block" id="Node"><a class="viewcode-back" href="../../priops.node.html#priops.node.Node">[docs]</a><span class="k">class</span> <span class="nc">Node</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Nodes define nodes in the graph, by giving a specification of a list of</span>
+<span class="sd">    objects.  A node contains a list, each element describes the category of an </span>
+<span class="sd">    operand.  (For technical reason if cannot *be* a list: Overloading</span>
+<span class="sd">    ``__getitem__()`` in that case doesn&#39;t work.)</span>
+<span class="sd">    </span>
+<span class="sd">    This class is abstract.  Derived classes should provide:</span>
+<span class="sd">    </span>
+<span class="sd">    *   ``.fulfils_specification(self, other_node)``: Gives ``True`` if </span>
+<span class="sd">        objects of specification *self* fulfil also the specification</span>
+<span class="sd">        *other_node*.  Should accept ``None`` entries in *other_node*, where </span>
+<span class="sd">        ``None`` is a wildcard for &quot;any item&quot;.&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="Node.__init__"><a class="viewcode-back" href="../../priops.node.html#priops.node.Node.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">item</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">items</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">node</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Initialises the Node from either one *item* or many *items*.  One</span>
+<span class="sd">        of *item* or *items* must be given, but not both.  If both *item* and</span>
+<span class="sd">        *items* are ``None``, it is assumed that *item* is given as ``None``,</span>
+<span class="sd">        and that *items* is not specified.</span>
+<span class="sd">        </span>
+<span class="sd">        Alternatively, the Node can be initialised from another ``Node``</span>
+<span class="sd">        instance *node*.  This is needed by derived classes in some cases</span>
+<span class="sd">        to provide e.g. slicing operations based on this class&#39;es slicing</span>
+<span class="sd">        operation.  If *node* is given, it overrides all other parameters.&quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="n">node</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span> 
+            <span class="bp">self</span><span class="o">.</span><span class="n">scalar</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="n">scalar</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">elements</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="n">elements</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">item</span> <span class="ow">is</span> <span class="bp">None</span> <span class="ow">and</span> <span class="n">items</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">elements</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">items</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">scalar</span> <span class="o">=</span> <span class="bp">False</span>
+            <span class="k">elif</span> <span class="n">items</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+                <span class="c"># The use might want to specify *item* as precisely ``None``.</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">elements</span> <span class="o">=</span> <span class="p">[</span><span class="n">item</span><span class="p">]</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">scalar</span> <span class="o">=</span> <span class="bp">True</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="c"># This can happen only if 1) *items* is not None and 2) *item*</span>
+                <span class="c"># is not None (at the same time).</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&#39;Exactly one of *item* and *items* must be &#39;</span>
+                    <span class="s">&#39;given, not both&#39;</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="Node.frominter"><a class="viewcode-back" href="../../priops.node.html#priops.node.Node.frominter">[docs]</a>    <span class="k">def</span> <span class="nf">frominter</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Processes given data to match the scalar/vector specification</span>
+<span class="sd">        of the node.  This is defined at initialisation time.  </span>
+<span class="sd">        </span>
+<span class="sd">        *data* is always assumed to be a list.  If *self* is scalar, the</span>
+<span class="sd">        length must be unity, and the first element is returned.  Else,</span>
+<span class="sd">        the list is returned unchanged.&quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">scalar</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&#39;Scalar nodes only accept scalar-like data&#39;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">data</span>
+</div>
+<div class="viewcode-block" id="Node.tointer"><a class="viewcode-back" href="../../priops.node.html#priops.node.Node.tointer">[docs]</a>    <span class="k">def</span> <span class="nf">tointer</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Processes the output of an edge according to the scalar/vector</span>
+<span class="sd">        specification of the node to match the inter-node data flow </span>
+<span class="sd">        specification (which is lists).</span>
+
+<span class="sd">        If *self* is scalar, the *data* is wrapped into a list, else, the</span>
+<span class="sd">        *data* is returned unchanged.&quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">scalar</span><span class="p">:</span>
+            <span class="k">return</span> <span class="p">[</span><span class="n">data</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">data</span>
+</div>
+<div class="viewcode-block" id="Node.__str__"><a class="viewcode-back" href="../../priops.node.html#priops.node.Node.__str__">[docs]</a>    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">scalar</span> <span class="ow">is</span> <span class="bp">True</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s">&#39;(Scalar Node &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">elements</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">+</span> <span class="s">&#39;)&#39;</span>
+        <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">elements</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s">&#39;(Empty Node)&#39;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s">&#39;(Vector Node &#39;</span> <span class="o">+</span> <span class="s">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">elements</span><span class="p">))</span> <span class="o">+</span> <span class="s">&#39;)&#39;</span>
+    </div>
+<div class="viewcode-block" id="Node.__add__"><a class="viewcode-back" href="../../priops.node.html#priops.node.Node.__add__">[docs]</a>    <span class="k">def</span> <span class="nf">__add__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other_node</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Combines two nodes by combining them into a </span>
+<span class="sd">        :class:`CombinedNode`.&quot;&quot;&quot;</span>
+
+        <span class="k">return</span> <span class="n">CombinedNode</span><span class="p">(</span><span class="n">constituents</span><span class="o">=</span><span class="p">[</span><span class="bp">self</span><span class="p">,</span> <span class="n">other_node</span><span class="p">])</span>
+</div>
+<div class="viewcode-block" id="Node.__getitem__"><a class="viewcode-back" href="../../priops.node.html#priops.node.Node.__getitem__">[docs]</a>    <span class="k">def</span> <span class="nf">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;If a slice is requested, returns a portion of this Node as a Node.</span>
+<span class="sd">        If an element is requested (technically, everything that&#39;s not a </span>
+<span class="sd">        slice), then the element of *self.elements* is returned.&quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="nb">slice</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">Node</span><span class="p">(</span><span class="n">items</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">elements</span><span class="p">[</span><span class="n">key</span><span class="p">])</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">elements</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+</div>
+    <span class="k">def</span> <span class="nf">__len__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">elements</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="EmptyNode"><a class="viewcode-back" href="../../priops.node.html#priops.node.EmptyNode">[docs]</a><span class="k">class</span> <span class="nc">EmptyNode</span><span class="p">(</span><span class="n">Node</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;A node without elements.  Needed as initial element for summing up</span>
+<span class="sd">    nodes via ``sum()``.&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="EmptyNode.__init__"><a class="viewcode-back" href="../../priops.node.html#priops.node.EmptyNode.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Initialises the emptiness of the node.&quot;&quot;&quot;</span>
+
+        <span class="n">Node</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">items</span><span class="o">=</span><span class="p">[])</span>
+</div>
+<div class="viewcode-block" id="EmptyNode.__str__"><a class="viewcode-back" href="../../priops.node.html#priops.node.EmptyNode.__str__">[docs]</a>    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s">&#39;(Empty Node)&#39;</span>
+</div>
+<div class="viewcode-block" id="EmptyNode.__add__"><a class="viewcode-back" href="../../priops.node.html#priops.node.EmptyNode.__add__">[docs]</a>    <span class="k">def</span> <span class="nf">__add__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other_node</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Returns the other node *other_node*, since this node is empty and</span>
+<span class="sd">        doesn&#39;t matter.&quot;&quot;&quot;</span>
+
+        <span class="k">return</span> <span class="n">other_node</span>
+</div>
+<div class="viewcode-block" id="EmptyNode.fulfils_specification"><a class="viewcode-back" href="../../priops.node.html#priops.node.EmptyNode.fulfils_specification">[docs]</a>    <span class="k">def</span> <span class="nf">fulfils_specification</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other_node</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;If the other node *other_node* is empty too, returns ``True``,</span>
+<span class="sd">        else ``False``.&quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">other_node</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="c"># Both zero length:</span>
+            <span class="k">return</span> <span class="bp">True</span>
+        <span class="k">return</span> <span class="bp">False</span>
+</div>
+<div class="viewcode-block" id="EmptyNode.__getitem__"><a class="viewcode-back" href="../../priops.node.html#priops.node.EmptyNode.__getitem__">[docs]</a>    <span class="k">def</span> <span class="nf">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Under slicing always returns itself, else (if non-slicing</span>
+<span class="sd">        getitem operation occurs), raises ``IndexError``.&quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="nb">slice</span><span class="p">):</span>
+            <span class="k">return</span> <span class="bp">self</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">IndexError</span><span class="p">(</span><span class="s">&#39;Empty Node has no elements&#39;</span><span class="p">)</span>
+</div></div>
+<div class="viewcode-block" id="CombinedNode"><a class="viewcode-back" href="../../priops.node.html#priops.node.CombinedNode">[docs]</a><span class="k">class</span> <span class="nc">CombinedNode</span><span class="p">(</span><span class="n">Node</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Combined nodes combine a number of :class:`Node` objects into one big</span>
+<span class="sd">    node.  The elements of the combined node are the sum of all constituents,</span>
+<span class="sd">    seeing the constituents as ``list`` objects.</span>
+<span class="sd">    </span>
+<span class="sd">    If a combined node fulfils another specification depends on the </span>
+<span class="sd">    constituents.&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="CombinedNode.__init__"><a class="viewcode-back" href="../../priops.node.html#priops.node.CombinedNode.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">constituents</span><span class="p">):</span>
+        <span class="n">Node</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">items</span><span class="o">=</span><span class="nb">sum</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="nb">list</span><span class="p">,</span> <span class="n">constituents</span><span class="p">),</span> <span class="p">[]))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">constituents</span> <span class="o">=</span> <span class="n">constituents</span>
+</div>
+<div class="viewcode-block" id="CombinedNode.__str__"><a class="viewcode-back" href="../../priops.node.html#priops.node.CombinedNode.__str__">[docs]</a>    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s">&#39;(Combined Node &#39;</span> <span class="o">+</span> <span class="s">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="bp">self</span><span class="p">))</span> <span class="o">+</span> <span class="s">&#39;)&#39;</span>
+</div>
+<div class="viewcode-block" id="CombinedNode.fulfils_specification"><a class="viewcode-back" href="../../priops.node.html#priops.node.CombinedNode.fulfils_specification">[docs]</a>    <span class="k">def</span> <span class="nf">fulfils_specification</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other_node</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Checks if *self*, defined by its constituents, fulfils the</span>
+<span class="sd">        specification *other_node*.  If the lengthes mismatch, ``False`` is</span>
+<span class="sd">        returned.&quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="n">other_node</span><span class="p">):</span>
+            <span class="k">return</span> <span class="bp">False</span>
+
+        <span class="n">other_left</span> <span class="o">=</span> <span class="n">other_node</span>
+        <span class="k">for</span> <span class="n">constituent</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">constituents</span><span class="p">:</span>
+            <span class="n">other_fulfil</span> <span class="o">=</span> <span class="n">other_left</span><span class="p">[:</span><span class="nb">len</span><span class="p">(</span><span class="n">constituent</span><span class="p">)]</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">constituent</span><span class="o">.</span><span class="n">fulfils_specification</span><span class="p">(</span><span class="n">other_fulfil</span><span class="p">):</span>
+                <span class="k">return</span> <span class="bp">False</span>
+            <span class="n">other_left</span> <span class="o">=</span> <span class="n">other_left</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">constituent</span><span class="p">):]</span>
+        <span class="k">return</span> <span class="bp">True</span>
+</div>
+<div class="viewcode-block" id="CombinedNode.__getitem__"><a class="viewcode-back" href="../../priops.node.html#priops.node.CombinedNode.__getitem__">[docs]</a>    <span class="k">def</span> <span class="nf">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;If *key* is a slice, the constituents are sliced accordingly.</span>
+<span class="sd">        Else, the element is returned.  Steps in slices are ignored.&quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="nb">slice</span><span class="p">):</span>
+            <span class="c"># Slicing requested.</span>
+            <span class="c"># The number of items of *self* iterated over so far:</span>
+            <span class="n">already_iterated</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="c"># The list of sliced constituents:</span>
+            <span class="n">new_constituents</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">for</span> <span class="n">constituent</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">constituents</span><span class="p">:</span>
+                <span class="c"># The indices into the *constituent*; negative indices are</span>
+                <span class="c"># not to be wrapped around:</span>
+                <span class="n">desired_start_idx</span> <span class="o">=</span> <span class="n">key</span><span class="o">.</span><span class="n">start</span> <span class="o">-</span> <span class="n">already_iterated</span> 
+                <span class="n">desired_stop_idx</span> <span class="o">=</span> <span class="n">key</span><span class="o">.</span><span class="n">stop</span> <span class="o">-</span> <span class="n">already_iterated</span>
+                <span class="c"># Clip the start and stop indices to non-negative indices:</span>
+                <span class="n">nonneg_start_idx</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">desired_start_idx</span><span class="p">)</span>
+                <span class="n">nonneg_stop_idx</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">desired_stop_idx</span><span class="p">)</span>
+                <span class="c"># Clip the start and stop indices to the end of the </span>
+                <span class="c"># *constituent*:</span>
+                <span class="n">start_idx</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">constituent</span><span class="p">),</span> <span class="n">nonneg_start_idx</span><span class="p">)</span>
+                <span class="n">stop_idx</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">constituent</span><span class="p">),</span> <span class="n">nonneg_stop_idx</span><span class="p">)</span>
+                <span class="c"># Check if the constituent is in at all:</span>
+                <span class="c"># It is not in if the slice would be empty.</span>
+                <span class="k">if</span> <span class="n">stop_idx</span> <span class="o">&gt;</span> <span class="n">start_idx</span><span class="p">:</span>
+                    <span class="c"># It is in.  So slice it:</span>
+                    <span class="n">new_constituents</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">constituent</span><span class="p">[</span><span class="n">start_idx</span><span class="p">:</span><span class="n">stop_idx</span><span class="p">])</span>
+                <span class="c"># Irrespective of whether the *constituent* was in or not</span>
+                <span class="c"># we have processed it, so advance *already_iterated*:</span>
+                <span class="n">already_iterated</span> <span class="o">+=</span> <span class="nb">len</span><span class="p">(</span><span class="n">constituent</span><span class="p">)</span>
+            <span class="c"># Concatenate the new constituents to a new CombinedNode:</span>
+            <span class="k">return</span> <span class="n">CombinedNode</span><span class="p">(</span><span class="n">constituents</span><span class="o">=</span><span class="n">new_constituents</span><span class="p">)</span>
+
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c"># No slicing requested, return element:</span>
+            <span class="k">return</span> <span class="n">Node</span><span class="o">.</span><span class="n">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">)</span></div></div>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../../index.html">
+              <img class="logo" src="../../_static/logo.png" alt="Logo"/>
+            </a></p>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../index.html">priops v0.1.0b documentation</a> &raquo;</li>
+          <li><a href="../index.html" >Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2011, Friedrich Romstedt.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
+    </div>
+  </body>
+</html>

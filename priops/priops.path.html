@@ -1,0 +1,172 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>priops.path &mdash; priops v0.1.0b documentation</title>
+    <link rel="stylesheet" href="_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.1.0b',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="shortcut icon" href="_static/favicon.ico"/>
+    <link rel="top" title="priops v0.1.0b documentation" href="index.html" />
+    <link rel="up" title="API" href="API.html" />
+    <link rel="next" title="priops.priop" href="priops.priop.html" />
+    <link rel="prev" title="priops.edge" href="priops.edge.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="priops.priop.html" title="priops.priop"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="priops.edge.html" title="priops.edge"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">priops v0.1.0b documentation</a> &raquo;</li>
+          <li><a href="API.html" accesskey="U">API</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="priops-path">
+<h1>priops.path<a class="headerlink" href="#priops-path" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="id1">
+<h2>priops.Path<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="priops.path.Path">
+<em class="property">class </em><tt class="descclassname">priops.path.</tt><tt class="descname">Path</tt><big>(</big><em>edges</em><big>)</big><a class="reference internal" href="_modules/priops/path.html#Path"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#priops.path.Path" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">list</span></tt></p>
+<p>A sequence of edges, together with the net weight.</p>
+<dl class="method">
+<dt id="priops.path.Path.__init__">
+<tt class="descname">__init__</tt><big>(</big><em>edges</em><big>)</big><a class="reference internal" href="_modules/priops/path.html#Path.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#priops.path.Path.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>edges</em> is a list of Edges.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="priops.path.Path.__str__">
+<tt class="descname">__str__</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/priops/path.html#Path.__str__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#priops.path.Path.__str__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns pretty-formatted string containing a numbered list of 
+edges making up the Path.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="priops.path.Path.__xor__">
+<tt class="descname">__xor__</tt><big>(</big><em>edge</em><big>)</big><a class="reference internal" href="_modules/priops/path.html#Path.__xor__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#priops.path.Path.__xor__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Combines this path with <em>edge</em> to a new path.  <em>edge</em> will extend 
+<em>self</em> at the end of <em>self</em>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="priops.path.Path.__rxor__">
+<tt class="descname">__rxor__</tt><big>(</big><em>edge</em><big>)</big><a class="reference internal" href="_modules/priops/path.html#Path.__rxor__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#priops.path.Path.__rxor__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Combines this path with <em>edge</em> to a new path.  <em>edge</em> will extend
+<em>self</em> at the start of <em>self</em>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="priops.path.Path.__call__">
+<tt class="descname">__call__</tt><big>(</big><em>input</em><big>)</big><a class="reference internal" href="_modules/priops/path.html#Path.__call__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#priops.path.Path.__call__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Processes inter-node data <em>input</em>.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="index.html">
+              <img class="logo" src="_static/logo.png" alt="Logo"/>
+            </a></p>
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">priops.path</a><ul>
+<li><a class="reference internal" href="#id1">priops.Path</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="priops.edge.html"
+                        title="previous chapter">priops.edge</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="priops.priop.html"
+                        title="next chapter">priops.priop</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/priops.path.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="priops.priop.html" title="priops.priop"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="priops.edge.html" title="priops.edge"
+             >previous</a> |</li>
+        <li><a href="index.html">priops v0.1.0b documentation</a> &raquo;</li>
+          <li><a href="API.html" >API</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2011, Friedrich Romstedt.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
+    </div>
+  </body>
+</html>

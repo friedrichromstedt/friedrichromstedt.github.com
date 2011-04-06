@@ -1,0 +1,174 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>priops.callable &mdash; priops v0.1.0b documentation</title>
+    <link rel="stylesheet" href="../../_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '0.1.0b',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="shortcut icon" href="../../_static/favicon.ico"/>
+    <link rel="top" title="priops v0.1.0b documentation" href="../../index.html" />
+    <link rel="up" title="Module code" href="../index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../index.html">priops v0.1.0b documentation</a> &raquo;</li>
+          <li><a href="../index.html" accesskey="U">Module code</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <h1>Source code for priops.callable</h1><div class="highlight"><pre>
+<span class="kn">from</span> <span class="nn">priops.edge</span> <span class="kn">import</span> <span class="n">Edge</span>
+
+<div class="viewcode-block" id="CallableEdge"><a class="viewcode-back" href="../../priops.callable.html#priops.callable.CallableEdge">[docs]</a><span class="k">class</span> <span class="nc">CallableEdge</span><span class="p">(</span><span class="n">Edge</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Calls some callable on call time.&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="CallableEdge.__init__"><a class="viewcode-back" href="../../priops.callable.html#priops.callable.CallableEdge.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">callable</span><span class="p">,</span> <span class="n">input_node</span><span class="p">,</span> <span class="n">output_node</span><span class="p">,</span> <span class="n">weight</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> 
+            <span class="n">name</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">select</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">dispatch</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;*callable* is the callable to call on call time.  </span>
+<span class="sd">        </span>
+<span class="sd">        *select* determines in what order the arguments handed over to </span>
+<span class="sd">        *self.process()* are handed over to the *callable*.  If *select* is </span>
+<span class="sd">        not given, the default is to hand over all arguments.  </span>
+
+<span class="sd">        *dispatch* is ``False`` per default for scalar input node, and </span>
+<span class="sd">        ``True`` per default for non-scalar input node.  If false, the </span>
+<span class="sd">        argument handed over to *self.process()* will be directly given to the </span>
+<span class="sd">        callable as the first positional argument.  If *dispatch* is true, </span>
+<span class="sd">        several arguments to *self.process()* will be split to several </span>
+<span class="sd">        positional arguments to *callable* by ``callable(*data)``.</span>
+
+<span class="sd">        Note that both *select* as well as *dispatch* are not available in </span>
+<span class="sd">        case the input node is scalar.  If either *select* of *dispatch* are</span>
+<span class="sd">        given with a scalar input node, ``ValueError`` is raised.</span>
+<span class="sd">        </span>
+<span class="sd">        *input_node*, *output_node*, *weight* and *name* go to </span>
+<span class="sd">        :class:`~priops.Edge`.&quot;&quot;&quot;</span>
+
+        <span class="c"># Check for unavailable modes and set the default for *dispatch* ...</span>
+        <span class="k">if</span> <span class="n">input_node</span><span class="o">.</span><span class="n">scalar</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">select</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&#39;*select* is unavailable with scalar input &#39;</span>
+                    <span class="s">&#39;node&#39;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">dispatch</span><span class="p">:</span> <span class="c"># not None or True</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&#39;*dispatch* is unavailable with scalar &#39;</span>
+                    <span class="s">&#39;input node&#39;</span><span class="p">)</span>
+
+            <span class="n">dispatch</span> <span class="o">=</span> <span class="bp">False</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">dispatch</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+                <span class="n">dispatch</span> <span class="o">=</span> <span class="bp">True</span>
+
+        <span class="c"># Initialise ...</span>
+        <span class="n">Edge</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">input_node</span><span class="o">=</span><span class="n">input_node</span><span class="p">,</span> <span class="n">output_node</span><span class="o">=</span><span class="n">output_node</span><span class="p">,</span>
+            <span class="n">weight</span><span class="o">=</span><span class="n">weight</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">callable</span> <span class="o">=</span> <span class="nb">callable</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">select</span> <span class="o">=</span> <span class="n">select</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dispatch</span> <span class="o">=</span> <span class="n">dispatch</span>
+    </div>
+<div class="viewcode-block" id="CallableEdge.process"><a class="viewcode-back" href="../../priops.callable.html#priops.callable.CallableEdge.process">[docs]</a>    <span class="k">def</span> <span class="nf">process</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">input</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Calls *self.callable* with the arguments given to this method.</span>
+
+<span class="sd">        If *self.select* is not ``None``, the argument tuple for </span>
+<span class="sd">        *self.callable* is constructed from the *input* list using the </span>
+<span class="sd">        *self.select* tuple handed over to ``__init__()`` as follows::</span>
+<span class="sd">            </span>
+<span class="sd">            [input[sel] for sel in select]</span>
+<span class="sd">            </span>
+<span class="sd">        Thus the i-th element of *select* tells what element from the </span>
+<span class="sd">        *input* tuple to use at argument *i* of *self.callable()*.</span>
+
+<span class="sd">        If *self.select* is unspecified (``None``), the behaviour is to hand </span>
+<span class="sd">        over all arguments.</span>
+
+<span class="sd">        If *self.dispatch* is true, the argument tuple obtained is handed over </span>
+<span class="sd">        using ``*data`` syntax, else it is handed over as the first positional</span>
+<span class="sd">        argument.&quot;&quot;&quot;</span>
+
+        <span class="c"># This code can handle both scalar as well as non-scalar input nodes,</span>
+        <span class="c"># since in the case of a scalar input node, *self.select* is None and</span>
+        <span class="c"># *self.dispatch* is False (see __init__()).</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">select</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="n">arguments</span> <span class="o">=</span> <span class="nb">input</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">arguments</span> <span class="o">=</span> <span class="p">[</span><span class="nb">input</span><span class="p">[</span><span class="n">sel</span><span class="p">]</span> <span class="k">for</span> <span class="n">sel</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">select</span><span class="p">]</span>
+        
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">dispatch</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">callable</span><span class="p">(</span><span class="o">*</span><span class="n">arguments</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">callable</span><span class="p">(</span><span class="n">arguments</span><span class="p">)</span></div></div>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../../index.html">
+              <img class="logo" src="../../_static/logo.png" alt="Logo"/>
+            </a></p>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../index.html">priops v0.1.0b documentation</a> &raquo;</li>
+          <li><a href="../index.html" >Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2011, Friedrich Romstedt.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
+    </div>
+  </body>
+</html>

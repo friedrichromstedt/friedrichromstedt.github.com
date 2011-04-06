@@ -1,0 +1,14 @@
+priops.priop
+============
+
+.. currentmodule:: priops.priop
+
+
+priops.Priop
+------------
+
+.. autoclass:: Priop
+
+    .. automethod:: __init__
+    .. automethod:: __str__
+    .. automethod:: __add__

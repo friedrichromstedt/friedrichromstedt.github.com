@@ -1,0 +1,40 @@
+priops.node
+===========
+
+.. currentmodule:: priops.node
+
+
+priops.Node
+-----------
+
+.. autoclass:: Node
+
+    .. automethod:: __init__
+    .. automethod:: frominter
+    .. automethod:: tointer
+    .. automethod:: __str__
+    .. automethod:: __add__
+    .. automethod:: __getitem__
+
+
+priops.EmptyNode
+----------------
+
+.. autoclass:: EmptyNode
+
+    .. automethod:: __init__
+    .. automethod:: __str__
+    .. automethod:: __add__
+    .. automethod:: fulfils_specification
+    .. automethod:: __getitem__
+
+
+priops.CombinedNode
+-------------------
+
+.. autoclass:: CombinedNode
+
+    .. automethod:: __init__
+    .. automethod:: __str__
+    .. automethod:: fulfils_specification
+    .. automethod:: __getitem__

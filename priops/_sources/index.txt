@@ -1,0 +1,58 @@
+priops Documentation
+====================
+
+.. only:: html
+
+    Contents:
+
+.. toctree::
+    :maxdepth: 1
+
+    Failure
+    Features
+    API
+
+.. only:: html
+    
+    Overview
+    --------
+
+.. raw:: html
+
+    <table width="100%">
+        <colgroup style="width:50%" span="2"></colgroup>
+        <tr valign="top">
+            <td>
+                <span style="font-size:120%"><a href="Failure.html">Where Normal Coercion Rules May Fail</a></span> <br/><em> Python's operator model can lead to a dysfunctional case where recovery is hard. </em></p>
+            </td><td>
+                <span style="font-size:120%"><a href="Features.html">Features</a></span> <br/><em> A comparison of Python operators and Priops. </em></p>
+            </td><td>
+            </td>
+        </tr>
+    </table>
+    
+.. only:: html
+    
+    Details
+    -------
+
+.. raw:: html
+    
+    <table width="100%">
+        <colgroup style="width:50%" span="2"></colgroup>
+        <tr valign="top">
+            <td>
+                <p> <span style="font-size:120%"><a href="API.html">API</a></span> <br/><em> The Application Programming Interface of priops. </em></p>
+            </td><td>
+            </td>
+        </tr>
+    </table>
+
+.. only:: html
+
+    Indices and Tables
+    ------------------
+
+    * :ref:`genindex`
+    * :ref:`modindex`
+    * :ref:`search`

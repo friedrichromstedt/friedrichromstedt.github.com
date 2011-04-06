@@ -1,0 +1,191 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Where Normal Coercion Rules May Fail &mdash; priops v0.1.0b documentation</title>
+    <link rel="stylesheet" href="_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.1.0b',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="shortcut icon" href="_static/favicon.ico"/>
+    <link rel="top" title="priops v0.1.0b documentation" href="index.html" />
+    <link rel="next" title="API" href="API.html" />
+    <link rel="prev" title="Concepts" href="Concepts.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="API.html" title="API"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="Concepts.html" title="Concepts"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">priops v0.1.0b documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="where-normal-coercion-rules-may-fail">
+<h1>Where Normal Coercion Rules May Fail<a class="headerlink" href="#where-normal-coercion-rules-may-fail" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="the-problem">
+<h2>The Problem<a class="headerlink" href="#the-problem" title="Permalink to this headline">¶</a></h2>
+<p>There is a not-so-uncommon cornercase in which the class-oriented operator concept yields unwanted results.  The situation is as follows:</p>
+<ul class="simple">
+<li>Class <tt class="docutils literal"><span class="pre">A</span></tt> is array-like and implements the operation with subclasses of <tt class="docutils literal"><span class="pre">A</span></tt>.  Operands which are not an instance of <tt class="docutils literal"><span class="pre">A</span></tt> are assumed to be scalar-like.  Hence they are applied to each element of the <tt class="docutils literal"><span class="pre">A</span></tt> instance.</li>
+<li>Class <tt class="docutils literal"><span class="pre">B</span></tt> is array-like too, but cannot be derived from <tt class="docutils literal"><span class="pre">A</span></tt> because it <em>is</em> not an <tt class="docutils literal"><span class="pre">A</span></tt>.  <tt class="docutils literal"><span class="pre">B</span></tt> implements the array coercion operation with <tt class="docutils literal"><span class="pre">A</span></tt>, both in forward as well as in reverse mode.</li>
+<li><tt class="docutils literal"><span class="pre">B</span></tt> also implements forward- and reverse operation with scalars (that is, objects that are neither <tt class="docutils literal"><span class="pre">A</span></tt> instances nor <tt class="docutils literal"><span class="pre">B</span></tt> instances).</li>
+</ul>
+<p>Now, consider the following expression:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">A</span><span class="p">()</span> <span class="o">+</span> <span class="n">B</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>The following happens:</p>
+<ol class="arabic">
+<li><p class="first"><tt class="docutils literal"><span class="pre">A()</span></tt> checks if it can operate with <tt class="docutils literal"><span class="pre">B()</span></tt>.</p>
+<ol class="loweralpha simple">
+<li><tt class="docutils literal"><span class="pre">B()</span></tt> is not <tt class="docutils literal"><span class="pre">A</span></tt>-like.  So it&#8217;s scalar-like.</li>
+<li><tt class="docutils literal"><span class="pre">B()</span></tt> is hence applied to each element of <tt class="docutils literal"><span class="pre">A()</span></tt>.</li>
+</ol>
+</li>
+<li><p class="first">The elements of <tt class="docutils literal"><span class="pre">A()</span></tt> cannot deal with <tt class="docutils literal"><span class="pre">B()</span></tt>, since <tt class="docutils literal"><span class="pre">B()</span></tt> is in fact an array.</p>
+</li>
+<li><p class="first">So the reverse operation on <tt class="docutils literal"><span class="pre">B()</span></tt> is invoked, with each of the elements of <tt class="docutils literal"><span class="pre">A()</span></tt>.</p>
+</li>
+<li><p class="first"><tt class="docutils literal"><span class="pre">B()</span></tt> applies the scalar elements of <tt class="docutils literal"><span class="pre">A()</span></tt> to each of its elements in turn.</p>
+</li>
+<li><p class="first">One ends up with the following situation:</p>
+<div class="highlight-python"><pre>.      A()      +      B()                                                         =                            A() + B()
+
+                                    +---------------------+--------------------+       +----------------------------+-----------------------------+
+                                    |                     |                    |       |                            |                             |
+                    +---+---+       |        +---+---+    |        +---+---+   |       |   +---------+---------+    |    +---------+---------+    |
+    +---+---+       | a | b |       |        | a | b |    |        | a | b |   |       |   |  1 + a  |  1 + b  |    |    |  2 + a  |  2 + b  |    |
+    | 1 | 2 |   +   +---+---+   =   |  1  +  +---+---+    |  2  +  +---+---+   |   =   |   +---------+---------+    |    +---------+---------+    |
+    +---+---+       | c | d |       |        | c | d |    |        | c | d |   |       |   |  1 + c  |  1 + d  |    |    |  2 + d  |  2 + d  |    |
+                    +---+---+       |        +---+---+    |        +---+---+   |       |   +---------+---------+    |    +---------+---------+    |
+                                    |                     |                    |       |                            |                             |
+                                    +---------------------+--------------------+       +----------------------------+-----------------------------+</pre>
+</div>
+</li>
+</ol>
+<p>Expected (wanted) is the broadcast of <tt class="docutils literal"><span class="pre">A()</span></tt> to the shape of <tt class="docutils literal"><span class="pre">B()</span></tt> and an element-wise operation <tt class="docutils literal"><span class="pre">+</span></tt> on each pair.  This is what happens on <tt class="docutils literal"><span class="pre">B()</span> <span class="pre">+</span> <span class="pre">A()</span></tt>:</p>
+<div class="highlight-python"><pre>.      B()     +       A()                                      =         B() + A()
+
+    +---+---+                       +---+---+       +---+---+       +---------+---------+
+    | a | b |       +---+---+       | a | b |       | 1 | 1 |       |  a + 1  |  b + 1  |
+    +---+---+   +   | 1 | 2 |   =   +---+---+   +   +---+---+   =   +---------+---------+
+    | c | d |       +---+---+       | c | d |       | 2 | 2 |       |  c + 2  |  d + 2  |
+    +---+---+                       +---+---+       +---+---+       +---------+---------+</pre>
+</div>
+<p>Thus the ignorance of <tt class="docutils literal"><span class="pre">A</span></tt> on the probably later introduced class <tt class="docutils literal"><span class="pre">B</span></tt> leads to an unexcepted result.</p>
+<p>Fixing this problem is not easy.  When one has usually no access anymore to the implementation of <tt class="docutils literal"><span class="pre">A</span></tt>, it seems even impossible.  If one still has access to some hooks in the implementation of <tt class="docutils literal"><span class="pre">A</span></tt>, one can monkey-patch <tt class="docutils literal"><span class="pre">A</span></tt>, but this is
+error-prone and little portable to scenarios where many packages want to access <tt class="docutils literal"><span class="pre">A</span></tt>&#8216;s hooks.  Especially for the <tt class="docutils literal"><span class="pre">numpy</span></tt> case, this monkey-patching <em>is possible</em>, although it lets the application currently crash on exit (April 2011, numpy
+1.5.1).</p>
+</div>
+<div class="section" id="the-priops-approach">
+<h2>The priops Approach<a class="headerlink" href="#the-priops-approach" title="Permalink to this headline">¶</a></h2>
+<p><tt class="docutils literal"><span class="pre">priops</span></tt> encourages all packages involved (here those of <tt class="docutils literal"><span class="pre">A</span></tt> and <tt class="docutils literal"><span class="pre">B</span></tt>) to give their power of deciding what to do away, to the Priop defined in the <tt class="docutils literal"><span class="pre">priops</span></tt> package.  There are as many Priops for as many types of operation as needed.  Priops
+consists of a description of the possible operations, optionally together with some cost measure (which might be boolean, for simplicity).</p>
+<p>When one wants to use the priop, one retrieves a kind of handle for the priop, defining the search criteria.  This handle&#8217;s function is to find a path of operations using the information stored in the Priop once the specification of the operation
+are known (classes of objects, output type ...).</p>
+<p>There exists a common data format for operator information exchange between concatenated operations used to carry out the request, and there exists a framework implementing the graph notions used.</p>
+<p>The priops approach can be localised to a non-global usecase by instantiating the classes provided by priops in the namespace where they are needed.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="index.html">
+              <img class="logo" src="_static/logo.png" alt="Logo"/>
+            </a></p>
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Where Normal Coercion Rules May Fail</a><ul>
+<li><a class="reference internal" href="#the-problem">The Problem</a></li>
+<li><a class="reference internal" href="#the-priops-approach">The priops Approach</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="Concepts.html"
+                        title="previous chapter">Concepts</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="API.html"
+                        title="next chapter">API</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/Failure.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="API.html" title="API"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="Concepts.html" title="Concepts"
+             >previous</a> |</li>
+        <li><a href="index.html">priops v0.1.0b documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2011, Friedrich Romstedt.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
+    </div>
+  </body>
+</html>

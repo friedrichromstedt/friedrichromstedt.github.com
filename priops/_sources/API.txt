@@ -1,0 +1,16 @@
+API
+===
+
+This is the documentation of both the application programming interface as well as of all the guts of ``priops``.
+
+.. toctree::
+    :maxdepth: 2
+
+    priops.node
+    priops.edge
+    priops.path
+    priops.priop
+    priops.pathfinder
+    priops.callable
+    priops.classes
+    priops.test

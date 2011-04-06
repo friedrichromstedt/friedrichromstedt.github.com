@@ -1,0 +1,52 @@
+priops.test
+===========
+
+priops.test.classes
+-------------------
+
+.. currentmodule:: priops.test.classes
+
+.. autoclass:: X
+    
+    .. automethod:: __init__
+
+.. autoclass:: Y
+    
+    .. automethod:: __init__
+
+.. autoclass:: Z
+    
+    .. automethod:: __init__
+
+
+priops.test.test_direct
+-----------------------
+
+.. automodule:: priops.test.test_direct
+
+.. autofunction:: add_xy
+
+.. autodata:: p
+.. autodata:: edge_add_xy
+.. autodata:: cpf
+
+.. autofunction:: test_succeeds
+.. autofunction:: test_fails
+
+
+priops.test.test_casting
+------------------------
+
+.. automodule:: priops.test.test_casting
+
+.. autofunction:: add_xy
+.. autofunction:: cast_yz
+
+.. autodata:: p
+.. autodata:: edge_add_xy
+.. autodata:: edge_cast_yz
+.. autodata:: cpf
+
+.. autofunction:: test_succeeds
+.. autofunction:: test_direct
+.. autofunction:: test_fails

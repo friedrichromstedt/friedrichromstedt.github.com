@@ -1,0 +1,163 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>priops.pathfinder &mdash; priops v0.1.0b documentation</title>
+    <link rel="stylesheet" href="_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.1.0b',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="shortcut icon" href="_static/favicon.ico"/>
+    <link rel="top" title="priops v0.1.0b documentation" href="index.html" />
+    <link rel="up" title="API" href="API.html" />
+    <link rel="next" title="priops.callable" href="priops.callable.html" />
+    <link rel="prev" title="priops.priop" href="priops.priop.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="priops.callable.html" title="priops.callable"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="priops.priop.html" title="priops.priop"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">priops v0.1.0b documentation</a> &raquo;</li>
+          <li><a href="API.html" accesskey="U">API</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="priops-pathfinder">
+<h1>priops.pathfinder<a class="headerlink" href="#priops-pathfinder" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="id1">
+<h2>priops.Pathfinder<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="priops.pathfinder.NoPath">
+<em class="property">class </em><tt class="descclassname">priops.pathfinder.</tt><tt class="descname">NoPath</tt><a class="reference internal" href="_modules/priops/pathfinder.html#NoPath"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#priops.pathfinder.NoPath" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">exceptions.TypeError</span></tt></p>
+</dd></dl>
+
+<dl class="class">
+<dt id="priops.pathfinder.Pathfinder">
+<em class="property">class </em><tt class="descclassname">priops.pathfinder.</tt><tt class="descname">Pathfinder</tt><big>(</big><em>priop</em>, <em>max_components=None</em>, <em>max_weight=None</em><big>)</big><a class="reference internal" href="_modules/priops/pathfinder.html#Pathfinder"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#priops.pathfinder.Pathfinder" title="Permalink to this definition">¶</a></dt>
+<dd><p>An algorithm for finding a path through the graph defined by a
+<tt class="xref py py-class docutils literal"><span class="pre">Priop</span></tt>.</p>
+<dl class="method">
+<dt id="priops.pathfinder.Pathfinder.__init__">
+<tt class="descname">__init__</tt><big>(</big><em>priop</em>, <em>max_components=None</em>, <em>max_weight=None</em><big>)</big><a class="reference internal" href="_modules/priops/pathfinder.html#Pathfinder.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#priops.pathfinder.Pathfinder.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets the Pathfinder up to search for pathes in <em>priop</em> with
+parameters <em>max_components</em> and <em>max_steps</em>.  <em>max_components</em> gives
+the maximum number of edges to combine into the path.  <em>max_weight</em> 
+gives the maximum weight of a path to be considered.</p>
+<p>The default for <em>max_components</em> is 1 and the default for <em>max_weight</em>
+is one.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="priops.pathfinder.Pathfinder.find_path">
+<tt class="descname">find_path</tt><big>(</big><em>input_node</em>, <em>output_node</em><big>)</big><a class="reference internal" href="_modules/priops/pathfinder.html#Pathfinder.find_path"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#priops.pathfinder.Pathfinder.find_path" title="Permalink to this definition">¶</a></dt>
+<dd><p>Finds a best path to traverse <em>self.priop</em> from input node
+<em>input_node</em> to output node <em>output_node</em>.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="index.html">
+              <img class="logo" src="_static/logo.png" alt="Logo"/>
+            </a></p>
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">priops.pathfinder</a><ul>
+<li><a class="reference internal" href="#id1">priops.Pathfinder</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="priops.priop.html"
+                        title="previous chapter">priops.priop</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="priops.callable.html"
+                        title="next chapter">priops.callable</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/priops.pathfinder.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="priops.callable.html" title="priops.callable"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="priops.priop.html" title="priops.priop"
+             >previous</a> |</li>
+        <li><a href="index.html">priops v0.1.0b documentation</a> &raquo;</li>
+          <li><a href="API.html" >API</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2011, Friedrich Romstedt.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
+    </div>
+  </body>
+</html>

@@ -1,0 +1,13 @@
+priops.callable
+===============
+
+.. currentmodule:: priops.callable
+
+
+priops.CallableEdge
+-------------------
+
+.. autoclass:: CallableEdge
+
+    .. automethod:: __init__
+    .. automethod:: process

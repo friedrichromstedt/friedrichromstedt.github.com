@@ -1,0 +1,143 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Features &mdash; priops v0.1.0b documentation</title>
+    <link rel="stylesheet" href="_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.1.0b',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="shortcut icon" href="_static/favicon.ico"/>
+    <link rel="top" title="priops v0.1.0b documentation" href="index.html" />
+    <link rel="next" title="API" href="API.html" />
+    <link rel="prev" title="Concepts" href="Concepts.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="API.html" title="API"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="Concepts.html" title="Concepts"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">priops v0.1.0b documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="features">
+<h1>Features<a class="headerlink" href="#features" title="Permalink to this headline">¶</a></h1>
+<p>Here comes a comparison of the Python operator concept and the <em>priops operator concept</em> (the priops version is always <em>italic</em>).  There are similarities in functionality, but differences in the approach.</p>
+<ul>
+<li><p class="first">Operators are implemented by the classes of the objects involved in the operation.</p>
+<p><em>Operators might be implemented by classes, but they do not have to be so.</em></p>
+</li>
+<li><p class="first">The classes can decide freely if they are willing to implement the operation with the other operand.  If they refuse to do so, they might <tt class="docutils literal"><span class="pre">return</span> <span class="pre">NotImplemented</span></tt>.</p>
+<p><em>The classes are assumed to be unable to decide in some cases what to do with the other operand; in fact they might know to little (see</em> <a class="reference internal" href="Failure.html"><em>Where Normal Coercion Rules May Fail</em></a> <em>about this).  A superordinated layer is necessary to decide what operation to apply onto
+the operands.</em></p>
+</li>
+<li><p class="first">Python always asks the left operand first, and if that gives no result, the right operand is asked for an implementation of the &#8220;reverse&#8221; operation.</p>
+<p><em>The superordinated layer does not know any longer about which operand was asked first.</em></p>
+</li>
+<li><p class="first">Operations are at most binary.</p>
+<p><em>Operations might have as many operands as you wish.</em></p>
+</li>
+<li><p class="first">Operations involving many operands are carried out always using binary reduction and sidedness of bianry operators.</p>
+<p><em>Operations involving many operands can be specified using all operands at once and can be automatically broken down to binary or other operations, in order to yield the desired output specification and the desired cost.</em></p>
+</li>
+<li><p class="first">The output type of an operation is undetermined and depends fully on the operands.</p>
+<p><em>The output of an operation can be requested to be of certain type.</em></p>
+</li>
+<li><p class="first">The output of an operation is always scalar-like (of course, this can be circumvented by using tuples).</p>
+<p><em>The output of an operation is</em> never <em>scalar-like, but in principle always list-like.  Of course, there exists a transparent mechanism to provide scalar out- and input.</em></p>
+</li>
+</ul>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="index.html">
+              <img class="logo" src="_static/logo.png" alt="Logo"/>
+            </a></p>
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="Concepts.html"
+                        title="previous chapter">Concepts</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="API.html"
+                        title="next chapter">API</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/Features.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="API.html" title="API"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="Concepts.html" title="Concepts"
+             >previous</a> |</li>
+        <li><a href="index.html">priops v0.1.0b documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2011, Friedrich Romstedt.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
+    </div>
+  </body>
+</html>

@@ -1,0 +1,207 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>priops.edge &mdash; priops v0.1.0b documentation</title>
+    <link rel="stylesheet" href="../../_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '0.1.0b',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="shortcut icon" href="../../_static/favicon.ico"/>
+    <link rel="top" title="priops v0.1.0b documentation" href="../../index.html" />
+    <link rel="up" title="Module code" href="../index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../index.html">priops v0.1.0b documentation</a> &raquo;</li>
+          <li><a href="../index.html" accesskey="U">Module code</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <h1>Source code for priops.edge</h1><div class="highlight"><pre>
+<span class="kn">from</span> <span class="nn">priops.node</span> <span class="kn">import</span> <span class="n">EmptyNode</span>
+
+<div class="viewcode-block" id="Edge"><a class="viewcode-back" href="../../priops.edge.html#priops.edge.Edge">[docs]</a><span class="k">class</span> <span class="nc">Edge</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Edges describe connections between two :class:`~priops.Node` objects.</span>
+<span class="sd">    An edge has a direction; there is an input node and an output node.</span>
+<span class="sd">    </span>
+<span class="sd">    An edge can be called, in that case the edge will transform an object</span>
+<span class="sd">    list of the input node specification into an object list of the output</span>
+<span class="sd">    node specification.</span>
+<span class="sd">    </span>
+<span class="sd">    This class is abstract.  Derived classes should provide:</span>
+<span class="sd">    </span>
+<span class="sd">    *   ``.process(self, input)``: Processes the non-internode input data to </span>
+<span class="sd">        non-internode output data.  Non-internode data is different from </span>
+<span class="sd">        internode data format by the fact that inter-node data is always a </span>
+<span class="sd">        list, while intra-edge data might be scalar.</span>
+<span class="sd">        </span>
+<span class="sd">        1.  If the input node is scalar, *input* will be scalar (the first</span>
+<span class="sd">            element of the inter-node data stream).  If the input node is not </span>
+<span class="sd">            scalar, *input* will be the direct inter-node data stream.</span>
+
+<span class="sd">        2.  If the output node is scalar, ``.process()`` should return a </span>
+<span class="sd">            scalar, which will then be converted by the output node to </span>
+<span class="sd">            inter-node list format.   If the output node is not scalar, the</span>
+<span class="sd">            output of ``.process()`` should already be a list.&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="Edge.__init__"><a class="viewcode-back" href="../../priops.edge.html#priops.edge.Edge.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">input_node</span><span class="p">,</span> <span class="n">output_node</span><span class="p">,</span> <span class="n">weight</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;*input_node* is the specification of the input, *output_node* is the</span>
+<span class="sd">        specification of the output of the ``Edge``.  *weight* is the effort</span>
+<span class="sd">        to follow this edge (default 1).  *name* is used for pretty </span>
+<span class="sd">        printing.&quot;&quot;&quot;</span>
+    
+        <span class="k">if</span> <span class="n">weight</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="n">weight</span> <span class="o">=</span> <span class="mi">1</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">input_node</span> <span class="o">=</span> <span class="n">input_node</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">output_node</span> <span class="o">=</span> <span class="n">output_node</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">weight</span> <span class="o">=</span> <span class="n">weight</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
+</div>
+<div class="viewcode-block" id="Edge.__str__"><a class="viewcode-back" href="../../priops.edge.html#priops.edge.Edge.__str__">[docs]</a>    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s">&#39;(&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">input_node</span><span class="p">)</span> <span class="o">+</span> <span class="s">&#39; -&gt; &#39;</span> <span class="o">+</span> \
+                <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">output_node</span><span class="p">)</span> <span class="o">+</span> <span class="s">&#39;)&#39;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s">&#39;(&#39;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">+</span> <span class="s">&#39; &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">input_node</span><span class="p">)</span> <span class="o">+</span> <span class="s">&#39; -&gt; &#39;</span> <span class="o">+</span> \
+                <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">output_node</span><span class="p">)</span> <span class="o">+</span> <span class="s">&#39;)&#39;</span>
+</div>
+<div class="viewcode-block" id="Edge.__add__"><a class="viewcode-back" href="../../priops.edge.html#priops.edge.Edge.__add__">[docs]</a>    <span class="k">def</span> <span class="nf">__add__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other_edge</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Combines this edge *self* with another edge *other_edge* via </span>
+<span class="sd">        creating a :class:`CombinedEdge` instance.&quot;&quot;&quot;</span>
+
+        <span class="k">return</span> <span class="n">CombinedEdge</span><span class="p">(</span><span class="n">constituents</span><span class="o">=</span><span class="p">[</span><span class="bp">self</span><span class="p">,</span> <span class="n">other_edge</span><span class="p">])</span>
+</div>
+<div class="viewcode-block" id="Edge.__call__"><a class="viewcode-back" href="../../priops.edge.html#priops.edge.Edge.__call__">[docs]</a>    <span class="k">def</span> <span class="nf">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">inputs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Processes the inter-edge data stream *inputs* into inter-edge</span>
+<span class="sd">        data stream *outputs*.  Inter-edge data are lists.</span>
+
+<span class="sd">        Calls *self.process()* with appropriate arguments.&quot;&quot;&quot;</span>
+
+        <span class="n">intra_edge_input</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">input_node</span><span class="o">.</span><span class="n">frominter</span><span class="p">(</span><span class="n">inputs</span><span class="p">)</span>
+        <span class="n">intra_edge_processed</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="p">(</span><span class="nb">input</span><span class="o">=</span><span class="n">intra_edge_input</span><span class="p">)</span>
+        <span class="n">inter_edge_output</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">output_node</span><span class="o">.</span><span class="n">tointer</span><span class="p">(</span><span class="n">intra_edge_processed</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">inter_edge_output</span>
+</div></div>
+<div class="viewcode-block" id="IdentityEdge"><a class="viewcode-back" href="../../priops.edge.html#priops.edge.IdentityEdge">[docs]</a><span class="k">class</span> <span class="nc">IdentityEdge</span><span class="p">(</span><span class="n">Edge</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;An edge with identical input and output nodes, returning its </span>
+<span class="sd">    arguments on call.  Has zero weight.&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="IdentityEdge.__init__"><a class="viewcode-back" href="../../priops.edge.html#priops.edge.IdentityEdge.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;*node* is the node to process by identity.&quot;&quot;&quot;</span>
+
+        <span class="n">Edge</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">input_node</span><span class="o">=</span><span class="n">node</span><span class="p">,</span> <span class="n">output_node</span><span class="o">=</span><span class="n">node</span><span class="p">,</span> <span class="n">weight</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+            <span class="n">name</span><span class="o">=</span><span class="s">&#39;Identity&#39;</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="IdentityEdge.process"><a class="viewcode-back" href="../../priops.edge.html#priops.edge.IdentityEdge.process">[docs]</a>    <span class="k">def</span> <span class="nf">process</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">input</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Returns *input* unchanged.&quot;&quot;&quot;</span>
+
+        <span class="k">return</span> <span class="nb">input</span>
+</div></div>
+<div class="viewcode-block" id="CombinedEdge"><a class="viewcode-back" href="../../priops.edge.html#priops.edge.CombinedEdge">[docs]</a><span class="k">class</span> <span class="nc">CombinedEdge</span><span class="p">(</span><span class="n">Edge</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Combined edges combine a number of :class:`Edge` objects into one big</span>
+<span class="sd">    edge.  The input node of the combined edge is the sum of all input nodes</span>
+<span class="sd">    of the constituets.  The output node of a combined edge is similarly the</span>
+<span class="sd">    sum of all output nodes of the constituets.</span>
+
+<span class="sd">    When being called, the combined edge dispatches the inputs to the</span>
+<span class="sd">    constituents according to the length of their input nodes.  Then the</span>
+<span class="sd">    constituents will be called with the dispatched inputs.&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="CombinedEdge.__init__"><a class="viewcode-back" href="../../priops.edge.html#priops.edge.CombinedEdge.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">constituents</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Combines *constituents* into a combined egde.&quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">constituents</span> <span class="o">=</span> <span class="n">constituents</span>
+        <span class="n">input_node</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">([</span><span class="n">constituent</span><span class="o">.</span><span class="n">input_node</span> <span class="k">for</span> <span class="n">constituent</span> <span class="ow">in</span> \
+            <span class="n">constituents</span><span class="p">],</span> <span class="n">EmptyNode</span><span class="p">())</span>
+        <span class="n">output_node</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">([</span><span class="n">constituent</span><span class="o">.</span><span class="n">output_node</span> <span class="k">for</span> <span class="n">constituent</span> <span class="ow">in</span> \
+            <span class="n">constituents</span><span class="p">],</span> <span class="n">EmptyNode</span><span class="p">())</span>
+        <span class="n">weight</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">([</span><span class="n">constituent</span><span class="o">.</span><span class="n">weight</span> <span class="k">for</span> <span class="n">constituent</span> <span class="ow">in</span> <span class="n">constituents</span><span class="p">])</span>
+        <span class="n">Edge</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">input_node</span><span class="o">=</span><span class="n">input_node</span><span class="p">,</span> <span class="n">output_node</span><span class="o">=</span><span class="n">output_node</span><span class="p">,</span>
+            <span class="n">weight</span><span class="o">=</span><span class="n">weight</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s">&#39;Combined Edge&#39;</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="CombinedEdge.process"><a class="viewcode-back" href="../../priops.edge.html#priops.edge.CombinedEdge.process">[docs]</a>    <span class="k">def</span> <span class="nf">process</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">input</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Dispatches the input object list *input* to the constituents.&quot;&quot;&quot;</span>
+
+        <span class="n">result</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">input_left</span> <span class="o">=</span> <span class="nb">input</span>
+        <span class="k">for</span> <span class="n">constituent</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">constituents</span><span class="p">:</span>
+            <span class="n">len_constituent</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">constituent</span><span class="o">.</span><span class="n">input_node</span><span class="p">)</span>
+            <span class="n">input_constituent</span> <span class="o">=</span> <span class="n">input_left</span><span class="p">[:</span><span class="n">len_constituent</span><span class="p">]</span>
+            <span class="n">result</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">constituent</span><span class="p">(</span><span class="n">input_constituent</span><span class="p">))</span>
+            <span class="n">input_left</span> <span class="o">=</span> <span class="n">input_left</span><span class="p">[</span><span class="n">len_constituent</span><span class="p">:]</span>
+        <span class="k">return</span> <span class="n">result</span></div></div>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../../index.html">
+              <img class="logo" src="../../_static/logo.png" alt="Logo"/>
+            </a></p>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../index.html">priops v0.1.0b documentation</a> &raquo;</li>
+          <li><a href="../index.html" >Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2011, Friedrich Romstedt.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
+    </div>
+  </body>
+</html>

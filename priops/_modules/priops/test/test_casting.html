@@ -1,0 +1,145 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>priops.test.test_casting &mdash; priops v0.1.0b documentation</title>
+    <link rel="stylesheet" href="../../../_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '0.1.0b',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <link rel="shortcut icon" href="../../../_static/favicon.ico"/>
+    <link rel="top" title="priops v0.1.0b documentation" href="../../../index.html" />
+    <link rel="up" title="Module code" href="../../index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../../index.html">priops v0.1.0b documentation</a> &raquo;</li>
+          <li><a href="../../index.html" accesskey="U">Module code</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <h1>Source code for priops.test.test_casting</h1><div class="highlight"><pre>
+<span class="sd">&quot;&quot;&quot;Tests addition ``X() + Z()`` via ``Z -&gt; Y``.&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">priops</span>
+<span class="kn">from</span> <span class="nn">priops.test.classes</span> <span class="kn">import</span> <span class="n">X</span><span class="p">,</span> <span class="n">Y</span><span class="p">,</span> <span class="n">Z</span>
+<span class="kn">import</span> <span class="nn">nose.tools</span>
+
+<div class="viewcode-block" id="add_xy"><a class="viewcode-back" href="../../../priops.test.html#priops.test.test_casting.add_xy">[docs]</a><span class="k">def</span> <span class="nf">add_xy</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Adds an :class:`~priops.test.classes.X` instance and a</span>
+<span class="sd">    :class:`~priops.test.classes.Y` instance.&quot;&quot;&quot;</span>
+
+    <span class="k">return</span> <span class="n">x</span><span class="o">.</span><span class="n">x</span> <span class="o">+</span> <span class="n">y</span><span class="o">.</span><span class="n">y</span>
+</div>
+<div class="viewcode-block" id="cast_yz"><a class="viewcode-back" href="../../../priops.test.html#priops.test.test_casting.cast_yz">[docs]</a><span class="k">def</span> <span class="nf">cast_yz</span><span class="p">(</span><span class="n">z</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Casts a :class:`~priops.test.classes.Z` instance to a</span>
+<span class="sd">    :class:`~priops.test.classes.Y` instance.&quot;&quot;&quot;</span>
+
+    <span class="k">return</span> <span class="n">Y</span><span class="p">(</span><span class="n">z</span><span class="o">.</span><span class="n">z</span><span class="p">)</span>
+</div>
+<span class="n">p</span> <span class="o">=</span> <span class="n">priops</span><span class="o">.</span><span class="n">Priop</span><span class="p">()</span>
+
+<span class="n">edge_add_xy</span> <span class="o">=</span> <span class="n">priops</span><span class="o">.</span><span class="n">CallableEdge</span><span class="p">(</span>
+    <span class="n">input_node</span><span class="o">=</span><span class="n">priops</span><span class="o">.</span><span class="n">ClassNode</span><span class="p">(</span><span class="n">items</span><span class="o">=</span><span class="p">[</span><span class="n">X</span><span class="p">,</span> <span class="n">Y</span><span class="p">]),</span>
+    <span class="n">output_node</span><span class="o">=</span><span class="n">priops</span><span class="o">.</span><span class="n">ClassNode</span><span class="p">(</span><span class="n">item</span><span class="o">=</span><span class="nb">int</span><span class="p">),</span>
+    <span class="nb">callable</span><span class="o">=</span><span class="n">add_xy</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s">&#39;Add X + Y&#39;</span><span class="p">)</span>
+<span class="n">p</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">edge_add_xy</span><span class="p">)</span>
+
+<span class="n">edge_cast_yz</span> <span class="o">=</span> <span class="n">priops</span><span class="o">.</span><span class="n">CallableEdge</span><span class="p">(</span>
+    <span class="n">input_node</span><span class="o">=</span><span class="n">priops</span><span class="o">.</span><span class="n">ClassNode</span><span class="p">(</span><span class="n">item</span><span class="o">=</span><span class="n">Z</span><span class="p">),</span>
+    <span class="n">output_node</span><span class="o">=</span><span class="n">priops</span><span class="o">.</span><span class="n">ClassNode</span><span class="p">(</span><span class="n">item</span><span class="o">=</span><span class="n">Y</span><span class="p">),</span>
+    <span class="nb">callable</span><span class="o">=</span><span class="n">cast_yz</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s">&#39;Cast Z -&gt; Y&#39;</span><span class="p">)</span>
+<span class="n">p</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">edge_cast_yz</span><span class="p">)</span>
+
+<span class="n">cpf</span> <span class="o">=</span> <span class="n">priops</span><span class="o">.</span><span class="n">ClassPathfinder</span><span class="p">(</span>
+    <span class="n">priop</span><span class="o">=</span><span class="n">p</span><span class="p">,</span> <span class="n">output_node</span><span class="o">=</span><span class="n">priops</span><span class="o">.</span><span class="n">ClassNode</span><span class="p">(</span><span class="n">item</span><span class="o">=</span><span class="bp">None</span><span class="p">),</span> <span class="n">max_components</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+    <span class="n">max_weight</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+
+<div class="viewcode-block" id="test_succeeds"><a class="viewcode-back" href="../../../priops.test.html#priops.test.test_casting.test_succeeds">[docs]</a><span class="k">def</span> <span class="nf">test_succeeds</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;Tests if ``X(1) + Z(3) == 4``.&quot;&quot;&quot;</span>
+
+    <span class="n">nose</span><span class="o">.</span><span class="n">tools</span><span class="o">.</span><span class="n">eq_</span><span class="p">(</span><span class="n">cpf</span><span class="p">(</span><span class="n">X</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span> <span class="n">Z</span><span class="p">(</span><span class="mi">3</span><span class="p">)),</span> <span class="mi">4</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="test_direct"><a class="viewcode-back" href="../../../priops.test.html#priops.test.test_casting.test_direct">[docs]</a><span class="k">def</span> <span class="nf">test_direct</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;Tests if ``X(1) + Y(2) == 3`` still.&quot;&quot;&quot;</span>
+
+    <span class="n">nose</span><span class="o">.</span><span class="n">tools</span><span class="o">.</span><span class="n">eq_</span><span class="p">(</span><span class="n">cpf</span><span class="p">(</span><span class="n">X</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span> <span class="n">Y</span><span class="p">(</span><span class="mi">2</span><span class="p">)),</span> <span class="mi">3</span><span class="p">)</span>
+</div>
+<span class="nd">@nose.tools.raises</span><span class="p">(</span><span class="n">priops</span><span class="o">.</span><span class="n">NoPath</span><span class="p">)</span>
+<div class="viewcode-block" id="test_fails"><a class="viewcode-back" href="../../../priops.test.html#priops.test.test_casting.test_fails">[docs]</a><span class="k">def</span> <span class="nf">test_fails</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;Tests that ``X(10)`` cannot be coerced with ``X(20)``.&quot;&quot;&quot;</span>
+
+    <span class="n">cpf</span><span class="p">(</span><span class="n">X</span><span class="p">(</span><span class="mi">10</span><span class="p">),</span> <span class="n">X</span><span class="p">(</span><span class="mi">20</span><span class="p">))</span></div>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../../../index.html">
+              <img class="logo" src="../../../_static/logo.png" alt="Logo"/>
+            </a></p>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../../index.html">priops v0.1.0b documentation</a> &raquo;</li>
+          <li><a href="../../index.html" >Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2011, Friedrich Romstedt.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
+    </div>
+  </body>
+</html>

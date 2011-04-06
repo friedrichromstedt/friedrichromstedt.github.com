@@ -1,0 +1,254 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>priops.classes &mdash; priops v0.1.0b documentation</title>
+    <link rel="stylesheet" href="_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.1.0b',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="shortcut icon" href="_static/favicon.ico"/>
+    <link rel="top" title="priops v0.1.0b documentation" href="index.html" />
+    <link rel="up" title="API" href="API.html" />
+    <link rel="next" title="priops.test" href="priops.test.html" />
+    <link rel="prev" title="priops.callable" href="priops.callable.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="priops.test.html" title="priops.test"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="priops.callable.html" title="priops.callable"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">priops v0.1.0b documentation</a> &raquo;</li>
+          <li><a href="API.html" accesskey="U">API</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="priops-classes">
+<h1>priops.classes<a class="headerlink" href="#priops-classes" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="priops-instancenode">
+<h2>priops.InstanceNode<a class="headerlink" href="#priops-instancenode" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="priops.classes.InstanceNode">
+<em class="property">class </em><tt class="descclassname">priops.classes.</tt><tt class="descname">InstanceNode</tt><big>(</big><em>item=None</em>, <em>items=None</em>, <em>node=None</em><big>)</big><a class="reference internal" href="_modules/priops/classes.html#InstanceNode"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#priops.classes.InstanceNode" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="priops.node.html#priops.node.Node" title="priops.node.Node"><tt class="xref py py-class docutils literal"><span class="pre">priops.node.Node</span></tt></a></p>
+<p>This Node tells that it fulfils the specifications of another Node if
+all elements of <em>self</em> are instances of the classes in the other node.</p>
+<dl class="method">
+<dt id="priops.classes.InstanceNode.__init__">
+<tt class="descname">__init__</tt><big>(</big><em>item=None</em>, <em>items=None</em>, <em>node=None</em><big>)</big><a class="headerlink" href="#priops.classes.InstanceNode.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialises the Node from either one <em>item</em> or many <em>items</em>.  One
+of <em>item</em> or <em>items</em> must be given, but not both.  If both <em>item</em> and
+<em>items</em> are <tt class="xref docutils literal"><span class="pre">None</span></tt>, it is assumed that <em>item</em> is given as <tt class="xref docutils literal"><span class="pre">None</span></tt>,
+and that <em>items</em> is not specified.</p>
+<p>Alternatively, the Node can be initialised from another <tt class="docutils literal"><span class="pre">Node</span></tt>
+instance <em>node</em>.  This is needed by derived classes in some cases
+to provide e.g. slicing operations based on this class&#8217;es slicing
+operation.  If <em>node</em> is given, it overrides all other parameters.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="priops.classes.InstanceNode.fulfils_specification">
+<tt class="descname">fulfils_specification</tt><big>(</big><em>other_node</em><big>)</big><a class="reference internal" href="_modules/priops/classes.html#InstanceNode.fulfils_specification"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#priops.classes.InstanceNode.fulfils_specification" title="Permalink to this definition">¶</a></dt>
+<dd><p>If the lengthes of <em>self</em> and <em>other_node</em> mismatch, then the
+node does not fulfil the <em>other_node</em> specification.  Else, <em>self</em>
+fulfils the <em>other_node</em> specification, if each element of <em>self</em> is
+an instance of the corresponding element of <em>other_node</em>.  <tt class="xref docutils literal"><span class="pre">None</span></tt>
+wildcards in <em>other_node</em> are respected.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="priops.classes.InstanceNode.__getitem__">
+<tt class="descname">__getitem__</tt><big>(</big><em>key</em><big>)</big><a class="reference internal" href="_modules/priops/classes.html#InstanceNode.__getitem__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#priops.classes.InstanceNode.__getitem__" title="Permalink to this definition">¶</a></dt>
+<dd><p>If a slice is requested, a sub-<tt class="docutils literal"><span class="pre">InstanceNode</span></tt> is returned.  Else,
+the element is returned.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="priops-classnode">
+<h2>priops.ClassNode<a class="headerlink" href="#priops-classnode" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="priops.classes.ClassNode">
+<em class="property">class </em><tt class="descclassname">priops.classes.</tt><tt class="descname">ClassNode</tt><big>(</big><em>item=None</em>, <em>items=None</em>, <em>node=None</em><big>)</big><a class="reference internal" href="_modules/priops/classes.html#ClassNode"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#priops.classes.ClassNode" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="priops.node.html#priops.node.Node" title="priops.node.Node"><tt class="xref py py-class docutils literal"><span class="pre">priops.node.Node</span></tt></a></p>
+<p>This node tells that it fulfils another specification if all elements
+of <em>self</em> are subclasses of the corresponding element in the other 
+node.</p>
+<dl class="method">
+<dt id="priops.classes.ClassNode.__init__">
+<tt class="descname">__init__</tt><big>(</big><em>item=None</em>, <em>items=None</em>, <em>node=None</em><big>)</big><a class="headerlink" href="#priops.classes.ClassNode.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialises the Node from either one <em>item</em> or many <em>items</em>.  One
+of <em>item</em> or <em>items</em> must be given, but not both.  If both <em>item</em> and
+<em>items</em> are <tt class="xref docutils literal"><span class="pre">None</span></tt>, it is assumed that <em>item</em> is given as <tt class="xref docutils literal"><span class="pre">None</span></tt>,
+and that <em>items</em> is not specified.</p>
+<p>Alternatively, the Node can be initialised from another <tt class="docutils literal"><span class="pre">Node</span></tt>
+instance <em>node</em>.  This is needed by derived classes in some cases
+to provide e.g. slicing operations based on this class&#8217;es slicing
+operation.  If <em>node</em> is given, it overrides all other parameters.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="priops.classes.ClassNode.fulfils_specification">
+<tt class="descname">fulfils_specification</tt><big>(</big><em>other_node</em><big>)</big><a class="reference internal" href="_modules/priops/classes.html#ClassNode.fulfils_specification"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#priops.classes.ClassNode.fulfils_specification" title="Permalink to this definition">¶</a></dt>
+<dd><p>If the lengthes of <em>self</em> and <em>other_node</em> mismatch, then the
+node does not fulfil the <em>other_node</em> specification.  Else, <em>self</em>
+fulfils the <em>other_node</em> specification, if each element of <em>self</em> is
+a subclass of the corresponding element of <em>other_node</em>.  <tt class="xref docutils literal"><span class="pre">None</span></tt>
+wildcards in <em>other_node</em> are respected.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="priops.classes.ClassNode.__getitem__">
+<tt class="descname">__getitem__</tt><big>(</big><em>key</em><big>)</big><a class="reference internal" href="_modules/priops/classes.html#ClassNode.__getitem__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#priops.classes.ClassNode.__getitem__" title="Permalink to this definition">¶</a></dt>
+<dd><p>If a slice is requested, a sub-<tt class="docutils literal"><span class="pre">ClassNode</span></tt> is returned.  Else,
+the element is returned.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="priops-classpathfinder">
+<h2>priops.ClassPathfinder<a class="headerlink" href="#priops-classpathfinder" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="priops.classes.ClassPathfinder">
+<em class="property">class </em><tt class="descclassname">priops.classes.</tt><tt class="descname">ClassPathfinder</tt><big>(</big><em>priop</em>, <em>output_node</em>, <em>max_components=None</em>, <em>max_weight=None</em>, <em>scalar=None</em><big>)</big><a class="reference internal" href="_modules/priops/classes.html#ClassPathfinder"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#priops.classes.ClassPathfinder" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="priops.pathfinder.html#priops.pathfinder.Pathfinder" title="priops.pathfinder.Pathfinder"><tt class="xref py py-class docutils literal"><span class="pre">priops.pathfinder.Pathfinder</span></tt></a></p>
+<p>This <a class="reference internal" href="priops.pathfinder.html#priops.pathfinder.Pathfinder" title="priops.pathfinder.Pathfinder"><tt class="xref py py-class docutils literal"><span class="pre">Pathfinder</span></tt></a> can be called, and the 
+input node will be constructed from 
+<a class="reference internal" href="#priops.classes.InstanceNode" title="priops.classes.InstanceNode"><tt class="xref py py-class docutils literal"><span class="pre">InstanceNode</span></tt></a>.</p>
+<dl class="method">
+<dt id="priops.classes.ClassPathfinder.__init__">
+<tt class="descname">__init__</tt><big>(</big><em>priop</em>, <em>output_node</em>, <em>max_components=None</em>, <em>max_weight=None</em>, <em>scalar=None</em><big>)</big><a class="reference internal" href="_modules/priops/classes.html#ClassPathfinder.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#priops.classes.ClassPathfinder.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialises the pathfinding algorith, and arranges for searching
+for output nodes <em>output_node</em>.  <em>output_node</em> might contain <tt class="xref docutils literal"><span class="pre">None</span></tt> 
+wildcards.</p>
+<p><em>scalar</em> determines how to handle the argument tuple to the call of 
+the object.  If true, the call must happen with exactly one argument, 
+and a scalar input node will be used.  Else, the input node will be 
+non-scalar, and an arbitrary number of arguments is allowed.  The 
+default is <tt class="xref docutils literal"><span class="pre">False</span></tt>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="priops.classes.ClassPathfinder.get_path">
+<tt class="descname">get_path</tt><big>(</big><em>*arguments</em><big>)</big><a class="reference internal" href="_modules/priops/classes.html#ClassPathfinder.get_path"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#priops.classes.ClassPathfinder.get_path" title="Permalink to this definition">¶</a></dt>
+<dd><p>Finds a path to process the <em>arguments</em>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="priops.classes.ClassPathfinder.__call__">
+<tt class="descname">__call__</tt><big>(</big><em>*arguments</em><big>)</big><a class="reference internal" href="_modules/priops/classes.html#ClassPathfinder.__call__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#priops.classes.ClassPathfinder.__call__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Processes non-internode data to non-internode data.  The 
+<em>arguments</em> are seen as non-internode data of the corresponding input 
+node.  Returned is the non-internode data as returned by 
+<em>self.output_node</em>.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="index.html">
+              <img class="logo" src="_static/logo.png" alt="Logo"/>
+            </a></p>
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">priops.classes</a><ul>
+<li><a class="reference internal" href="#priops-instancenode">priops.InstanceNode</a></li>
+<li><a class="reference internal" href="#priops-classnode">priops.ClassNode</a></li>
+<li><a class="reference internal" href="#priops-classpathfinder">priops.ClassPathfinder</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="priops.callable.html"
+                        title="previous chapter">priops.callable</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="priops.test.html"
+                        title="next chapter">priops.test</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/priops.classes.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="priops.test.html" title="priops.test"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="priops.callable.html" title="priops.callable"
+             >previous</a> |</li>
+        <li><a href="index.html">priops v0.1.0b documentation</a> &raquo;</li>
+          <li><a href="API.html" >API</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2011, Friedrich Romstedt.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
+    </div>
+  </body>
+</html>

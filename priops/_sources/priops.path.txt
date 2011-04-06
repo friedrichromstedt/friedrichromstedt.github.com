@@ -1,0 +1,16 @@
+priops.path
+===========
+
+.. currentmodule:: priops.path
+
+
+priops.Path
+-----------
+
+.. autoclass:: Path
+
+    .. automethod:: __init__
+    .. automethod:: __str__
+    .. automethod:: __xor__
+    .. automethod:: __rxor__
+    .. automethod:: __call__

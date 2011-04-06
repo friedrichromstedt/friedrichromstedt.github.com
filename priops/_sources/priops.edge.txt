@@ -1,0 +1,33 @@
+priops.edge
+===========
+
+.. currentmodule:: priops.edge
+
+
+priops.Edge
+-----------
+
+.. autoclass:: Edge
+
+    .. automethod:: __init__
+    .. automethod:: __str__
+    .. automethod:: __add__
+    .. automethod:: __call__
+
+
+priops.IdentityEdge
+-------------------
+
+.. autoclass:: IdentityEdge
+    
+    .. automethod:: __init__
+    .. automethod:: process
+
+
+priops.CombinedEdge
+-------------------
+
+.. autoclass:: CombinedEdge
+
+    .. automethod:: __init__
+    .. automethod:: process

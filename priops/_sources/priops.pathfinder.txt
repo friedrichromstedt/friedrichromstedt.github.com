@@ -1,0 +1,15 @@
+priops.pathfinder
+=================
+
+.. currentmodule:: priops.pathfinder
+
+
+priops.Pathfinder
+-----------------
+
+.. autoclass:: NoPath
+
+.. autoclass:: Pathfinder
+
+    .. automethod:: __init__
+    .. automethod:: find_path

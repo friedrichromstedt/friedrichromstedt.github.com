@@ -1,0 +1,33 @@
+Features
+========
+
+Here comes a comparison of the Python operator concept and the *priops operator concept* (the priops version is always *italic*).  There are similarities in functionality, but differences in the approach.
+
+*   Operators are implemented by the classes of the objects involved in the operation.
+
+    *Operators might be implemented by classes, but they do not have to be so.*
+
+*   The classes can decide freely if they are willing to implement the operation with the other operand.  If they refuse to do so, they might ``return NotImplemented``.
+
+    *The classes are assumed to be unable to decide in some cases what to do with the other operand; in fact they might know to little (see* :doc:`Failure` *about this).  A superordinated layer is necessary to decide what operation to apply onto 
+    the operands.*
+
+*   Python always asks the left operand first, and if that gives no result, the right operand is asked for an implementation of the "reverse" operation.
+    
+    *The superordinated layer does not know any longer about which operand was asked first.*
+
+*   Operations are at most binary.
+
+    *Operations might have as many operands as you wish.*
+
+*   Operations involving many operands are carried out always using binary reduction and sidedness of bianry operators.
+
+    *Operations involving many operands can be specified using all operands at once and can be automatically broken down to binary or other operations, in order to yield the desired output specification and the desired cost.*
+
+*   The output type of an operation is undetermined and depends fully on the operands.
+
+    *The output of an operation can be requested to be of certain type.*
+
+*   The output of an operation is always scalar-like (of course, this can be circumvented by using tuples).
+
+    *The output of an operation is* never *scalar-like, but in principle always list-like.  Of course, there exists a transparent mechanism to provide scalar out- and input.*

@@ -1,0 +1,240 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>priops.edge &mdash; priops v0.1.0b documentation</title>
+    <link rel="stylesheet" href="_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.1.0b',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="shortcut icon" href="_static/favicon.ico"/>
+    <link rel="top" title="priops v0.1.0b documentation" href="index.html" />
+    <link rel="up" title="API" href="API.html" />
+    <link rel="next" title="priops.path" href="priops.path.html" />
+    <link rel="prev" title="priops.node" href="priops.node.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="priops.path.html" title="priops.path"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="priops.node.html" title="priops.node"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">priops v0.1.0b documentation</a> &raquo;</li>
+          <li><a href="API.html" accesskey="U">API</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="priops-edge">
+<h1>priops.edge<a class="headerlink" href="#priops-edge" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="id1">
+<h2>priops.Edge<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="priops.edge.Edge">
+<em class="property">class </em><tt class="descclassname">priops.edge.</tt><tt class="descname">Edge</tt><big>(</big><em>input_node</em>, <em>output_node</em>, <em>weight=None</em>, <em>name=None</em><big>)</big><a class="reference internal" href="_modules/priops/edge.html#Edge"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#priops.edge.Edge" title="Permalink to this definition">¶</a></dt>
+<dd><p>Edges describe connections between two <tt class="xref py py-class docutils literal"><span class="pre">Node</span></tt> objects.
+An edge has a direction; there is an input node and an output node.</p>
+<p>An edge can be called, in that case the edge will transform an object
+list of the input node specification into an object list of the output
+node specification.</p>
+<p>This class is abstract.  Derived classes should provide:</p>
+<ul class="simple">
+<li><tt class="docutils literal"><span class="pre">.process(self,</span> <span class="pre">input)</span></tt>: Processes the non-internode input data to 
+non-internode output data.  Non-internode data is different from 
+internode data format by the fact that inter-node data is always a 
+list, while intra-edge data might be scalar.<ol class="arabic">
+<li>If the input node is scalar, <em>input</em> will be scalar (the first
+element of the inter-node data stream).  If the input node is not 
+scalar, <em>input</em> will be the direct inter-node data stream.</li>
+<li>If the output node is scalar, <tt class="docutils literal"><span class="pre">.process()</span></tt> should return a 
+scalar, which will then be converted by the output node to 
+inter-node list format.   If the output node is not scalar, the
+output of <tt class="docutils literal"><span class="pre">.process()</span></tt> should already be a list.</li>
+</ol>
+</li>
+</ul>
+<dl class="method">
+<dt id="priops.edge.Edge.__init__">
+<tt class="descname">__init__</tt><big>(</big><em>input_node</em>, <em>output_node</em>, <em>weight=None</em>, <em>name=None</em><big>)</big><a class="reference internal" href="_modules/priops/edge.html#Edge.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#priops.edge.Edge.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>input_node</em> is the specification of the input, <em>output_node</em> is the
+specification of the output of the <tt class="docutils literal"><span class="pre">Edge</span></tt>.  <em>weight</em> is the effort
+to follow this edge (default 1).  <em>name</em> is used for pretty 
+printing.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="priops.edge.Edge.__str__">
+<tt class="descname">__str__</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/priops/edge.html#Edge.__str__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#priops.edge.Edge.__str__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="priops.edge.Edge.__add__">
+<tt class="descname">__add__</tt><big>(</big><em>other_edge</em><big>)</big><a class="reference internal" href="_modules/priops/edge.html#Edge.__add__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#priops.edge.Edge.__add__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Combines this edge <em>self</em> with another edge <em>other_edge</em> via 
+creating a <a class="reference internal" href="#priops.edge.CombinedEdge" title="priops.edge.CombinedEdge"><tt class="xref py py-class docutils literal"><span class="pre">CombinedEdge</span></tt></a> instance.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="priops.edge.Edge.__call__">
+<tt class="descname">__call__</tt><big>(</big><em>inputs</em><big>)</big><a class="reference internal" href="_modules/priops/edge.html#Edge.__call__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#priops.edge.Edge.__call__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Processes the inter-edge data stream <em>inputs</em> into inter-edge
+data stream <em>outputs</em>.  Inter-edge data are lists.</p>
+<p>Calls <em>self.process()</em> with appropriate arguments.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="priops-identityedge">
+<h2>priops.IdentityEdge<a class="headerlink" href="#priops-identityedge" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="priops.edge.IdentityEdge">
+<em class="property">class </em><tt class="descclassname">priops.edge.</tt><tt class="descname">IdentityEdge</tt><big>(</big><em>node</em><big>)</big><a class="reference internal" href="_modules/priops/edge.html#IdentityEdge"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#priops.edge.IdentityEdge" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#priops.edge.Edge" title="priops.edge.Edge"><tt class="xref py py-class docutils literal"><span class="pre">priops.edge.Edge</span></tt></a></p>
+<p>An edge with identical input and output nodes, returning its 
+arguments on call.  Has zero weight.</p>
+<dl class="method">
+<dt id="priops.edge.IdentityEdge.__init__">
+<tt class="descname">__init__</tt><big>(</big><em>node</em><big>)</big><a class="reference internal" href="_modules/priops/edge.html#IdentityEdge.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#priops.edge.IdentityEdge.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>node</em> is the node to process by identity.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="priops.edge.IdentityEdge.process">
+<tt class="descname">process</tt><big>(</big><em>input</em><big>)</big><a class="reference internal" href="_modules/priops/edge.html#IdentityEdge.process"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#priops.edge.IdentityEdge.process" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns <em>input</em> unchanged.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="priops-combinededge">
+<h2>priops.CombinedEdge<a class="headerlink" href="#priops-combinededge" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="priops.edge.CombinedEdge">
+<em class="property">class </em><tt class="descclassname">priops.edge.</tt><tt class="descname">CombinedEdge</tt><big>(</big><em>constituents</em><big>)</big><a class="reference internal" href="_modules/priops/edge.html#CombinedEdge"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#priops.edge.CombinedEdge" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#priops.edge.Edge" title="priops.edge.Edge"><tt class="xref py py-class docutils literal"><span class="pre">priops.edge.Edge</span></tt></a></p>
+<p>Combined edges combine a number of <a class="reference internal" href="#priops.edge.Edge" title="priops.edge.Edge"><tt class="xref py py-class docutils literal"><span class="pre">Edge</span></tt></a> objects into one big
+edge.  The input node of the combined edge is the sum of all input nodes
+of the constituets.  The output node of a combined edge is similarly the
+sum of all output nodes of the constituets.</p>
+<p>When being called, the combined edge dispatches the inputs to the
+constituents according to the length of their input nodes.  Then the
+constituents will be called with the dispatched inputs.</p>
+<dl class="method">
+<dt id="priops.edge.CombinedEdge.__init__">
+<tt class="descname">__init__</tt><big>(</big><em>constituents</em><big>)</big><a class="reference internal" href="_modules/priops/edge.html#CombinedEdge.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#priops.edge.CombinedEdge.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Combines <em>constituents</em> into a combined egde.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="priops.edge.CombinedEdge.process">
+<tt class="descname">process</tt><big>(</big><em>input</em><big>)</big><a class="reference internal" href="_modules/priops/edge.html#CombinedEdge.process"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#priops.edge.CombinedEdge.process" title="Permalink to this definition">¶</a></dt>
+<dd><p>Dispatches the input object list <em>input</em> to the constituents.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="index.html">
+              <img class="logo" src="_static/logo.png" alt="Logo"/>
+            </a></p>
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">priops.edge</a><ul>
+<li><a class="reference internal" href="#id1">priops.Edge</a></li>
+<li><a class="reference internal" href="#priops-identityedge">priops.IdentityEdge</a></li>
+<li><a class="reference internal" href="#priops-combinededge">priops.CombinedEdge</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="priops.node.html"
+                        title="previous chapter">priops.node</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="priops.path.html"
+                        title="next chapter">priops.path</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/priops.edge.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="priops.path.html" title="priops.path"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="priops.node.html" title="priops.node"
+             >previous</a> |</li>
+        <li><a href="index.html">priops v0.1.0b documentation</a> &raquo;</li>
+          <li><a href="API.html" >API</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2011, Friedrich Romstedt.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
+    </div>
+  </body>
+</html>

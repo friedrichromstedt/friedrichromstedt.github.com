@@ -1,0 +1,131 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>priops.path &mdash; priops v0.1.0b documentation</title>
+    <link rel="stylesheet" href="../../_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '0.1.0b',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="shortcut icon" href="../../_static/favicon.ico"/>
+    <link rel="top" title="priops v0.1.0b documentation" href="../../index.html" />
+    <link rel="up" title="Module code" href="../index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../index.html">priops v0.1.0b documentation</a> &raquo;</li>
+          <li><a href="../index.html" accesskey="U">Module code</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <h1>Source code for priops.path</h1><div class="highlight"><pre>
+<div class="viewcode-block" id="Path"><a class="viewcode-back" href="../../priops.path.html#priops.path.Path">[docs]</a><span class="k">class</span> <span class="nc">Path</span><span class="p">(</span><span class="nb">list</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;A sequence of edges, together with the net weight.&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="Path.__init__"><a class="viewcode-back" href="../../priops.path.html#priops.path.Path.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">edges</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;*edges* is a list of Edges.&quot;&quot;&quot;</span>
+
+        <span class="nb">list</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">edges</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">weight</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">([</span><span class="n">edge</span><span class="o">.</span><span class="n">weight</span> <span class="k">for</span> <span class="n">edge</span> <span class="ow">in</span> <span class="n">edges</span><span class="p">])</span>
+</div>
+<div class="viewcode-block" id="Path.__str__"><a class="viewcode-back" href="../../priops.path.html#priops.path.Path.__str__">[docs]</a>    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Returns pretty-formatted string containing a numbered list of </span>
+<span class="sd">        edges making up the Path.&quot;&quot;&quot;</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="s">&#39;(Path:&#39;</span>
+        <span class="k">for</span> <span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">element</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+            <span class="n">result</span> <span class="o">+=</span> <span class="s">&#39;</span><span class="se">\n</span><span class="si">%d</span><span class="s">. </span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">element</span><span class="p">)</span>
+        <span class="n">result</span> <span class="o">+=</span> <span class="s">&#39;</span><span class="se">\n</span><span class="s">)&#39;</span>
+        <span class="k">return</span> <span class="n">result</span>
+</div>
+<div class="viewcode-block" id="Path.__xor__"><a class="viewcode-back" href="../../priops.path.html#priops.path.Path.__xor__">[docs]</a>    <span class="k">def</span> <span class="nf">__xor__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">edge</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Combines this path with *edge* to a new path.  *edge* will extend </span>
+<span class="sd">        *self* at the end of *self*.&quot;&quot;&quot;</span>
+
+        <span class="k">return</span> <span class="n">Path</span><span class="p">(</span><span class="bp">self</span> <span class="o">+</span> <span class="p">[</span><span class="n">edge</span><span class="p">])</span>
+</div>
+<div class="viewcode-block" id="Path.__rxor__"><a class="viewcode-back" href="../../priops.path.html#priops.path.Path.__rxor__">[docs]</a>    <span class="k">def</span> <span class="nf">__rxor__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">edge</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Combines this path with *edge* to a new path.  *edge* will extend</span>
+<span class="sd">        *self* at the start of *self*.&quot;&quot;&quot;</span>
+
+        <span class="k">return</span> <span class="n">Path</span><span class="p">([</span><span class="n">edge</span><span class="p">]</span> <span class="o">+</span> <span class="bp">self</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="Path.__call__"><a class="viewcode-back" href="../../priops.path.html#priops.path.Path.__call__">[docs]</a>    <span class="k">def</span> <span class="nf">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">input</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Processes inter-node data *input*.&quot;&quot;&quot;</span>
+
+        <span class="n">result</span> <span class="o">=</span> <span class="nb">input</span>
+        <span class="k">for</span> <span class="n">edge</span> <span class="ow">in</span> <span class="bp">self</span><span class="p">:</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="n">edge</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">result</span></div></div>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../../index.html">
+              <img class="logo" src="../../_static/logo.png" alt="Logo"/>
+            </a></p>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../index.html">priops v0.1.0b documentation</a> &raquo;</li>
+          <li><a href="../index.html" >Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2011, Friedrich Romstedt.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
+    </div>
+  </body>
+</html>

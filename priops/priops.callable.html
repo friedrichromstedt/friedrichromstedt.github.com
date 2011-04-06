@@ -1,0 +1,178 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>priops.callable &mdash; priops v0.1.0b documentation</title>
+    <link rel="stylesheet" href="_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.1.0b',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="shortcut icon" href="_static/favicon.ico"/>
+    <link rel="top" title="priops v0.1.0b documentation" href="index.html" />
+    <link rel="up" title="API" href="API.html" />
+    <link rel="next" title="priops.classes" href="priops.classes.html" />
+    <link rel="prev" title="priops.pathfinder" href="priops.pathfinder.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="priops.classes.html" title="priops.classes"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="priops.pathfinder.html" title="priops.pathfinder"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">priops v0.1.0b documentation</a> &raquo;</li>
+          <li><a href="API.html" accesskey="U">API</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="priops-callable">
+<h1>priops.callable<a class="headerlink" href="#priops-callable" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="priops-callableedge">
+<h2>priops.CallableEdge<a class="headerlink" href="#priops-callableedge" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="priops.callable.CallableEdge">
+<em class="property">class </em><tt class="descclassname">priops.callable.</tt><tt class="descname">CallableEdge</tt><big>(</big><em>callable</em>, <em>input_node</em>, <em>output_node</em>, <em>weight=None</em>, <em>name=None</em>, <em>select=None</em>, <em>dispatch=None</em><big>)</big><a class="reference internal" href="_modules/priops/callable.html#CallableEdge"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#priops.callable.CallableEdge" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="priops.edge.html#priops.edge.Edge" title="priops.edge.Edge"><tt class="xref py py-class docutils literal"><span class="pre">priops.edge.Edge</span></tt></a></p>
+<p>Calls some callable on call time.</p>
+<dl class="method">
+<dt id="priops.callable.CallableEdge.__init__">
+<tt class="descname">__init__</tt><big>(</big><em>callable</em>, <em>input_node</em>, <em>output_node</em>, <em>weight=None</em>, <em>name=None</em>, <em>select=None</em>, <em>dispatch=None</em><big>)</big><a class="reference internal" href="_modules/priops/callable.html#CallableEdge.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#priops.callable.CallableEdge.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>callable</em> is the callable to call on call time.</p>
+<p><em>select</em> determines in what order the arguments handed over to 
+<em>self.process()</em> are handed over to the <em>callable</em>.  If <em>select</em> is 
+not given, the default is to hand over all arguments.</p>
+<p><em>dispatch</em> is <tt class="xref docutils literal"><span class="pre">False</span></tt> per default for scalar input node, and 
+<tt class="xref docutils literal"><span class="pre">True</span></tt> per default for non-scalar input node.  If false, the 
+argument handed over to <em>self.process()</em> will be directly given to the 
+callable as the first positional argument.  If <em>dispatch</em> is true, 
+several arguments to <em>self.process()</em> will be split to several 
+positional arguments to <em>callable</em> by <tt class="docutils literal"><span class="pre">callable(*data)</span></tt>.</p>
+<p>Note that both <em>select</em> as well as <em>dispatch</em> are not available in 
+case the input node is scalar.  If either <em>select</em> of <em>dispatch</em> are
+given with a scalar input node, <tt class="docutils literal"><span class="pre">ValueError</span></tt> is raised.</p>
+<p><em>input_node</em>, <em>output_node</em>, <em>weight</em> and <em>name</em> go to 
+<tt class="xref py py-class docutils literal"><span class="pre">Edge</span></tt>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="priops.callable.CallableEdge.process">
+<tt class="descname">process</tt><big>(</big><em>input</em><big>)</big><a class="reference internal" href="_modules/priops/callable.html#CallableEdge.process"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#priops.callable.CallableEdge.process" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calls <em>self.callable</em> with the arguments given to this method.</p>
+<p>If <em>self.select</em> is not <tt class="xref docutils literal"><span class="pre">None</span></tt>, the argument tuple for 
+<em>self.callable</em> is constructed from the <em>input</em> list using the 
+<em>self.select</em> tuple handed over to <tt class="docutils literal"><span class="pre">__init__()</span></tt> as follows:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="p">[</span><span class="nb">input</span><span class="p">[</span><span class="n">sel</span><span class="p">]</span> <span class="k">for</span> <span class="n">sel</span> <span class="ow">in</span> <span class="n">select</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>Thus the i-th element of <em>select</em> tells what element from the 
+<em>input</em> tuple to use at argument <em>i</em> of <em>self.callable()</em>.</p>
+<p>If <em>self.select</em> is unspecified (<tt class="xref docutils literal"><span class="pre">None</span></tt>), the behaviour is to hand 
+over all arguments.</p>
+<p>If <em>self.dispatch</em> is true, the argument tuple obtained is handed over 
+using <tt class="docutils literal"><span class="pre">*data</span></tt> syntax, else it is handed over as the first positional
+argument.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="index.html">
+              <img class="logo" src="_static/logo.png" alt="Logo"/>
+            </a></p>
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">priops.callable</a><ul>
+<li><a class="reference internal" href="#priops-callableedge">priops.CallableEdge</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="priops.pathfinder.html"
+                        title="previous chapter">priops.pathfinder</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="priops.classes.html"
+                        title="next chapter">priops.classes</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/priops.callable.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="priops.classes.html" title="priops.classes"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="priops.pathfinder.html" title="priops.pathfinder"
+             >previous</a> |</li>
+        <li><a href="index.html">priops v0.1.0b documentation</a> &raquo;</li>
+          <li><a href="API.html" >API</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2011, Friedrich Romstedt.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
+    </div>
+  </body>
+</html>

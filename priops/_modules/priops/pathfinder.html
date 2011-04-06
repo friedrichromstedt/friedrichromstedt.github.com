@@ -1,0 +1,225 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>priops.pathfinder &mdash; priops v0.1.0b documentation</title>
+    <link rel="stylesheet" href="../../_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '0.1.0b',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="shortcut icon" href="../../_static/favicon.ico"/>
+    <link rel="top" title="priops v0.1.0b documentation" href="../../index.html" />
+    <link rel="up" title="Module code" href="../index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../index.html">priops v0.1.0b documentation</a> &raquo;</li>
+          <li><a href="../index.html" accesskey="U">Module code</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <h1>Source code for priops.pathfinder</h1><div class="highlight"><pre>
+<span class="kn">from</span> <span class="nn">priops.edge</span> <span class="kn">import</span> <span class="n">IdentityEdge</span>
+<span class="kn">from</span> <span class="nn">priops.path</span> <span class="kn">import</span> <span class="n">Path</span>
+
+<div class="viewcode-block" id="NoPath"><a class="viewcode-back" href="../../priops.pathfinder.html#priops.pathfinder.NoPath">[docs]</a><span class="k">class</span> <span class="nc">NoPath</span><span class="p">(</span><span class="ne">TypeError</span><span class="p">):</span>
+    <span class="k">pass</span>
+</div>
+<div class="viewcode-block" id="Pathfinder"><a class="viewcode-back" href="../../priops.pathfinder.html#priops.pathfinder.Pathfinder">[docs]</a><span class="k">class</span> <span class="nc">Pathfinder</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;An algorithm for finding a path through the graph defined by a</span>
+<span class="sd">    :class:`~priops.Priop`.&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="Pathfinder.__init__"><a class="viewcode-back" href="../../priops.pathfinder.html#priops.pathfinder.Pathfinder.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">priop</span><span class="p">,</span> <span class="n">max_components</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">max_weight</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Sets the Pathfinder up to search for pathes in *priop* with</span>
+<span class="sd">        parameters *max_components* and *max_steps*.  *max_components* gives</span>
+<span class="sd">        the maximum number of edges to combine into the path.  *max_weight* </span>
+<span class="sd">        gives the maximum weight of a path to be considered.</span>
+<span class="sd">        </span>
+<span class="sd">        The default for *max_components* is 1 and the default for *max_weight*</span>
+<span class="sd">        is one.&quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="n">max_components</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="n">max_components</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="k">if</span> <span class="n">max_weight</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="n">max_weight</span> <span class="o">=</span> <span class="mf">1.0</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">priop</span> <span class="o">=</span> <span class="n">priop</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">max_components</span> <span class="o">=</span> <span class="n">max_components</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">max_weight</span> <span class="o">=</span> <span class="n">max_weight</span>
+</div>
+<div class="viewcode-block" id="Pathfinder.find_path"><a class="viewcode-back" href="../../priops.pathfinder.html#priops.pathfinder.Pathfinder.find_path">[docs]</a>    <span class="k">def</span> <span class="nf">find_path</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">input_node</span><span class="p">,</span> <span class="n">output_node</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Finds a best path to traverse *self.priop* from input node</span>
+<span class="sd">        *input_node* to output node *output_node*.&quot;&quot;&quot;</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_find_path</span><span class="p">(</span><span class="n">input_node</span><span class="o">=</span><span class="n">input_node</span><span class="p">,</span> 
+            <span class="n">output_node</span><span class="o">=</span><span class="n">output_node</span><span class="p">,</span> <span class="n">max_components</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">max_components</span><span class="p">,</span>
+            <span class="n">max_weight</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">max_weight</span><span class="p">)</span>
+</div>
+    <span class="k">def</span> <span class="nf">_find_path</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">input_node</span><span class="p">,</span> <span class="n">output_node</span><span class="p">,</span> <span class="n">max_components</span><span class="p">,</span> <span class="n">max_weight</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Finds a path from *input_node* to *output_node* using at most</span>
+<span class="sd">        *max_components* edges and with maximum weight *max_weight*.&quot;&quot;&quot;</span>
+
+        <span class="c"># The max_weight might diminish as soon as we have found a path.</span>
+        <span class="n">current_max_weight</span> <span class="o">=</span> <span class="n">max_weight</span>
+        <span class="n">current_path</span> <span class="o">=</span> <span class="bp">None</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_debug</span><span class="p">(</span><span class="n">max_components</span><span class="p">,</span> <span class="n">input_node</span><span class="p">,</span> <span class="s">&quot;-&gt;&quot;</span><span class="p">,</span> <span class="n">output_node</span><span class="p">)</span>
+    
+        <span class="c"># Select a portion of the *output_node* to be generated by an edge:</span>
+        <span class="k">for</span> <span class="n">start_idx</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">input_node</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+            <span class="c"># We exclude spawning operands from nothing (deemed too slow), so </span>
+            <span class="c"># we start at *start_idx + 1* with the search for *stop_idx*:</span>
+            <span class="k">for</span> <span class="n">stop_idx</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="n">start_idx</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">input_node</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+                <span class="c"># What is the currently used part of the *input_node*?</span>
+                <span class="n">input_node_used</span> <span class="o">=</span> <span class="n">input_node</span><span class="p">[</span><span class="n">start_idx</span><span class="p">:</span><span class="n">stop_idx</span><span class="p">]</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_debug</span><span class="p">(</span><span class="n">max_components</span><span class="p">,</span> <span class="s">&#39;*&#39;</span><span class="p">,</span> <span class="s">&quot;input node used:&quot;</span><span class="p">,</span> 
+                    <span class="n">input_node_used</span><span class="p">)</span>
+                <span class="c"># Find an edge in *self.priop* that can be used for </span>
+                <span class="c"># *input_node_used*:</span>
+                <span class="k">for</span> <span class="n">edge</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">priop</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_debug</span><span class="p">(</span><span class="n">max_components</span><span class="p">,</span> <span class="s">&#39; &#39;</span><span class="p">,</span> <span class="s">&quot;trying edge&quot;</span><span class="p">,</span>
+                        <span class="n">edge</span><span class="p">)</span>
+                    <span class="c"># Is the edge eligible?</span>
+                    <span class="k">if</span> <span class="n">input_node_used</span><span class="o">.</span><span class="n">fulfils_specification</span><span class="p">(</span>
+                    <span class="n">edge</span><span class="o">.</span><span class="n">input_node</span><span class="p">)</span> <span class="ow">and</span> <span class="n">edge</span><span class="o">.</span><span class="n">weight</span> <span class="o">&lt;=</span> <span class="n">current_max_weight</span><span class="p">:</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">_debug</span><span class="p">(</span><span class="n">max_components</span><span class="p">,</span> <span class="s">&#39; &#39;</span><span class="p">,</span> <span class="s">&#39;the edge &#39;</span>
+                            <span class="s">&#39;fulfils the specification&#39;</span><span class="p">)</span>
+                        <span class="c"># Find the input node resulting from applying the</span>
+                        <span class="c"># edge:</span>
+                        <span class="n">node_applied_edge</span> <span class="o">=</span> <span class="n">input_node</span><span class="p">[:</span><span class="n">start_idx</span><span class="p">]</span> <span class="o">+</span> \
+                            <span class="n">edge</span><span class="o">.</span><span class="n">output_node</span> <span class="o">+</span> <span class="n">input_node</span><span class="p">[</span><span class="n">stop_idx</span><span class="p">:]</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">_debug</span><span class="p">(</span><span class="n">max_components</span><span class="p">,</span> <span class="s">&#39; &#39;</span><span class="p">,</span> <span class="s">&#39;node with &#39;</span>
+                            <span class="s">&#39;applied edge:&#39;</span><span class="p">,</span> <span class="n">node_applied_edge</span><span class="p">)</span>
+                        <span class="c"># Compose the full edge:</span>
+                        <span class="n">full_edge</span> <span class="o">=</span> \
+                            <span class="n">IdentityEdge</span><span class="p">(</span><span class="n">input_node</span><span class="p">[:</span><span class="n">start_idx</span><span class="p">])</span> <span class="o">+</span> \
+                            <span class="n">edge</span> <span class="o">+</span> \
+                            <span class="n">IdentityEdge</span><span class="p">(</span><span class="n">input_node</span><span class="p">[</span><span class="n">stop_idx</span><span class="p">:])</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">_debug</span><span class="p">(</span><span class="n">max_components</span><span class="p">,</span> <span class="s">&#39; &#39;</span><span class="p">,</span> <span class="s">&#39;the full edge &#39;</span>
+                            <span class="s">&#39;is:&#39;</span><span class="p">,</span> <span class="n">full_edge</span><span class="p">)</span>
+                        <span class="c"># Does this edge solve the problem?</span>
+                        <span class="k">if</span> <span class="n">node_applied_edge</span><span class="o">.</span><span class="n">fulfils_specification</span><span class="p">(</span>
+                        <span class="n">output_node</span><span class="p">):</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">_debug</span><span class="p">(</span><span class="n">max_components</span><span class="p">,</span> <span class="s">&#39; &#39;</span><span class="p">,</span> <span class="s">&#39;the edge &#39;</span>
+                                <span class="s">&#39;solves the problem&#39;</span><span class="p">)</span>
+                            <span class="n">current_path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">([</span><span class="n">full_edge</span><span class="p">])</span>
+                            <span class="n">current_max_weight</span> <span class="o">=</span> <span class="n">current_path</span><span class="o">.</span><span class="n">weight</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">_debug</span><span class="p">(</span><span class="n">max_components</span><span class="p">,</span> <span class="s">&#39; &#39;</span><span class="p">,</span> <span class="s">&#39;path stored, &#39;</span>
+                                <span class="s">&#39;weight&#39;</span><span class="p">,</span> <span class="n">current_max_weight</span><span class="p">)</span>
+                        <span class="c"># This edge does not solve the problem alone; can</span>
+                        <span class="c"># we use more edges?</span>
+                        <span class="k">elif</span> <span class="n">max_components</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">_debug</span><span class="p">(</span><span class="n">max_components</span><span class="p">,</span> <span class="s">&#39; &#39;</span><span class="p">,</span> <span class="s">&#39;the edge &#39;</span>
+                                <span class="s">&#39;does not solve the problem yet&#39;</span><span class="p">)</span>
+                            <span class="c"># Try to complete the path by finding more steps:</span>
+                            <span class="k">try</span><span class="p">:</span>
+                                <span class="n">completion</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_find_path</span><span class="p">(</span>
+                                    <span class="n">input_node</span><span class="o">=</span><span class="n">node_applied_edge</span><span class="p">,</span>
+                                    <span class="n">output_node</span><span class="o">=</span><span class="n">output_node</span><span class="p">,</span>
+                                    <span class="n">max_components</span><span class="o">=</span><span class="p">(</span><span class="n">max_components</span> <span class="o">-</span> <span class="mi">1</span><span class="p">),</span>
+                                    <span class="n">max_weight</span><span class="o">=</span><span class="p">(</span><span class="n">max_weight</span> <span class="o">-</span> 
+                                        <span class="n">full_edge</span><span class="o">.</span><span class="n">weight</span><span class="p">))</span>
+                                <span class="n">current_path</span> <span class="o">=</span> <span class="n">full_edge</span> <span class="o">^</span> <span class="n">completion</span>
+                                <span class="n">current_max_weight</span> <span class="o">=</span> <span class="n">current_path</span><span class="o">.</span><span class="n">weight</span>
+                                <span class="bp">self</span><span class="o">.</span><span class="n">_debug</span><span class="p">(</span><span class="n">max_components</span><span class="p">,</span> <span class="s">&#39; &#39;</span><span class="p">,</span> <span class="s">&#39;completion &#39;</span>
+                                    <span class="s">&#39;was successful with weight&#39;</span><span class="p">,</span> 
+                                    <span class="n">current_max_weight</span><span class="p">)</span>
+                            <span class="k">except</span> <span class="n">NoPath</span><span class="p">:</span>
+                                <span class="c"># But there is no such path.</span>
+                                <span class="bp">self</span><span class="o">.</span><span class="n">_debug</span><span class="p">(</span><span class="n">max_components</span><span class="p">,</span> <span class="s">&#39; &#39;</span><span class="p">,</span> <span class="s">&#39;completion &#39;</span>
+                                    <span class="s">&#39;was unsuccessful&#39;</span><span class="p">)</span>
+                                <span class="k">pass</span>
+
+        <span class="k">if</span> <span class="n">current_path</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="c"># No path found</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_debug</span><span class="p">(</span><span class="n">max_components</span><span class="p">,</span> <span class="s">&#39;no path found&#39;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="n">NoPath</span><span class="p">(</span><span class="s">&#39;No path found&#39;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_debug</span><span class="p">(</span><span class="n">max_components</span><span class="p">,</span> <span class="s">&#39;path found, weight&#39;</span><span class="p">,</span> 
+                <span class="n">current_max_weight</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">current_path</span>
+
+    <span class="k">def</span> <span class="nf">_debug</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">max_components</span><span class="p">,</span> <span class="o">*</span><span class="n">msg</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Prints a debug message *msg* with indentation based on </span>
+<span class="sd">        *max_components*.  If *max_components* equals *self.max_components*,</span>
+<span class="sd">        no indentation will be done, with decreasing *max_components* more</span>
+<span class="sd">        and more indentation will be done.&quot;&quot;&quot;</span>
+
+        <span class="k">return</span> <span class="c"># Cut a long story short.</span>
+        <span class="k">print</span> <span class="s">&quot;    &quot;</span> <span class="o">*</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">max_components</span> <span class="o">-</span> <span class="n">max_components</span><span class="p">),</span> 
+        <span class="k">for</span> <span class="n">msgi</span> <span class="ow">in</span> <span class="n">msg</span><span class="p">:</span>
+            <span class="k">print</span> <span class="n">msgi</span><span class="p">,</span>
+        <span class="k">print</span></div>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../../index.html">
+              <img class="logo" src="../../_static/logo.png" alt="Logo"/>
+            </a></p>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../index.html">priops v0.1.0b documentation</a> &raquo;</li>
+          <li><a href="../index.html" >Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2011, Friedrich Romstedt.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
+    </div>
+  </body>
+</html>

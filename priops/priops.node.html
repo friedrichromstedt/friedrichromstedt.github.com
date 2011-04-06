@@ -1,0 +1,285 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>priops.node &mdash; priops v0.1.0b documentation</title>
+    <link rel="stylesheet" href="_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.1.0b',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="shortcut icon" href="_static/favicon.ico"/>
+    <link rel="top" title="priops v0.1.0b documentation" href="index.html" />
+    <link rel="up" title="API" href="API.html" />
+    <link rel="next" title="priops.edge" href="priops.edge.html" />
+    <link rel="prev" title="API" href="API.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="priops.edge.html" title="priops.edge"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="API.html" title="API"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">priops v0.1.0b documentation</a> &raquo;</li>
+          <li><a href="API.html" accesskey="U">API</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="priops-node">
+<h1>priops.node<a class="headerlink" href="#priops-node" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="id1">
+<h2>priops.Node<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="priops.node.Node">
+<em class="property">class </em><tt class="descclassname">priops.node.</tt><tt class="descname">Node</tt><big>(</big><em>item=None</em>, <em>items=None</em>, <em>node=None</em><big>)</big><a class="reference internal" href="_modules/priops/node.html#Node"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#priops.node.Node" title="Permalink to this definition">¶</a></dt>
+<dd><p>Nodes define nodes in the graph, by giving a specification of a list of
+objects.  A node contains a list, each element describes the category of an 
+operand.  (For technical reason if cannot <em>be</em> a list: Overloading
+<tt class="docutils literal"><span class="pre">__getitem__()</span></tt> in that case doesn&#8217;t work.)</p>
+<p>This class is abstract.  Derived classes should provide:</p>
+<ul class="simple">
+<li><tt class="docutils literal"><span class="pre">.fulfils_specification(self,</span> <span class="pre">other_node)</span></tt>: Gives <tt class="xref docutils literal"><span class="pre">True</span></tt> if 
+objects of specification <em>self</em> fulfil also the specification
+<em>other_node</em>.  Should accept <tt class="xref docutils literal"><span class="pre">None</span></tt> entries in <em>other_node</em>, where 
+<tt class="xref docutils literal"><span class="pre">None</span></tt> is a wildcard for &#8220;any item&#8221;.</li>
+</ul>
+<dl class="method">
+<dt id="priops.node.Node.__init__">
+<tt class="descname">__init__</tt><big>(</big><em>item=None</em>, <em>items=None</em>, <em>node=None</em><big>)</big><a class="reference internal" href="_modules/priops/node.html#Node.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#priops.node.Node.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialises the Node from either one <em>item</em> or many <em>items</em>.  One
+of <em>item</em> or <em>items</em> must be given, but not both.  If both <em>item</em> and
+<em>items</em> are <tt class="xref docutils literal"><span class="pre">None</span></tt>, it is assumed that <em>item</em> is given as <tt class="xref docutils literal"><span class="pre">None</span></tt>,
+and that <em>items</em> is not specified.</p>
+<p>Alternatively, the Node can be initialised from another <tt class="docutils literal"><span class="pre">Node</span></tt>
+instance <em>node</em>.  This is needed by derived classes in some cases
+to provide e.g. slicing operations based on this class&#8217;es slicing
+operation.  If <em>node</em> is given, it overrides all other parameters.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="priops.node.Node.frominter">
+<tt class="descname">frominter</tt><big>(</big><em>data</em><big>)</big><a class="reference internal" href="_modules/priops/node.html#Node.frominter"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#priops.node.Node.frominter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Processes given data to match the scalar/vector specification
+of the node.  This is defined at initialisation time.</p>
+<p><em>data</em> is always assumed to be a list.  If <em>self</em> is scalar, the
+length must be unity, and the first element is returned.  Else,
+the list is returned unchanged.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="priops.node.Node.tointer">
+<tt class="descname">tointer</tt><big>(</big><em>data</em><big>)</big><a class="reference internal" href="_modules/priops/node.html#Node.tointer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#priops.node.Node.tointer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Processes the output of an edge according to the scalar/vector
+specification of the node to match the inter-node data flow 
+specification (which is lists).</p>
+<p>If <em>self</em> is scalar, the <em>data</em> is wrapped into a list, else, the
+<em>data</em> is returned unchanged.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="priops.node.Node.__str__">
+<tt class="descname">__str__</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/priops/node.html#Node.__str__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#priops.node.Node.__str__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="priops.node.Node.__add__">
+<tt class="descname">__add__</tt><big>(</big><em>other_node</em><big>)</big><a class="reference internal" href="_modules/priops/node.html#Node.__add__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#priops.node.Node.__add__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Combines two nodes by combining them into a 
+<a class="reference internal" href="#priops.node.CombinedNode" title="priops.node.CombinedNode"><tt class="xref py py-class docutils literal"><span class="pre">CombinedNode</span></tt></a>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="priops.node.Node.__getitem__">
+<tt class="descname">__getitem__</tt><big>(</big><em>key</em><big>)</big><a class="reference internal" href="_modules/priops/node.html#Node.__getitem__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#priops.node.Node.__getitem__" title="Permalink to this definition">¶</a></dt>
+<dd><p>If a slice is requested, returns a portion of this Node as a Node.
+If an element is requested (technically, everything that&#8217;s not a 
+slice), then the element of <em>self.elements</em> is returned.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="priops-emptynode">
+<h2>priops.EmptyNode<a class="headerlink" href="#priops-emptynode" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="priops.node.EmptyNode">
+<em class="property">class </em><tt class="descclassname">priops.node.</tt><tt class="descname">EmptyNode</tt><a class="reference internal" href="_modules/priops/node.html#EmptyNode"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#priops.node.EmptyNode" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#priops.node.Node" title="priops.node.Node"><tt class="xref py py-class docutils literal"><span class="pre">priops.node.Node</span></tt></a></p>
+<p>A node without elements.  Needed as initial element for summing up
+nodes via <tt class="docutils literal"><span class="pre">sum()</span></tt>.</p>
+<dl class="method">
+<dt id="priops.node.EmptyNode.__init__">
+<tt class="descname">__init__</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/priops/node.html#EmptyNode.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#priops.node.EmptyNode.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialises the emptiness of the node.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="priops.node.EmptyNode.__str__">
+<tt class="descname">__str__</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/priops/node.html#EmptyNode.__str__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#priops.node.EmptyNode.__str__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="priops.node.EmptyNode.__add__">
+<tt class="descname">__add__</tt><big>(</big><em>other_node</em><big>)</big><a class="reference internal" href="_modules/priops/node.html#EmptyNode.__add__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#priops.node.EmptyNode.__add__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the other node <em>other_node</em>, since this node is empty and
+doesn&#8217;t matter.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="priops.node.EmptyNode.fulfils_specification">
+<tt class="descname">fulfils_specification</tt><big>(</big><em>other_node</em><big>)</big><a class="reference internal" href="_modules/priops/node.html#EmptyNode.fulfils_specification"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#priops.node.EmptyNode.fulfils_specification" title="Permalink to this definition">¶</a></dt>
+<dd><p>If the other node <em>other_node</em> is empty too, returns <tt class="xref docutils literal"><span class="pre">True</span></tt>,
+else <tt class="xref docutils literal"><span class="pre">False</span></tt>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="priops.node.EmptyNode.__getitem__">
+<tt class="descname">__getitem__</tt><big>(</big><em>key</em><big>)</big><a class="reference internal" href="_modules/priops/node.html#EmptyNode.__getitem__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#priops.node.EmptyNode.__getitem__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Under slicing always returns itself, else (if non-slicing
+getitem operation occurs), raises <tt class="docutils literal"><span class="pre">IndexError</span></tt>.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="priops-combinednode">
+<h2>priops.CombinedNode<a class="headerlink" href="#priops-combinednode" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="priops.node.CombinedNode">
+<em class="property">class </em><tt class="descclassname">priops.node.</tt><tt class="descname">CombinedNode</tt><big>(</big><em>constituents</em><big>)</big><a class="reference internal" href="_modules/priops/node.html#CombinedNode"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#priops.node.CombinedNode" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#priops.node.Node" title="priops.node.Node"><tt class="xref py py-class docutils literal"><span class="pre">priops.node.Node</span></tt></a></p>
+<p>Combined nodes combine a number of <a class="reference internal" href="#priops.node.Node" title="priops.node.Node"><tt class="xref py py-class docutils literal"><span class="pre">Node</span></tt></a> objects into one big
+node.  The elements of the combined node are the sum of all constituents,
+seeing the constituents as <tt class="docutils literal"><span class="pre">list</span></tt> objects.</p>
+<p>If a combined node fulfils another specification depends on the 
+constituents.</p>
+<dl class="method">
+<dt id="priops.node.CombinedNode.__init__">
+<tt class="descname">__init__</tt><big>(</big><em>constituents</em><big>)</big><a class="reference internal" href="_modules/priops/node.html#CombinedNode.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#priops.node.CombinedNode.__init__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="priops.node.CombinedNode.__str__">
+<tt class="descname">__str__</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/priops/node.html#CombinedNode.__str__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#priops.node.CombinedNode.__str__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="priops.node.CombinedNode.fulfils_specification">
+<tt class="descname">fulfils_specification</tt><big>(</big><em>other_node</em><big>)</big><a class="reference internal" href="_modules/priops/node.html#CombinedNode.fulfils_specification"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#priops.node.CombinedNode.fulfils_specification" title="Permalink to this definition">¶</a></dt>
+<dd><p>Checks if <em>self</em>, defined by its constituents, fulfils the
+specification <em>other_node</em>.  If the lengthes mismatch, <tt class="xref docutils literal"><span class="pre">False</span></tt> is
+returned.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="priops.node.CombinedNode.__getitem__">
+<tt class="descname">__getitem__</tt><big>(</big><em>key</em><big>)</big><a class="reference internal" href="_modules/priops/node.html#CombinedNode.__getitem__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#priops.node.CombinedNode.__getitem__" title="Permalink to this definition">¶</a></dt>
+<dd><p>If <em>key</em> is a slice, the constituents are sliced accordingly.
+Else, the element is returned.  Steps in slices are ignored.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="index.html">
+              <img class="logo" src="_static/logo.png" alt="Logo"/>
+            </a></p>
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">priops.node</a><ul>
+<li><a class="reference internal" href="#id1">priops.Node</a></li>
+<li><a class="reference internal" href="#priops-emptynode">priops.EmptyNode</a></li>
+<li><a class="reference internal" href="#priops-combinednode">priops.CombinedNode</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="API.html"
+                        title="previous chapter">API</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="priops.edge.html"
+                        title="next chapter">priops.edge</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/priops.node.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="priops.edge.html" title="priops.edge"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="API.html" title="API"
+             >previous</a> |</li>
+        <li><a href="index.html">priops v0.1.0b documentation</a> &raquo;</li>
+          <li><a href="API.html" >API</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2011, Friedrich Romstedt.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
+    </div>
+  </body>
+</html>
