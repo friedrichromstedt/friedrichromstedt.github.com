@@ -5,6 +5,7 @@ Contents:
 
 *   `moviemaker2 <moviemaker2/index.html>`_
 *   `priops <priops/index.html>`_
+*   `matplotlib-grayscale <matplotlib-grayscale/index.html>`_
 
 Note: Go to the respective projekt page to search etc.  (This page is a 
 separate Sphinx project.)

@@ -1,0 +1,232 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>The Roadmap to matplotlib-grayscale &mdash; Matplotlib Grayscale</title>
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     'x',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="shortcut icon" href="_static/favicon_grayscale.ico"/>
+    <link rel="top" title="Matplotlib Grayscale" href="index.html" />
+    <link rel="prev" title="Matplotlib Grayscale Patch" href="index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="index.html" title="Matplotlib Grayscale Patch"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">Matplotlib Grayscale</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="the-roadmap-to-matplotlib-grayscale">
+<h1>The Roadmap to <tt class="docutils literal"><span class="pre">matplotlib-grayscale</span></tt><a class="headerlink" href="#the-roadmap-to-matplotlib-grayscale" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="the-matplotlib-grayscale-project-at-a-glance">
+<h2>The <tt class="docutils literal"><span class="pre">matplotlib-grayscale</span></tt> project at a glance<a class="headerlink" href="#the-matplotlib-grayscale-project-at-a-glance" title="Permalink to this headline">¶</a></h2>
+<p>I&#8217;ve got the grayscale mode working earlier, but it was a bit hackish and in the end I didn&#8217;t know very well what parts have been changed and which not.  So I&#8217;ll try to make a list from the old repository&#8217;s commit history first of what should
+be done, properly this time.  Not that it wasn&#8217;t properly last time, but it could be more proper.</p>
+<p>I&#8217;m working on <tt class="docutils literal"><span class="pre">matplotlib-grayscale</span></tt> since about a year now, but it has been put aside for many monthes, until now.  The proof of principle is in my opinion fully brought up, Benjamin Root has tested all features and I remember all parts of
+mpl rendering grayscale when the switch is toggled.  What is not so well-tested is the per-artist switch.</p>
+<p>Matplotlib-grayscale works with 3D plots, with 2D plots, can colour single artists and their sub-artists with a single command gray, and can let colourbars inherit the gray flag from the Mappable they take the value from.</p>
+</div>
+<div class="section" id="my-reasoning">
+<h2>My Reasoning<a class="headerlink" href="#my-reasoning" title="Permalink to this headline">¶</a></h2>
+<p>I&#8217;m doing this feature implementation not for its own sake, but first, because users requested it repeatedly, although not often enough to make someone else doing it, and second, because I want to show that I&#8217;m capable of tinkering around in a
+(2D) rendering stack which is pretty complicated, what I&#8217;m doing to get you interested in <tt class="docutils literal"><span class="pre">plotlayers</span></tt>.  <tt class="docutils literal"><span class="pre">plotlayers</span></tt> stems from <tt class="docutils literal"><span class="pre">moviemaker</span></tt> (v3), <a class="reference external" href="http://friedrichromstedt.github.com/moviemaker2/">http://friedrichromstedt.github.com/moviemaker2/</a> (although the docs are for v2).
+<tt class="docutils literal"><span class="pre">moviemaker</span></tt> in turn is a 2D rendering library for videos, but it renders all frames independently and has no state machinery like a simlulation does have.  So I think it might be abstractable to a plotting library on its own, namely,
+<tt class="docutils literal"><span class="pre">plotlayers</span></tt>.  This project is to be started when <tt class="docutils literal"><span class="pre">matplotlib-grayscale</span></tt> is on its way to the repository.  To the main respository.</p>
+<p>Otherwise I don&#8217;t want to get involved with matplotlib anymore.</p>
+</div>
+<div class="section" id="what-is-pending">
+<h2>What Is Pending<a class="headerlink" href="#what-is-pending" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="feature-requests">
+<h3>Feature Requests<a class="headerlink" href="#feature-requests" title="Permalink to this headline">¶</a></h3>
+<ol class="arabic simple">
+<li>Grayscale support, for:<ul>
+<li>The whole Figure</li>
+<li>Parts of the Figure</li>
+<li>In a toggle-switch behaviour</li>
+</ul>
+</li>
+<li>Colour transform in the same fashion, say to CMYK or something.</li>
+</ol>
+</div>
+<div class="section" id="roadmap">
+<h3>Roadmap<a class="headerlink" href="#roadmap" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li>Getting the instance of <tt class="docutils literal"><span class="pre">colors.ColorConverter</span></tt> in <tt class="docutils literal"><span class="pre">mpl.colors</span></tt> vanish and be replaced by a compatibility stub.</li>
+<li>Putting the ColorConverter instance into the rendering pipeline, to make it accessible to rendering items on render time.</li>
+<li>Designing the filter.  We can do the ColorConverter from scratch now, so properly this time.  Meaning for all types of arrays, not only the restricted set active currently.  Matplotlib has allot of guessing techniques which make it hard to
+do this properly.</li>
+</ul>
+</div>
+</div>
+<div class="section" id="what-has-been-done">
+<h2>What Has Been Done<a class="headerlink" href="#what-has-been-done" title="Permalink to this headline">¶</a></h2>
+<p>At a glimpse, it worked the following way:</p>
+<ol class="arabic simple">
+<li>A global flag <tt class="docutils literal"><span class="pre">rcParams['gray']</span></tt>.</li>
+<li>Local flags in all artists: <tt class="docutils literal"><span class="pre">._gray</span></tt>.  An accompanying functions <tt class="docutils literal"><span class="pre">.set_gray(bool)</span></tt>.  This was later extended to accept also other artists where the Artist shall lookup its own gray mode.</li>
+<li><tt class="docutils literal"><span class="pre">colors.ColorConverter</span></tt> (a class) made respect <tt class="docutils literal"><span class="pre">rcParams['gray']</span></tt>.</li>
+</ol>
+<p>This approach has, above its simplicity, no other advantages, but allot of disadvatages:</p>
+<ul class="simple">
+<li>Thread unsafety</li>
+<li>Clumsiness, global flags as a remedy against a proper signalling mechanism in the render pipeline</li>
+<li><tt class="docutils literal"><span class="pre">colors.ColorConverter</span></tt> instance has to fall back to rcParams.</li>
+</ul>
+<p>All this flaws reside in parts in the matplotlib architechture and stem from it:</p>
+<ul class="simple">
+<li><tt class="docutils literal"><span class="pre">colors.ColorConverter</span></tt> is instanciated in <tt class="docutils literal"><span class="pre">mpl.colors</span></tt>.  This is way too early, it should happen in the render pipeline instead.  This is one of the main goals what mpl-grayscale should fix, of course without breaking any code out there.</li>
+<li><tt class="docutils literal"><span class="pre">rcParams</span></tt> belong to matplotlib, although they are in fact something session-local.  Sessions are a concept unknown to Matplotlib.</li>
+</ul>
+<p>There were changes in <tt class="file docutils literal"><span class="pre">collections.py</span></tt> and <tt class="file docutils literal"><span class="pre">image.py</span></tt> to make sure color are recalculated on draw time.  Otherwise the caching mechanism makes the grayscale toggle invisible.  The amount of caching in matplotlib code is in general
+remarkable.  And it happens at pretty low level.  Since this cannot be changed, and I&#8217;m also not interested in fixing that, I&#8217;ll not discuss this here.</p>
+<p><tt class="docutils literal"><span class="pre">colors.ColorConverter</span></tt> was completely backwards-compatible refactored with the aim of a logical design and general applicability.  The old methods became stubs which just invoke the general methods with their arguments after maybe some
+casting.</p>
+<p>There was a decorator for <tt class="docutils literal"><span class="pre">.draw()</span></tt> methods which evaluates the <tt class="docutils literal"><span class="pre">._gray</span></tt> attribute and translates it into <tt class="docutils literal"><span class="pre">rcParams['gray']</span></tt>, restoring the old setting on exit.  All the <tt class="docutils literal"><span class="pre">.draw()</span></tt> methods have been decorated with this decorator called
+<tt class="docutils literal"><span class="pre">take_gray_into_account</span></tt>.</p>
+<ul class="simple">
+<li>There must be a better way to pass on messages in the render queue.</li>
+</ul>
+<p>Files affected, as far as I can see so far from the commit logs:</p>
+<ul class="simple">
+<li><tt class="file docutils literal"><span class="pre">colors.py</span></tt></li>
+<li><tt class="file docutils literal"><span class="pre">collections.py</span></tt></li>
+<li><tt class="file docutils literal"><span class="pre">image.py</span></tt></li>
+<li><tt class="file docutils literal"><span class="pre">mplot3d/axes3d.py</span></tt></li>
+</ul>
+<div class="section" id="how-colourbar-linking-worked">
+<h3>How colourbar linking worked<a class="headerlink" href="#how-colourbar-linking-worked" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="first-attempt">
+<h4>First Attempt<a class="headerlink" href="#first-attempt" title="Permalink to this headline">¶</a></h4>
+<p><tt class="xref py py-func docutils literal"><span class="pre">figure.Figure.colorbar()</span></tt> established a gray link from the <tt class="docutils literal"><span class="pre">cax</span></tt> to the axes the colourbar belongs to (<tt class="docutils literal"><span class="pre">ax</span></tt>).</p>
+<p>Thus the gray mode of the colourbar is always that of the corresponding axes.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The <tt class="xref py py-class docutils literal"><span class="pre">colorbar.Colorbar</span></tt> constructor doesn&#8217;t have access the corresponding original axes anymore, only to the colourbar Axes.  Thus implementing the feature in <tt class="xref py py-class docutils literal"><span class="pre">figure.Figure</span></tt> was the most general way of doing it.</p>
+</div>
+</div>
+<div class="section" id="second-attempt">
+<h4>Second Attempt<a class="headerlink" href="#second-attempt" title="Permalink to this headline">¶</a></h4>
+<p>On call of <tt class="docutils literal"><span class="pre">Colorbar.__init__()</span></tt>, the <tt class="docutils literal"><span class="pre">cax</span></tt> links to the Mappable.</p>
+<p>Rationale:</p>
+<ol class="arabic simple">
+<li>Some calls from <tt class="xref py py-mod docutils literal"><span class="pre">axes_grid1</span></tt> do not use <tt class="docutils literal"><span class="pre">figure.Figure.colorbar()</span></tt>.</li>
+<li>It is not safe to make use of the <em>ax</em> argument in <tt class="docutils literal"><span class="pre">Figure.colorbar()</span></tt>, since it might be determined by a &#8220;current axes&#8221; query in <tt class="docutils literal"><span class="pre">plt.colorbar()</span></tt>, and I did not trust in that this always meets our specifications to it in all cases.
+(What I did not write down was why I distrusted it ...)</li>
+<li>It is more sane and fundamental to link to the mappable, since the colorbar itself also refers to a Mappable and not to an Axes.</li>
+</ol>
+<p>Nasty: <tt class="docutils literal"><span class="pre">axes_grid1</span></tt> duplicates a lot of the <tt class="docutils literal"><span class="pre">Colorbar</span></tt> code without inheritance, so maintance will be painful.</p>
+<p>This second attempt was the last commit note in the old repository.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="code-reposities">
+<h1>Code reposities<a class="headerlink" href="#code-reposities" title="Permalink to this headline">¶</a></h1>
+<ul class="simple">
+<li>Old respository with the proof of concept: <a class="reference external" href="http://github.com/friedrichromstedt/matplotlib-pre-github/">http://github.com/friedrichromstedt/matplotlib-pre-github/</a></li>
+<li>New respository where the better solution shall go: <a class="reference external" href="http://github.com/friedrichromstedt/matplotlib-grayscale/">http://github.com/friedrichromstedt/matplotlib-grayscale/</a></li>
+</ul>
+<p>Have fun!</p>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">The Roadmap to <tt class="docutils literal"><span class="pre">matplotlib-grayscale</span></tt></a><ul>
+<li><a class="reference internal" href="#the-matplotlib-grayscale-project-at-a-glance">The <tt class="docutils literal"><span class="pre">matplotlib-grayscale</span></tt> project at a glance</a></li>
+<li><a class="reference internal" href="#my-reasoning">My Reasoning</a></li>
+<li><a class="reference internal" href="#what-is-pending">What Is Pending</a><ul>
+<li><a class="reference internal" href="#feature-requests">Feature Requests</a></li>
+<li><a class="reference internal" href="#roadmap">Roadmap</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#what-has-been-done">What Has Been Done</a><ul>
+<li><a class="reference internal" href="#how-colourbar-linking-worked">How colourbar linking worked</a><ul>
+<li><a class="reference internal" href="#first-attempt">First Attempt</a></li>
+<li><a class="reference internal" href="#second-attempt">Second Attempt</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#code-reposities">Code reposities</a></li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="index.html"
+                        title="previous chapter">Matplotlib Grayscale Patch</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/roadmap.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="index.html" title="Matplotlib Grayscale Patch"
+             >previous</a> |</li>
+        <li><a href="index.html">Matplotlib Grayscale</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2011, Friedrich Romstedt et al..
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
+    </div>
+  </body>
+</html>

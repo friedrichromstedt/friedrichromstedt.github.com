@@ -1,0 +1,121 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Matplotlib Grayscale Patch &mdash; Matplotlib Grayscale</title>
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     'x',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="shortcut icon" href="_static/favicon_grayscale.ico"/>
+    <link rel="top" title="Matplotlib Grayscale" href="#" />
+    <link rel="next" title="The Roadmap to matplotlib-grayscale" href="roadmap.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="roadmap.html" title="The Roadmap to matplotlib-grayscale"
+             accesskey="N">next</a> |</li>
+        <li><a href="#">Matplotlib Grayscale</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="matplotlib-grayscale-patch">
+<h1>Matplotlib Grayscale Patch<a class="headerlink" href="#matplotlib-grayscale-patch" title="Permalink to this headline">¶</a></h1>
+<p>The matplotlib grayscale patch (available at <a class="reference external" href="http://github.com/friedrichromstedt/matplotlib/">http://github.com/friedrichromstedt/matplotlib/</a>) is a fork of the original and official matplotlib repository at github, <a class="reference external" href="http://github.com/matplotlib/matplotlib/">http://github.com/matplotlib/matplotlib/</a>, and aims at introducing various
+filters to the matplotlib core, enabling the matplotlib to e.g. render your figure in grayscale with a toggle-switch.</p>
+<p>The advantage comes at the cost of a little overhead because some caching cannot be done anymore; meaning the matplotlib will be a little slower.  If you do not care about speed for your application, it will not matter.  If you do care, and
+really need <tt class="docutils literal"><span class="pre">O(2)</span></tt> complexity reasoning, well, then you&#8217;ll probably better off using the normal matplotlib.  I guess if you really need grayscale mode there&#8217;s no or little way around this overhead.</p>
+<p>Contents:</p>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="roadmap.html">The Roadmap to <tt class="docutils literal"><span class="pre">matplotlib-grayscale</span></tt></a><ul>
+<li class="toctree-l2"><a class="reference internal" href="roadmap.html#the-matplotlib-grayscale-project-at-a-glance">The <tt class="docutils literal"><span class="pre">matplotlib-grayscale</span></tt> project at a glance</a></li>
+<li class="toctree-l2"><a class="reference internal" href="roadmap.html#my-reasoning">My Reasoning</a></li>
+<li class="toctree-l2"><a class="reference internal" href="roadmap.html#what-is-pending">What Is Pending</a></li>
+<li class="toctree-l2"><a class="reference internal" href="roadmap.html#what-has-been-done">What Has Been Done</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="roadmap.html#code-reposities">Code reposities</a></li>
+</ul>
+</div>
+<ul class="simple">
+<li><a class="reference internal" href="genindex.html"><em>Index</em></a></li>
+<li><a class="reference internal" href="search.html"><em>Search Page</em></a></li>
+</ul>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h4>Next topic</h4>
+  <p class="topless"><a href="roadmap.html"
+                        title="next chapter">The Roadmap to <tt class="docutils literal"><span class="pre">matplotlib-grayscale</span></tt></a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/index.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="roadmap.html" title="The Roadmap to matplotlib-grayscale"
+             >next</a> |</li>
+        <li><a href="#">Matplotlib Grayscale</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2011, Friedrich Romstedt et al..
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
+    </div>
+  </body>
+</html>

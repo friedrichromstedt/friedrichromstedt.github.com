@@ -1,0 +1,131 @@
+The Roadmap to ``matplotlib-grayscale``
+=======================================
+
+The ``matplotlib-grayscale`` project at a glance
+------------------------------------------------
+
+I've got the grayscale mode working earlier, but it was a bit hackish and in the end I didn't know very well what parts have been changed and which not.  So I'll try to make a list from the old repository's commit history first of what should
+be done, properly this time.  Not that it wasn't properly last time, but it could be more proper.
+
+I'm working on ``matplotlib-grayscale`` since about a year now, but it has been put aside for many monthes, until now.  The proof of principle is in my opinion fully brought up, Benjamin Root has tested all features and I remember all parts of
+mpl rendering grayscale when the switch is toggled.  What is not so well-tested is the per-artist switch.
+
+Matplotlib-grayscale works with 3D plots, with 2D plots, can colour single artists and their sub-artists with a single command gray, and can let colourbars inherit the gray flag from the Mappable they take the value from.
+
+
+My Reasoning
+------------
+
+I'm doing this feature implementation not for its own sake, but first, because users requested it repeatedly, although not often enough to make someone else doing it, and second, because I want to show that I'm capable of tinkering around in a
+(2D) rendering stack which is pretty complicated, what I'm doing to get you interested in ``plotlayers``.  ``plotlayers`` stems from ``moviemaker`` (v3), http://friedrichromstedt.github.com/moviemaker2/ (although the docs are for v2).
+``moviemaker`` in turn is a 2D rendering library for videos, but it renders all frames independently and has no state machinery like a simlulation does have.  So I think it might be abstractable to a plotting library on its own, namely,
+``plotlayers``.  This project is to be started when ``matplotlib-grayscale`` is on its way to the repository.  To the main respository.
+
+Otherwise I don't want to get involved with matplotlib anymore.
+
+
+What Is Pending
+---------------
+
+Feature Requests
+^^^^^^^^^^^^^^^^
+
+1.  Grayscale support, for:
+    
+    -   The whole Figure
+    -   Parts of the Figure
+    -   In a toggle-switch behaviour
+
+2.  Colour transform in the same fashion, say to CMYK or something.
+
+Roadmap
+^^^^^^^
+
+*   Getting the instance of ``colors.ColorConverter`` in ``mpl.colors`` vanish and be replaced by a compatibility stub.
+
+*   Putting the ColorConverter instance into the rendering pipeline, to make it accessible to rendering items on render time.
+
+*   Designing the filter.  We can do the ColorConverter from scratch now, so properly this time.  Meaning for all types of arrays, not only the restricted set active currently.  Matplotlib has allot of guessing techniques which make it hard to
+    do this properly.
+
+
+What Has Been Done
+------------------
+
+At a glimpse, it worked the following way:
+
+1.  A global flag ``rcParams['gray']``.
+2.  Local flags in all artists: ``._gray``.  An accompanying functions ``.set_gray(bool)``.  This was later extended to accept also other artists where the Artist shall lookup its own gray mode.
+3.  ``colors.ColorConverter`` (a class) made respect ``rcParams['gray']``.
+
+This approach has, above its simplicity, no other advantages, but allot of disadvatages:
+
+-   Thread unsafety
+-   Clumsiness, global flags as a remedy against a proper signalling mechanism in the render pipeline
+-   ``colors.ColorConverter`` instance has to fall back to rcParams.
+
+All this flaws reside in parts in the matplotlib architechture and stem from it:
+
+-   ``colors.ColorConverter`` is instanciated in ``mpl.colors``.  This is way too early, it should happen in the render pipeline instead.  This is one of the main goals what mpl-grayscale should fix, of course without breaking any code out there.
+-   ``rcParams`` belong to matplotlib, although they are in fact something session-local.  Sessions are a concept unknown to Matplotlib.
+
+There were changes in :file:`collections.py` and :file:`image.py` to make sure color are recalculated on draw time.  Otherwise the caching mechanism makes the grayscale toggle invisible.  The amount of caching in matplotlib code is in general 
+remarkable.  And it happens at pretty low level.  Since this cannot be changed, and I'm also not interested in fixing that, I'll not discuss this here.
+
+``colors.ColorConverter`` was completely backwards-compatible refactored with the aim of a logical design and general applicability.  The old methods became stubs which just invoke the general methods with their arguments after maybe some 
+casting.
+
+There was a decorator for ``.draw()`` methods which evaluates the ``._gray`` attribute and translates it into ``rcParams['gray']``, restoring the old setting on exit.  All the ``.draw()`` methods have been decorated with this decorator called
+``take_gray_into_account``.
+
+-   There must be a better way to pass on messages in the render queue.
+
+Files affected, as far as I can see so far from the commit logs:
+
+-   :file:`colors.py`
+-   :file:`collections.py`
+-   :file:`image.py`
+-   :file:`mplot3d/axes3d.py`
+
+
+How colourbar linking worked
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+First Attempt
+"""""""""""""
+
+:func:`figure.Figure.colorbar` established a gray link from the ``cax`` to the axes the colourbar belongs to (``ax``).
+
+Thus the gray mode of the colourbar is always that of the corresponding axes.
+
+.. note::
+    
+    The :class:`colorbar.Colorbar` constructor doesn't have access the corresponding original axes anymore, only to the colourbar Axes.  Thus implementing the feature in :class:`figure.Figure` was the most general way of doing it.
+
+Second Attempt
+""""""""""""""
+
+On call of ``Colorbar.__init__()``, the ``cax`` links to the Mappable.
+
+Rationale:
+
+1.  Some calls from :mod:`axes_grid1` do not use ``figure.Figure.colorbar()``.
+
+2.  It is not safe to make use of the *ax* argument in ``Figure.colorbar()``, since it might be determined by a "current axes" query in ``plt.colorbar()``, and I did not trust in that this always meets our specifications to it in all cases.
+    (What I did not write down was why I distrusted it ...)
+
+3.  It is more sane and fundamental to link to the mappable, since the colorbar itself also refers to a Mappable and not to an Axes.
+
+Nasty: ``axes_grid1`` duplicates a lot of the ``Colorbar`` code without inheritance, so maintance will be painful.
+
+This second attempt was the last commit note in the old repository.
+
+
+Code reposities
+===============
+
+*   Old respository with the proof of concept: http://github.com/friedrichromstedt/matplotlib-pre-github/
+*   New respository where the better solution shall go: http://github.com/friedrichromstedt/matplotlib-grayscale/
+
+
+Have fun!

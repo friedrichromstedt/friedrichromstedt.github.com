@@ -1,0 +1,18 @@
+Matplotlib Grayscale Patch
+==========================
+
+The matplotlib grayscale patch (available at http://github.com/friedrichromstedt/matplotlib/) is a fork of the original and official matplotlib repository at github, http://github.com/matplotlib/matplotlib/, and aims at introducing various 
+filters to the matplotlib core, enabling the matplotlib to e.g. render your figure in grayscale with a toggle-switch.
+
+The advantage comes at the cost of a little overhead because some caching cannot be done anymore; meaning the matplotlib will be a little slower.  If you do not care about speed for your application, it will not matter.  If you do care, and
+really need ``O(2)`` complexity reasoning, well, then you'll probably better off using the normal matplotlib.  I guess if you really need grayscale mode there's no or little way around this overhead.
+
+Contents:
+
+.. toctree::
+    :maxdepth: 2
+    
+    roadmap
+
+* :ref:`genindex`
+* :ref:`search`
