@@ -4,11 +4,11 @@ Lists as Paragraphs in Sphinx
 The Proposal
 ------------
 
-We propose to treat lists as paragraphs, and not only their content.  This means, a list is an entity on its own, like a word constituting a single paragraph.  It does not matter what it contains; the functionality should not rely on the 
+I propose to treat lists as paragraphs, and not only their content.  This means, a list is an entity on its own, like a word constituting a single paragraph.  It does not matter what it contains; the functionality should not rely on the 
 formatting of the content; rather the functionality should be independent of the content.
 
-We describe what the triggering rst code looks like, why the browser rendering issue appears, and how it can be solved by a single <p> tag.  After this, we make some investigations concerning suppressing compactness at all.  After that comes the 
-conclusion and an outlook concerned with the generality of the observation.
+I describe what the triggering rst code looks like, why the browser rendering issue appears, and how it could be solved by a single <p> tag.  After this, I make some investigations concerning the proposal suppressing compactness at all.  After that 
+comes the conclusion and an outlook concerned with the generality of the observation.
 
 
 Stating the Problem
