@@ -1,0 +1,157 @@
+Lists as Paragraphs in Sphinx
+=============================
+
+The Proposal
+------------
+
+We propose to treat lists as paragraphs, and not only their content.  This means, a list is an entity on its own, like a word constituting a single paragraph.  It does not matter what it contains; the functionality should not rely on the 
+formatting of the content; rather the functionality should be independent of the content.
+
+We describe what the triggering rst code looks like, why the browser rendering issue appears, and how it can be solved by a single <p> tag.  After this, we make some investigations concerning suppressing compactness at all.  After that comes the 
+conclusion and an outlook concerned with the generality of the observation.
+
+
+Stating the Problem
+-------------------
+
+This renders correct:
+
+*   item 1
+
+    -   subitem 1.1
+    -   subitem 1.2
+        
+*   item 2
+*   item 3
+
+This not:
+
+*   item 1
+
+    -   subitem 1.1
+    -   subitem 1.2
+
+*   item 2
+    
+    second paragraph
+
+How the second list renders
+^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+The second list renders as::
+
+    <ul>
+    <li><p class="first">item 1</p>
+    <ul class="simple">
+    <li>subitem 1.1</li>
+    <li>subitem 1.2</li>
+    </ul>
+    </li>
+    <li><p class="first">item 2</p>
+    <p>second paragraph</p>
+    </li>
+    </ul>
+
+How it should render (probably)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+It should render as (edits marked by ``<!-- edit -->``)::
+
+    <ul>
+    <li><p class="first">item 1</p>
+    <p> <!-- edit -->
+    <ul class="simple">
+    <li>subitem 1.1</li>
+    <li>subitem 1.2</li>
+    </ul>
+    </p> <!-- edit -->
+    </li>
+    <li><p class="first">item 2</p>
+    <p>second paragraph</p>
+    </li>
+    </ul>
+
+You can see the html output of the corrected html here (generated with the ``.. raw:: html`` directive):
+
+.. raw:: html
+
+    <ul>
+    <li><p class="first">item 1</p>
+    <p> <!-- edit -->
+    <ul class="simple">
+    <li>subitem 1.1</li>
+    <li>subitem 1.2</li>
+    </ul>
+    </p> <!-- edit -->
+    </li>
+    <li><p class="first">item 2</p>
+    <p>second paragraph</p>
+    </li>
+    </ul>
+
+=> The missing <p> tag around the sublist causes the trouble.
+
+Investigating why ``html_compact_lists = False`` can make it at least consistent
+--------------------------------------------------------------------------------
+
+The question is, which <p> tags introduced by ``html_compact_lists = False`` make it "work" (although the compactness feature is lost without further tweaking), since the <p> tag around the sublist is still missing; only its items
+are wrapped in <p> tags then.
+
+You should translate this document without ``html_compact_lists = False``.
+
+Let's see if a <p> tag in the last sublist item can make it consistent
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+How does this render 
+
+*   item 1
+
+    -   subitem 1.1
+    -   subitem 1.2
+        
+        second paragraph
+        
+*   item 2
+*   item 3
+
+.. note::
+    
+    non-compactness inherits to higher-level lists; we cannot test hence using this strategy.
+
+Trying to avoid the <p> tag around the next toplevel list item by making it a list too, and such exploiting the bug
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+*   item 1
+
+    -   subitem 1.1
+    -   subitem 1.2
+        
+        second paragraph
+        
+*   
+    
+    -   item 2.1
+    -   item 2.2
+
+*   item 3
+
+.. note::
+    
+    The paragraph style in the sublist item is sufficient to introduce space to the next toplevel list item.
+
+    Nevertheless it does not solve the problem.  Because the sublist might just need to be compact, if we do not wanna waive that.
+
+.. warning:: 
+
+    Does a <p> tag in the toplevel list item suffice too?  Obviously not, otherwise the bug would not appear in the Section "Stating the Problem".
+
+Conclusion
+----------
+
+Lists need to be wrapped in a <p> tag if they behave like a paragraph.  They behave probably like paragraphs in lists which are non-compact.
+
+
+Outlook
+-------
+    
+It might be that they even behave like paragraphs in normal text; where they are also rendered without enclosing <p> tags currently; but there it works also apparently without.

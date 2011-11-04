@@ -7,5 +7,10 @@ Contents:
 *   `priops <priops/index.html>`_
 *   `matplotlib-grayscale <matplotlib-grayscale/index.html>`_
 
+.. toctree::
+    :maxdepth: 1
+    
+    lists1
+
 Note: Go to the respective projekt page to search etc.  (This page is a 
 separate Sphinx project.)

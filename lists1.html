@@ -1,0 +1,258 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Lists as Paragraphs in Sphinx &mdash; Friedrich Romstedt 0.1.0b documentation</title>
+    
+    <link rel="stylesheet" href="_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.1.0b',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="Friedrich Romstedt 0.1.0b documentation" href="index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li><a href="index.html">Friedrich Romstedt 0.1.0b documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="lists-as-paragraphs-in-sphinx">
+<h1>Lists as Paragraphs in Sphinx<a class="headerlink" href="#lists-as-paragraphs-in-sphinx" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="the-proposal">
+<h2>The Proposal<a class="headerlink" href="#the-proposal" title="Permalink to this headline">¶</a></h2>
+<p>We propose to treat lists as paragraphs, and not only their content.  This means, a list is an entity on its own, like a word constituting a single paragraph.  It does not matter what it contains; the functionality should not rely on the
+formatting of the content; rather the functionality should be independent of the content.</p>
+<p>We describe what the triggering rst code looks like, why the browser rendering issue appears, and how it can be solved by a single &lt;p&gt; tag.  After this, we make some investigations concerning suppressing compactness at all.  After that comes the
+conclusion and an outlook concerned with the generality of the observation.</p>
+</div>
+<div class="section" id="stating-the-problem">
+<h2>Stating the Problem<a class="headerlink" href="#stating-the-problem" title="Permalink to this headline">¶</a></h2>
+<p>This renders correct:</p>
+<ul class="simple">
+<li>item 1<ul>
+<li>subitem 1.1</li>
+<li>subitem 1.2</li>
+</ul>
+</li>
+<li>item 2</li>
+<li>item 3</li>
+</ul>
+<p>This not:</p>
+<ul>
+<li><p class="first">item 1</p>
+<ul class="simple">
+<li>subitem 1.1</li>
+<li>subitem 1.2</li>
+</ul>
+</li>
+<li><p class="first">item 2</p>
+<p>second paragraph</p>
+</li>
+</ul>
+<div class="section" id="how-the-second-list-renders">
+<h3>How the second list renders<a class="headerlink" href="#how-the-second-list-renders" title="Permalink to this headline">¶</a></h3>
+<p>The second list renders as:</p>
+<div class="highlight-python"><pre>&lt;ul&gt;
+&lt;li&gt;&lt;p class="first"&gt;item 1&lt;/p&gt;
+&lt;ul class="simple"&gt;
+&lt;li&gt;subitem 1.1&lt;/li&gt;
+&lt;li&gt;subitem 1.2&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p class="first"&gt;item 2&lt;/p&gt;
+&lt;p&gt;second paragraph&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;</pre>
+</div>
+</div>
+<div class="section" id="how-it-should-render-probably">
+<h3>How it should render (probably)<a class="headerlink" href="#how-it-should-render-probably" title="Permalink to this headline">¶</a></h3>
+<p>It should render as (edits marked by <tt class="docutils literal"><span class="pre">&lt;!--</span> <span class="pre">edit</span> <span class="pre">--&gt;</span></tt>):</p>
+<div class="highlight-python"><pre>&lt;ul&gt;
+&lt;li&gt;&lt;p class="first"&gt;item 1&lt;/p&gt;
+&lt;p&gt; &lt;!-- edit --&gt;
+&lt;ul class="simple"&gt;
+&lt;li&gt;subitem 1.1&lt;/li&gt;
+&lt;li&gt;subitem 1.2&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/p&gt; &lt;!-- edit --&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p class="first"&gt;item 2&lt;/p&gt;
+&lt;p&gt;second paragraph&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;</pre>
+</div>
+<p>You can see the html output of the corrected html here (generated with the <tt class="docutils literal"><span class="pre">..</span> <span class="pre">raw::</span> <span class="pre">html</span></tt> directive):</p>
+<ul>
+<li><p class="first">item 1</p>
+<p> <!-- edit -->
+<ul class="simple">
+<li>subitem 1.1</li>
+<li>subitem 1.2</li>
+</ul>
+</p> <!-- edit -->
+</li>
+<li><p class="first">item 2</p>
+<p>second paragraph</p>
+</li>
+</ul><p>=&gt; The missing &lt;p&gt; tag around the sublist causes the trouble.</p>
+</div>
+</div>
+<div class="section" id="investigating-why-html-compact-lists-false-can-make-it-at-least-consistent">
+<h2>Investigating why <tt class="docutils literal"><span class="pre">html_compact_lists</span> <span class="pre">=</span> <span class="pre">False</span></tt> can make it at least consistent<a class="headerlink" href="#investigating-why-html-compact-lists-false-can-make-it-at-least-consistent" title="Permalink to this headline">¶</a></h2>
+<p>The question is, which &lt;p&gt; tags introduced by <tt class="docutils literal"><span class="pre">html_compact_lists</span> <span class="pre">=</span> <span class="pre">False</span></tt> make it &#8220;work&#8221; (although the compactness feature is lost without further tweaking), since the &lt;p&gt; tag around the sublist is still missing; only its items
+are wrapped in &lt;p&gt; tags then.</p>
+<p>You should translate this document without <tt class="docutils literal"><span class="pre">html_compact_lists</span> <span class="pre">=</span> <span class="pre">False</span></tt>.</p>
+<div class="section" id="let-s-see-if-a-p-tag-in-the-last-sublist-item-can-make-it-consistent">
+<h3>Let&#8217;s see if a &lt;p&gt; tag in the last sublist item can make it consistent<a class="headerlink" href="#let-s-see-if-a-p-tag-in-the-last-sublist-item-can-make-it-consistent" title="Permalink to this headline">¶</a></h3>
+<p>How does this render</p>
+<ul>
+<li><p class="first">item 1</p>
+<ul>
+<li><p class="first">subitem 1.1</p>
+</li>
+<li><p class="first">subitem 1.2</p>
+<p>second paragraph</p>
+</li>
+</ul>
+</li>
+<li><p class="first">item 2</p>
+</li>
+<li><p class="first">item 3</p>
+</li>
+</ul>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">non-compactness inherits to higher-level lists; we cannot test hence using this strategy.</p>
+</div>
+</div>
+<div class="section" id="trying-to-avoid-the-p-tag-around-the-next-toplevel-list-item-by-making-it-a-list-too-and-such-exploiting-the-bug">
+<h3>Trying to avoid the &lt;p&gt; tag around the next toplevel list item by making it a list too, and such exploiting the bug<a class="headerlink" href="#trying-to-avoid-the-p-tag-around-the-next-toplevel-list-item-by-making-it-a-list-too-and-such-exploiting-the-bug" title="Permalink to this headline">¶</a></h3>
+<ul>
+<li><p class="first">item 1</p>
+<ul>
+<li><p class="first">subitem 1.1</p>
+</li>
+<li><p class="first">subitem 1.2</p>
+<p>second paragraph</p>
+</li>
+</ul>
+</li>
+<li><ul class="first simple">
+<li>item 2.1</li>
+<li>item 2.2</li>
+</ul>
+</li>
+<li><p class="first">item 3</p>
+</li>
+</ul>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p>The paragraph style in the sublist item is sufficient to introduce space to the next toplevel list item.</p>
+<p class="last">Nevertheless it does not solve the problem.  Because the sublist might just need to be compact, if we do not wanna waive that.</p>
+</div>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">Does a &lt;p&gt; tag in the toplevel list item suffice too?  Obviously not, otherwise the bug would not appear in the Section &#8220;Stating the Problem&#8221;.</p>
+</div>
+</div>
+</div>
+<div class="section" id="conclusion">
+<h2>Conclusion<a class="headerlink" href="#conclusion" title="Permalink to this headline">¶</a></h2>
+<p>Lists need to be wrapped in a &lt;p&gt; tag if they behave like a paragraph.  They behave probably like paragraphs in lists which are non-compact.</p>
+</div>
+<div class="section" id="outlook">
+<h2>Outlook<a class="headerlink" href="#outlook" title="Permalink to this headline">¶</a></h2>
+<p>It might be that they even behave like paragraphs in normal text; where they are also rendered without enclosing &lt;p&gt; tags currently; but there it works also apparently without.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Lists as Paragraphs in Sphinx</a><ul>
+<li><a class="reference internal" href="#the-proposal">The Proposal</a></li>
+<li><a class="reference internal" href="#stating-the-problem">Stating the Problem</a><ul>
+<li><a class="reference internal" href="#how-the-second-list-renders">How the second list renders</a></li>
+<li><a class="reference internal" href="#how-it-should-render-probably">How it should render (probably)</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#investigating-why-html-compact-lists-false-can-make-it-at-least-consistent">Investigating why <tt class="docutils literal"><span class="pre">html_compact_lists</span> <span class="pre">=</span> <span class="pre">False</span></tt> can make it at least consistent</a><ul>
+<li><a class="reference internal" href="#let-s-see-if-a-p-tag-in-the-last-sublist-item-can-make-it-consistent">Let&#8217;s see if a &lt;p&gt; tag in the last sublist item can make it consistent</a></li>
+<li><a class="reference internal" href="#trying-to-avoid-the-p-tag-around-the-next-toplevel-list-item-by-making-it-a-list-too-and-such-exploiting-the-bug">Trying to avoid the &lt;p&gt; tag around the next toplevel list item by making it a list too, and such exploiting the bug</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#conclusion">Conclusion</a></li>
+<li><a class="reference internal" href="#outlook">Outlook</a></li>
+</ul>
+</li>
+</ul>
+
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/lists1.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li><a href="index.html">Friedrich Romstedt 0.1.0b documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2011, Friedrich Romstedt.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.2.
+    </div>
+  </body>
+</html>
